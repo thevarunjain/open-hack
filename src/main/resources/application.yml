@@ -1,0 +1,15 @@
+server:
+  port: 5000
+spring:
+  application:
+    name: open-hack
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://HOSTNAME/DBNAME?serverTimezone=America/Los_Angeles
+    username: USERNAME
+    password: PASSWORD
+  jpa:
+    hibernate.ddl-auto: create-drop
+    generate-ddl: true
+    show-sql: true
+
