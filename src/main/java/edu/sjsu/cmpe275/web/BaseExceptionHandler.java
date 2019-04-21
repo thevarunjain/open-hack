@@ -1,9 +1,7 @@
 package edu.sjsu.cmpe275.web;
 
-import edu.sjsu.cmpe275.domain.exception.EmployeeNotFoundException;
-import edu.sjsu.cmpe275.domain.exception.EmployerNotFoundException;
+import edu.sjsu.cmpe275.domain.exception.UserNotFoundException;
 import edu.sjsu.cmpe275.web.exception.ConstraintViolationException;
-import edu.sjsu.cmpe275.web.exception.OperationNotAllowedException;
 import edu.sjsu.cmpe275.web.model.response.ErrorResponseDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -29,7 +27,7 @@ public class BaseExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ErrorResponseDto handleException(final EmployeeNotFoundException e) {
+    public ErrorResponseDto handleException(final UserNotFoundException e) {
         return new ErrorResponseDto(
                 e.getERROR_CODE(),
                 e.getMessage(),
@@ -37,20 +35,11 @@ public class BaseExceptionHandler {
         );
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ResponseBody
-    public ErrorResponseDto handleException(final EmployerNotFoundException e) {
-        return new ErrorResponseDto(
-                e.getERROR_CODE(),
-                e.getMessage(),
-                e.getId().toString()
-        );
-    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handleException(final RuntimeException e) {
+        // TODO Proper error message on DB violation like unique email / screen name
         if (e instanceof DataIntegrityViolationException
                 || e instanceof javax.validation.ConstraintViolationException
         ) {
