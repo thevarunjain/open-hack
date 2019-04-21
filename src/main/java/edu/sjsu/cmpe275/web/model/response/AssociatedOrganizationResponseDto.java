@@ -4,26 +4,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 @Data
 @ToString
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@XmlRootElement
-public class CollaboratorDto {
-
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public class AssociatedOrganizationResponseDto {
     @JsonProperty("id")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private long id;
 
     @JsonProperty("name")
     private String name;
-
-    @JsonProperty("title")
-    private String title;
-
-    @JsonProperty(value = "employer")
-    private AssociatedEmployerDetailsDto employer;
 }

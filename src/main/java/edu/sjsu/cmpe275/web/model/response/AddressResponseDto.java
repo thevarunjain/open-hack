@@ -4,16 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 @Data
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@XmlRootElement
-public class AddressDto {
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public class AddressResponseDto {
 
     @JsonProperty("street")
     private String street;

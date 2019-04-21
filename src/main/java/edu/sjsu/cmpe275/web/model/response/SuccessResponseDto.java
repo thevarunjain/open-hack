@@ -14,6 +14,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NoArgsConstructor
 public class SuccessResponseDto {
-    @JsonProperty("success_message")
-    private String responseMessage;
+    @JsonProperty("successMessage")
+    private String successMessage;
 }
