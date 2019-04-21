@@ -8,14 +8,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Embeddable
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@XmlRootElement
 public class Address {
 
     @Column(name = "street")

@@ -1,27 +1,24 @@
 package edu.sjsu.cmpe275.web.model.response;
 
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@XmlRootElement
-public class AssociatedEmployeeDetailsDto {
-
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public class AssociatedUserResponseDto {
     @JsonProperty("id")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private long id;
 
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("email")
+    private String email;
 
-    @JsonProperty("title")
-    private String title;
+    @JsonProperty("screenName")
+    private String screenName;
 }
