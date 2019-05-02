@@ -4,8 +4,10 @@ package edu.sjsu.cmpe275.web;
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.web.mapper.HackathonMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -13,19 +15,25 @@ import java.util.Map;
 public class HackathonController {
 
 
-    @GetMapping(value = "abc", produces = "application/json")
+    @GetMapping(value = "", produces = "application/json")
+    @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public void getHackathon(@RequestParam Long id){
-
-        return;
+    public String  getHackathon(@Valid @RequestBody String name){
+        return  name;
     }
 
 
-    @PostMapping(value = "")
-    @ResponseStatus(HttpStatus.OK)
-    public Hackathon createHackathon(@RequestParam Map<String, String> params){
-
-    }
+//    @PostMapping(value = "")
+//    @ResponseBody
+//    @ResponseStatus(HttpStatus.OK)
+//    public void createHackathon(@Valid @RequestBody CreateHackathonRequestDTO  hackathon, Errors validationErrors){
+//        if(validationErrors.hasErrors()){
+//            //TODO Validate the error
+//        }
+//
+//
+//
+//    }
 
 }
 
