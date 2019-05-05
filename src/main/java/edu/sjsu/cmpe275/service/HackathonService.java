@@ -3,6 +3,7 @@ package edu.sjsu.cmpe275.service;
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.exception.HackathonNotFoundException;
 import edu.sjsu.cmpe275.domain.repository.HackathonRepository;
+import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

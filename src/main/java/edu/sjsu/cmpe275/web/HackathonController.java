@@ -2,10 +2,13 @@ package edu.sjsu.cmpe275.web;
 
 
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
+import edu.sjsu.cmpe275.domain.entity.HackathonSponsor;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.service.HackathonService;
+import edu.sjsu.cmpe275.service.HackathonSponsorService;
 import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.web.mapper.HackathonMapper;
+import edu.sjsu.cmpe275.web.mapper.HackathonSponsorMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
 import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Null;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -28,17 +32,26 @@ public class HackathonController {
 
     private HackathonService hackathonService;
 
+    private HackathonSponsorService hackathonSponsorService;
+
     private UserService userService;
+
+    private HackathonSponsorMapper hackathonSponsorMapper;
+
 
     @Autowired
     public HackathonController(
             HackathonMapper hackathonMapper,
             HackathonService hackathonService,
-            UserService userService
+            UserService userService,
+            HackathonSponsorMapper hackathonSponsorMapper,
+            HackathonSponsorService hackathonSponsorService
     ){
         this.hackathonMapper = hackathonMapper;
         this.hackathonService = hackathonService;
         this.userService = userService;
+        this.hackathonSponsorMapper = hackathonSponsorMapper;
+        this.hackathonSponsorService = hackathonSponsorService;
     }
 
 
@@ -47,9 +60,21 @@ public class HackathonController {
     @GetMapping(value = "", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public String  getHackathon(@Valid @RequestBody String name){
+    public List<HackathonResponseDto> getHackathons(@Valid @RequestBody String name){
 
-        return  name;
+        List<Hackathon> allHackathons = hackathonService.findHackathons();
+        return hackathonMapper.map(allHackathons);
+
+
+    }
+
+    @GetMapping(value = "/{id}", produces = "application/json")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public HackathonResponseDto getHackathon(@PathVariable @NonNull Long id){
+
+          Hackathon hackathon =  hackathonService.findHackathon(id);
+            return hackathonMapper.map(hackathon);
     }
 
 
@@ -69,8 +94,14 @@ public class HackathonController {
             judges.add(userService.findUser(id));
         }
 
-
         Hackathon createdHackathon = hackathonService.createHackathon(hackathonMapper.map(toCreateHackathon,judges));
+
+        //Can be changed
+        for(int i=0;i<toCreateHackathon.getSponsors().size();i++){
+                HackathonSponsor createdSponsor = hackathonSponsorMapper.map(hackathonService.findHackathon(createdHackathon.getId()), toCreateHackathon.getSponsors().get(i), toCreateHackathon.getDiscount().get(i));
+                hackathonSponsorService.createSponsors(createdSponsor);
+        }
+
         return hackathonMapper.map(createdHackathon);
     }
 

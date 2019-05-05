@@ -6,6 +6,8 @@ import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
 import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -39,4 +41,17 @@ public class HackathonMapper {
                     .build();
         }
 
+    public List<HackathonResponseDto> map(final List<Hackathon> hackathons){
+            List<HackathonResponseDto> hackathonResponseDtoList = new ArrayList<>();
+                for(Hackathon hackathon : hackathons){
+                    hackathonResponseDtoList.add(
+                            map(hackathon)
+                    );
+                }
+            return hackathonResponseDtoList;
+    }
+
+
+
 }
+
