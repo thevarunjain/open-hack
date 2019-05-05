@@ -18,6 +18,7 @@ public class CreateUserRequestDto {
     @Valid
     private NameRequestDto name;
 
+    // TODO Email address validation is not working
     @NotNull(message = "Email can not be null")
     @Email
     private String email;

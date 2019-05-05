@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
@@ -58,29 +59,19 @@ public class UserMapper {
                 .screenName(user.getScreenName())
                 .portraitURL(user.getPortraitURL())
                 .businessTitle(user.getBusinessTitle())
-                .organization(mapOrganizationResponse(user.getOrganization()))
+// TODO                .organization(mapOrganizationResponse(user.getOrganization()))
                 .aboutMe(user.getAboutMe())
                 .address(mapAddressResponse(user.getAddress()))
+                .isAdmin(user.isAdmin())
                 .build();
     }
 
     public List<UserResponseDto> map(final List<User> users) {
-        List<UserResponseDto> userResponseDtoList = new ArrayList<>();
-        for (User user : users) {
-            userResponseDtoList.add(
-                    UserResponseDto.builder()
-                            .id(user.getId())
-                            .name(mapNameResponse(user))
-                            .email(user.getEmail())
-                            .screenName(user.getScreenName())
-                            .portraitURL(user.getPortraitURL())
-                            .businessTitle(user.getBusinessTitle())
-                            .organization(mapOrganizationResponse(user.getOrganization()))
-                            .aboutMe(user.getAboutMe())
-                            .address(mapAddressResponse(user.getAddress()))
-                            .build()
-            );
-        }
+        List<UserResponseDto> userResponseDtoList = Objects.nonNull(users)
+                ? users
+                .stream()
+                .map(user -> map(user))
+                .collect(Collectors.toList()) : new ArrayList<>();
         return userResponseDtoList;
     }
 
