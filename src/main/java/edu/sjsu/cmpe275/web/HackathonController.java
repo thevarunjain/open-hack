@@ -2,16 +2,22 @@ package edu.sjsu.cmpe275.web;
 
 
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
+import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.service.HackathonService;
+import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.web.mapper.HackathonMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
 import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/hackathon")
@@ -22,13 +28,17 @@ public class HackathonController {
 
     private HackathonService hackathonService;
 
+    private UserService userService;
+
     @Autowired
     public HackathonController(
             HackathonMapper hackathonMapper,
-            HackathonService hackathonService
+            HackathonService hackathonService,
+            UserService userService
     ){
         this.hackathonMapper = hackathonMapper;
         this.hackathonService = hackathonService;
+        this.userService = userService;
     }
 
 
@@ -50,7 +60,17 @@ public class HackathonController {
         if(validationErrors.hasErrors()){
             //TODO Validate the error
         }
-        Hackathon createdHackathon = hackathonService.createHackathon(hackathonMapper.map(toCreateHackathon));
+
+        Set<User> judges = new HashSet();
+        for(Long id : toCreateHackathon.getJudges()){
+            if(true){
+                //TODO userService.findUser(id) validation
+            }
+            judges.add(userService.findUser(id));
+        }
+
+
+        Hackathon createdHackathon = hackathonService.createHackathon(hackathonMapper.map(toCreateHackathon,judges));
         return hackathonMapper.map(createdHackathon);
     }
 

@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.web.model.request;
 
+import edu.sjsu.cmpe275.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.sql.Date;
+import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,6 +48,8 @@ public class CreateHackathonRequestDto {
     @NotNull(message = "Maximum team size can not be null")
     private int maxSize;
 
+    @NotNull(message = "Atleast one judge is required")
+    private Set<Long> judges;
 
     private int status;
 
