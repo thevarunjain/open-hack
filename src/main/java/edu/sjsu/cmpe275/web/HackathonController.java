@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping(value = "/hackathon")
+@RequestMapping(value = "/hackathons")
 public class HackathonController {
 
 
