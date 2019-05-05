@@ -1,15 +1,15 @@
-server:
-  port: 5000
 spring:
   application:
     name: open-hack
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://HOSTNAME/DBNAME?serverTimezone=America/Los_Angeles
-    username: USERNAME
-    password: PASSWORD
+    url: jdbc:mysql://localhost/cmpe275?serverTimezone=America/Los_Angeles
+    username: root
+    password: root
   jpa:
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: validate
     generate-ddl: true
     show-sql: true
+  flyway:
+    schemas: ["cmpe275"]
 
