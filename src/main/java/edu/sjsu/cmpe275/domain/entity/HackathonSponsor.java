@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.expression.spel.ast.BooleanLiteral;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -16,29 +18,29 @@ import java.util.Set;
 @Table(name = "hackathon_sponsor")
 public class HackathonSponsor{
 
-    @Id
+    @EmbeddedId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private HackathonSponsorId id;
 
-//    @OneToOne
-//    @JoinColumn(name="hackathon_id", table = "hackathon", referencedColumnName = "id")
-//    private Hackathon hackathonId;
-//
-//    @OneToMany
-//    @JoinColumn(name = "organization_id")
-//    private Organization sponsorId;
-//
-//    @JoinTable(name="temp", col1 = hack_id, col2 = org_id)
+    @ManyToOne
+    @JoinColumn(name = "hackathon_id", insertable = false, updatable = false)
+    private Hackathon hackathonId1;
 
-//    @JoinTable(name = "new", col1 = hack_id table temp1  )
+    @ManyToOne
+    @JoinColumn(name = "sponsor_id", insertable = false, updatable = false)
+    private Organization organizationId1;
 
-        @OneToMany(cascade=CascadeType.ALL)
-        @JoinTable(name="hackathon_judge",
-                joinColumns={@JoinColumn(name="hackathon_id", referencedColumnName="id", table = "hackathon")}
-                ,inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="id", table = "user")})
-        private Set<User> judges;
-
-
-    @Column(name = "discount", unique = false, nullable = true)
+    @Column(name = "discount")
     private int discount;
+
+    @Embeddable
+    public static class HackathonSponsorId implements Serializable {
+
+        @Column(name = "hackathon_id", columnDefinition = "int unsigned")
+        private Long hackathonId;
+
+        @Column(name = "sponsor_id", columnDefinition = "int unsigned")
+        private Long sponsorId;
+
+    }
 }
