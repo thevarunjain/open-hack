@@ -29,6 +29,6 @@ public class Address {
     private String state;
 
     @Column(name = "zip")
-    @Size(max = 6)
+    @Size(max = 10)
     private String zip;
 }
