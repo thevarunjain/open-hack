@@ -15,8 +15,8 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder // Building a constructor or a bean
-@Data // Getter and Setter
+@Builder
+@Data
 @Table(name = "hackathon")
 public class Hackathon {
 
