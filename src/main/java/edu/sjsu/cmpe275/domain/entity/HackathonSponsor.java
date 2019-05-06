@@ -30,7 +30,7 @@ public class HackathonSponsor{
     @JoinColumn(name = "sponsor_id", insertable = false, updatable = false)
     private Organization organizationId;
 
-    @Column(name = "discount")
+    @Column(name = "discount",nullable = false)
     private int discount;
 
     @Embeddable

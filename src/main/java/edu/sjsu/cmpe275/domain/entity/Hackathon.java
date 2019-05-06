@@ -19,10 +19,11 @@ public class Hackathon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(name = "id",columnDefinition = "int unsigned")
     private long id;
 
     @Column(name = "name", nullable = false, unique = true)
+    @Size(max = 50)
     private String name;
 
     @Temporal(TemporalType.DATE)
@@ -33,20 +34,24 @@ public class Hackathon {
     @Column(name = "end_date", nullable = false)
     private java.util.Date endDate;
 
-    @Size(min = 10)
     @Column(name = "description", nullable = false)
+    @Size(min = 10,max = 255)
     private String description;
 
     @Column(name = "fee", nullable = false)
+    @Size(max = 10)
     private Float fee;
 
     @Column(name = "min_size", nullable = false)
+    @Size(max = 11)
     private int minSize;
 
     @Column(name = "max_size", nullable = false)
+    @Size(max = 11)
     private int maxSize;
 
     @Column(name = "status", nullable = false)
+    @Size(max = 11)
     private int status;
 
     @OneToMany(cascade=CascadeType.ALL)
