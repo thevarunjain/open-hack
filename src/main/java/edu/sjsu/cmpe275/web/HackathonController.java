@@ -104,7 +104,6 @@ public class HackathonController {
         return hackathonMapper.map(createdHackathon);
     }
 
-//    @PatchMapping(value = "/{id}", produces = "application/json")
     @RequestMapping(value = "/{id}",
             produces = "application/json",
             method=RequestMethod.PATCH)

@@ -50,8 +50,9 @@ public class Hackathon {
     @Max(value = 11)
     private int maxSize;
 
-    @Column(name = "status", columnDefinition = "enum")
+    @Column(name = "status", columnDefinition = "enum DEFAULT 'OPEN' ")
     private String status;
+
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinTable(name="hackathon_judge",
