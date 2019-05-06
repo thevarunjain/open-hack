@@ -1,22 +1,21 @@
 package edu.sjsu.cmpe275.domain.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 @Table(name = "organization")
 public class Organization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "int unsigned")
     private long id;
 
     @Column(name = "name", nullable = false, unique = true)
@@ -26,12 +25,12 @@ public class Organization {
     @JoinColumn(name = "owner_id", nullable = false, updatable = false)
     private User owner;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "organization")
-    private Set<User> members;
+    @OneToMany(mappedBy = "member", targetEntity = OrganizationMembership.class)
+    private List<User> members;
 }

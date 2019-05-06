@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class OrganizationDto {
+public class OrganizationResponseDto {
     @JsonProperty("id")
     private long id;
 

@@ -21,6 +21,7 @@ public class UserService {
     }
 
     public List<User> findUsers() {
+        // TODO Only return users with valid email address
         return userRepository.findAll();
     }
 
@@ -31,7 +32,8 @@ public class UserService {
 
     @Transactional
     public User createUser(final User user) {
-        // TODO Do I need to save if @Transactional annotation is used
+        if (user.getEmail().endsWith("sjsu.edu"))
+            user.setAdmin(true);
         return userRepository.save(user);
     }
 }
