@@ -6,12 +6,15 @@ import edu.sjsu.cmpe275.domain.exception.HackathonNotFoundException;
 import edu.sjsu.cmpe275.domain.repository.HackathonRepository;
 import edu.sjsu.cmpe275.web.mapper.HackathonSponsorMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
+import edu.sjsu.cmpe275.web.model.request.UpdateHackathonRequestDto;
 import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class HackathonService {
@@ -59,6 +62,23 @@ public class HackathonService {
         }
 
         return createdHackathon;
+    }
+
+    @Transactional
+    public Hackathon updateHackathon(final Long id, @Valid UpdateHackathonRequestDto updateHackathon){
+        Hackathon hackathon = findHackathon(id);
+
+        hackathon.setStartDate(Objects.nonNull(updateHackathon.getStartDate())
+                                      ? updateHackathon.getStartDate()
+                                      : hackathon.getStartDate()
+                                );
+
+        hackathon.setEndDate(Objects.nonNull(updateHackathon.getEndDate())
+                                    ? updateHackathon.getEndDate()
+                                    : hackathon.getEndDate()
+                                );
+
+        return hackathon;
     }
 
 }
