@@ -20,8 +20,8 @@ CREATE TABLE hackathon_judge (
 
 
 CREATE TABLE hackathon_sponsor (
-  hackathon_id int(10)  NOT NULL,
-  sponsor_id int(10)  NOT NULL,
+  hackathon_id int unsigned  NOT NULL,
+  sponsor_id int unsigned  NOT NULL,
   discount int(11) NOT NULL,
   PRIMARY KEY (hackathon_id,sponsor_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

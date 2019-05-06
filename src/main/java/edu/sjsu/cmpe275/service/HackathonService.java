@@ -54,7 +54,7 @@ public class HackathonService {
                     findHackathon(createdHackathon.getId()),
                     organizationService.findOrganization(sponsors.get(i)),
                     discount.get(i));
-            
+
            hackathonSponsorService.createSponsors(createdSponsor);
         }
 
