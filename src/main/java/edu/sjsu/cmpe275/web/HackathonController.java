@@ -98,8 +98,8 @@ public class HackathonController {
 
         //Can be changed
         for(int i=0;i<toCreateHackathon.getSponsors().size();i++){
-                HackathonSponsor createdSponsor = hackathonSponsorMapper.map(hackathonService.findHackathon(createdHackathon.getId()), toCreateHackathon.getSponsors().get(i), toCreateHackathon.getDiscount().get(i));
-                hackathonSponsorService.createSponsors(createdSponsor);
+//                HackathonSponsor createdSponsor = hackathonSponsorMapper.map(hackathonService.findHackathon(createdHackathon.getId()), toCreateHackathon.getSponsors().get(i), toCreateHackathon.getDiscount().get(i));
+//                hackathonSponsorService.createSponsors(createdSponsor);
         }
 
         return hackathonMapper.map(createdHackathon);

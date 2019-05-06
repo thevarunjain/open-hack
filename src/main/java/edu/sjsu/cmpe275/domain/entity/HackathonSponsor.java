@@ -24,11 +24,11 @@ public class HackathonSponsor{
 
     @ManyToOne
     @JoinColumn(name = "hackathon_id", insertable = false, updatable = false)
-    private Hackathon hackathonId1;
+    private Hackathon hackathonId;
 
     @ManyToOne
     @JoinColumn(name = "sponsor_id", insertable = false, updatable = false)
-    private Long organizationId1;
+    private Organization organizationId;
 
     @Column(name = "discount")
     private int discount;

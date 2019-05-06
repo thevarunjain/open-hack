@@ -4,12 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
-import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.sql.Date;
 import java.util.Set;
 
 @Entity
@@ -30,11 +27,11 @@ public class Hackathon {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "start_date", nullable = false)
-    private java.util.Date start_date;
+    private java.util.Date startDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "end_date", nullable = false)
-    private java.util.Date end_date;
+    private java.util.Date endDate;
 
     @Size(min = 10)
     @Column(name = "description", nullable = false)
@@ -44,10 +41,10 @@ public class Hackathon {
     private Float fee;
 
     @Column(name = "min_size", nullable = false)
-    private int min_size;
+    private int minSize;
 
     @Column(name = "max_size", nullable = false)
-    private int max_size;
+    private int maxSize;
 
     @Column(name = "status", nullable = false)
     private int status;
@@ -55,7 +52,7 @@ public class Hackathon {
     @OneToMany(cascade=CascadeType.ALL)
     @JoinTable(name="hackathon_judge",
                joinColumns={@JoinColumn(name="hackathon_id", referencedColumnName="id", table = "hackathon")}
-               ,inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="id", table = "user")})
+               ,inverseJoinColumns={@JoinColumn(name="judge_id", referencedColumnName="id", table = "user")})
     private Set<User> judges;
 
 }
