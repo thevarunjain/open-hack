@@ -3,7 +3,6 @@ package edu.sjsu.cmpe275.web.mapper;
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.HackathonSponsor;
 import edu.sjsu.cmpe275.domain.entity.Organization;
-import edu.sjsu.cmpe275.web.model.response.HackathonSponsorResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,10 +28,4 @@ public class HackathonSponsorMapper {
                 .build();
     }
 
-    public HackathonSponsorResponseDto map(String sponsor, int discount) {
-            return HackathonSponsorResponseDto.builder()
-                    .sponsor(sponsor)
-                    .discount(discount)
-                    .build();
-        }
 }

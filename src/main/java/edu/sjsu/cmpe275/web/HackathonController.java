@@ -3,7 +3,6 @@ package edu.sjsu.cmpe275.web;
 
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.HackathonSponsor;
-import edu.sjsu.cmpe275.domain.entity.Organization;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.service.HackathonService;
 import edu.sjsu.cmpe275.service.HackathonSponsorService;
@@ -13,7 +12,6 @@ import edu.sjsu.cmpe275.web.mapper.HackathonMapper;
 import edu.sjsu.cmpe275.web.mapper.HackathonSponsorMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
 import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
-import edu.sjsu.cmpe275.web.model.response.HackathonSponsorResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -21,7 +19,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.lang.reflect.Field;
 import java.util.*;
 
 @RestController
@@ -41,7 +38,6 @@ public class HackathonController {
 
     private HackathonSponsorMapper hackathonSponsorMapper;
 
-    private HackathonSponsorResponseDto hackathonSponsorResponseDto;
 
 
     @Autowired
@@ -50,8 +46,7 @@ public class HackathonController {
             HackathonService hackathonService,
             UserService userService,
             HackathonSponsorMapper hackathonSponsorMapper,
-            HackathonSponsorService hackathonSponsorService,
-            HackathonSponsorResponseDto hackathonSponsorResponseDto
+            HackathonSponsorService hackathonSponsorService
     ){
         this.hackathonMapper = hackathonMapper;
         this.hackathonService = hackathonService;
@@ -59,7 +54,6 @@ public class HackathonController {
         this.hackathonSponsorMapper = hackathonSponsorMapper;
         this.hackathonSponsorService = hackathonSponsorService;
         this.organizationService = organizationService;
-        this.hackathonSponsorResponseDto = hackathonSponsorResponseDto;
     }
 
 
@@ -87,10 +81,10 @@ public class HackathonController {
         List<HackathonSponsor> allHackathonSponsor=  hackathonSponsorService.findHackathonSponsors(hackathon);
 
         for(HackathonSponsor hackathonSponsor : allHackathonSponsor){
-            hackathonSponsorMapper.map(
-                    hackathonSponsor.getOrganizationId().getName(),
-                    hackathonSponsor.getDiscount()
-            );
+
+                    hackathonSponsor.getOrganizationId().getName();
+                    hackathonSponsor.getDiscount();
+
         }
 
         return hackathonMapper.map(hackathon);
