@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -19,10 +20,11 @@ public class Hackathon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(name = "id",columnDefinition = "int unsigned")
     private long id;
 
     @Column(name = "name", nullable = false, unique = true)
+    @Size(max = 50)
     private String name;
 
     @Temporal(TemporalType.DATE)
@@ -33,21 +35,23 @@ public class Hackathon {
     @Column(name = "end_date", nullable = false)
     private java.util.Date endDate;
 
-    @Size(min = 10)
     @Column(name = "description", nullable = false)
+    @Size(min = 10,max = 255)
     private String description;
 
     @Column(name = "fee", nullable = false)
     private Float fee;
 
     @Column(name = "min_size", nullable = false)
+    @Max(value = 11)
     private int minSize;
 
     @Column(name = "max_size", nullable = false)
+    @Max(value = 11)
     private int maxSize;
 
-    @Column(name = "status", nullable = false)
-    private int status;
+    @Column(name = "status", columnDefinition = "enum")
+    private String status;
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinTable(name="hackathon_judge",

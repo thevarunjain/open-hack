@@ -3,17 +3,29 @@ package edu.sjsu.cmpe275.web.mapper;
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.HackathonSponsor;
 import edu.sjsu.cmpe275.domain.entity.Organization;
-import javafx.geometry.Orientation;
 import org.springframework.stereotype.Component;
 
 @Component
 public class HackathonSponsorMapper {
-//
-//        public HackathonSponsor map(final Hackathon hackathon, final Organization sponsorId, final int discount){
-//            return HackathonSponsor.builder()
-//                    .hackathonId1(hackathon)
-////                    .organizationId1(sponsorId)
-//                    .discount(discount)
-//                    .build();
-//        }
+
+        public HackathonSponsor map(final Hackathon hackathon, final Organization sponsors, final int discount){
+            return HackathonSponsor.builder()
+                    .id(mapSponsorId(hackathon, sponsors))
+                    .hackathonId(hackathon)
+                    .organizationId(sponsors)
+                    .discount(discount)
+                    .build();
+        }
+
+
+    private HackathonSponsor.HackathonSponsorId mapSponsorId(
+            final Hackathon hackathon,
+            final Organization sponsors
+    ) {
+        return HackathonSponsor.HackathonSponsorId.builder()
+                .hackathonId(hackathon.getId())
+                .sponsorId(sponsors.getId())
+                .build();
+    }
+
 }

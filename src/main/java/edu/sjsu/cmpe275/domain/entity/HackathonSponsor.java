@@ -22,18 +22,22 @@ public class HackathonSponsor{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private HackathonSponsorId id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hackathon_id", insertable = false, updatable = false)
     private Hackathon hackathonId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sponsor_id", insertable = false, updatable = false)
     private Organization organizationId;
 
-    @Column(name = "discount")
+    @Column(name = "discount",nullable = false)
     private int discount;
 
     @Embeddable
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class HackathonSponsorId implements Serializable {
 
         @Column(name = "hackathon_id", columnDefinition = "int unsigned")

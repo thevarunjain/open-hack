@@ -53,11 +53,11 @@ public class CreateHackathonRequestDto {
     @NotNull(message = "Atleast one judge is required")
     private Set<Long> judges;
 
-    private int status;
+    private String status;
 
     private List<Long> sponsors;
 
     private List<Integer> discount;
-
 }
+
 
