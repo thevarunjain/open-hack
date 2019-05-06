@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.web.model.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -38,5 +39,10 @@ public class UserResponseDto {
 
     @JsonProperty(value = "address")
     private AddressResponseDto address;
+
+    // TODO Needed to add Ignore to avoid duplicate values
+    @JsonProperty(value = "isAdmin")
+    @JsonIgnore
+    private boolean isAdmin;
 
 }

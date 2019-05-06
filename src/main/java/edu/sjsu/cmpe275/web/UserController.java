@@ -43,7 +43,10 @@ public class UserController {
     @PostMapping(value = "")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public UserResponseDto createUser(@Valid @RequestBody CreateUserRequestDto toCreate, Errors validationErrors) {
+    public UserResponseDto createUser(
+            @Valid @RequestBody CreateUserRequestDto toCreate,
+            Errors validationErrors
+    ) {
         // TODO Custom error on validation failure
         if (validationErrors.hasErrors()) {
 
