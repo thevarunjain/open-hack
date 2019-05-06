@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -39,20 +40,18 @@ public class Hackathon {
     private String description;
 
     @Column(name = "fee", nullable = false)
-    @Size(max = 10)
     private Float fee;
 
     @Column(name = "min_size", nullable = false)
-    @Size(max = 11)
+    @Max(value = 11)
     private int minSize;
 
     @Column(name = "max_size", nullable = false)
-    @Size(max = 11)
+    @Max(value = 11)
     private int maxSize;
 
-    @Column(name = "status", nullable = false)
-    @Size(max = 11)
-    private int status;
+    @Column(name = "status", columnDefinition = "enum")
+    private String status;
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinTable(name="hackathon_judge",

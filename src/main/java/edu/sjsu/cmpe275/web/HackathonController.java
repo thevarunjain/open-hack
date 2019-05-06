@@ -6,6 +6,7 @@ import edu.sjsu.cmpe275.domain.entity.HackathonSponsor;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.service.HackathonService;
 import edu.sjsu.cmpe275.service.HackathonSponsorService;
+import edu.sjsu.cmpe275.service.OrganizationService;
 import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.web.mapper.HackathonMapper;
 import edu.sjsu.cmpe275.web.mapper.HackathonSponsorMapper;
@@ -18,7 +19,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Null;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +38,8 @@ public class HackathonController {
 
     private UserService userService;
 
+    private OrganizationService organizationService;
+
     private HackathonSponsorMapper hackathonSponsorMapper;
 
 
@@ -52,6 +56,7 @@ public class HackathonController {
         this.userService = userService;
         this.hackathonSponsorMapper = hackathonSponsorMapper;
         this.hackathonSponsorService = hackathonSponsorService;
+        this.organizationService = organizationService;
     }
 
 
@@ -82,25 +87,21 @@ public class HackathonController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public HackathonResponseDto createHackathon(@Valid @RequestBody CreateHackathonRequestDto toCreateHackathon, Errors validationErrors){
+
         if(validationErrors.hasErrors()){
             //TODO Validate the error
         }
 
         Set<User> judges = new HashSet();
         for(Long id : toCreateHackathon.getJudges()){
-            if(true){
-                //TODO userService.findUser(id) validation
-            }
             judges.add(userService.findUser(id));
         }
 
-        Hackathon createdHackathon = hackathonService.createHackathon(hackathonMapper.map(toCreateHackathon,judges));
-
-        //Can be changed
-        for(int i=0;i<toCreateHackathon.getSponsors().size();i++){
-//                HackathonSponsor createdSponsor = hackathonSponsorMapper.map(hackathonService.findHackathon(createdHackathon.getId()), toCreateHackathon.getSponsors().get(i), toCreateHackathon.getDiscount().get(i));
-//                hackathonSponsorService.createSponsors(createdSponsor);
-        }
+        Hackathon createdHackathon = hackathonService.createHackathon(
+                hackathonMapper.map(toCreateHackathon,judges),
+                toCreateHackathon.getSponsors(),
+                toCreateHackathon.getDiscount()
+        );
 
         return hackathonMapper.map(createdHackathon);
     }
@@ -108,4 +109,4 @@ public class HackathonController {
 }
 
 
-//@GetMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.GET)
+

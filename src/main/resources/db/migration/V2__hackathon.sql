@@ -4,10 +4,10 @@ CREATE TABLE hackathon (
   start_date date NOT NULL,
   end_date date NOT NULL,
   description varchar(255) NOT NULL,
-  fee float(10) NOT NULL,
+  fee float NOT NULL,
   max_size int(11) NOT NULL,
   min_size int(11) NOT NULL,
-  status int(11) NOT NULL,
+  status enum('Open', 'Closed', 'Finalized') DEFAULT "Open",
   PRIMARY KEY (id),
   UNIQUE KEY (name)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
