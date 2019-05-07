@@ -64,7 +64,7 @@ public class HackathonController {
     @GetMapping(value = "/{id}", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public HackathonResponseDto getHackathon(@PathVariable @NonNull Long id){
+    public HackathonResponseDto getHackathonById(@PathVariable @NonNull Long id){
 
         Hackathon hackathon =  hackathonService.findHackathon(id);
         List<HackathonSponsor> allHackathonSponsor=  hackathonSponsorService.findHackathonSponsors(hackathon);
@@ -79,6 +79,23 @@ public class HackathonController {
     }
 
 
+    @GetMapping(value = "/name/{name}", produces = "application/json")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public List<Hackathon> getHackathonByName(@PathVariable @NonNull String name){
+
+        List<Hackathon> hackathon =  hackathonService.findHackathonByName(name);
+//        List<HackathonSponsor> allHackathonSponsor=  hackathonSponsorService.findHackathonSponsors(hackathon);
+
+//        for(HackathonSponsor hackathonSponsor : allHackathonSponsor){
+//
+//            hackathonSponsor.getOrganizationId().getName();
+//            hackathonSponsor.getDiscount();
+//
+//        }
+//        return hackathonMapper.map(hackathon);
+        return hackathon;
+    }
 
 
     @PostMapping(value = "", produces = "application/json")
@@ -115,7 +132,6 @@ public class HackathonController {
         if(validationErrors.hasErrors()){
             //TODO Validate the error
         }
-
 
         Hackathon hackathon =  hackathonService.updateHackathon(id, updateHackathon);
 

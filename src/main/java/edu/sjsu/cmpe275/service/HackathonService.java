@@ -44,6 +44,10 @@ public class HackathonService {
                 .orElseThrow(()-> new HackathonNotFoundException(id));
     }
 
+    public List<Hackathon> findHackathonByName(final String name){
+        return hackathonRepository.findByName(name);
+    }
+
     @Transactional
     public Hackathon createHackathon(final Hackathon hackathon, final List<Long> sponsors, final List<Integer> discount){
 
@@ -65,7 +69,7 @@ public class HackathonService {
     public Hackathon updateHackathon(final Long id, @Valid UpdateHackathonRequestDto updateHackathon){
         Hackathon hackathon = findHackathon(id);
 //        Date todaysDate = new Date();
-//        Date 
+//        Date
         hackathon.setStartDate(Objects.nonNull(updateHackathon.getStartDate())
                                       ? updateHackathon.getStartDate()
                                       : hackathon.getStartDate()
