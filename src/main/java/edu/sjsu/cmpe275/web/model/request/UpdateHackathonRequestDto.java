@@ -14,6 +14,9 @@ public class UpdateHackathonRequestDto {
 
     private java.util.Date endDate;
 
+    private java.util.Date currentDate;
+
     private String toState;
+
 
 }

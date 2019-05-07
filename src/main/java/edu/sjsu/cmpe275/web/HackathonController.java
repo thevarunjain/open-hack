@@ -21,6 +21,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -145,13 +147,11 @@ public class HackathonController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public HackathonResponseDto updateHackathon(@Valid @RequestBody UpdateHackathonRequestDto updateHackathon,
-                                Errors validationErrors, @NonNull @PathVariable Long id){
+                                Errors validationErrors, @NonNull @PathVariable Long id) throws ParseException {
 
         if(validationErrors.hasErrors()){
             //TODO Validate the error
         }
-        System.out.println("................."+updateHackathon.getToState());
-
         Hackathon hackathon =  hackathonService.updateHackathon(id, updateHackathon);
 
         return hackathonMapper.map(hackathon);

@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -67,9 +70,34 @@ public class HackathonService {
     }
 
     @Transactional
-    public Hackathon updateHackathon(final Long id, @Valid UpdateHackathonRequestDto updateHackathon){
+    public Hackathon updateHackathon(final Long id, @Valid UpdateHackathonRequestDto updateHackathon) throws ParseException {
         Hackathon hackathon = findHackathon(id);
-//        Date todaysDate = new Date();
+
+
+        Date start = Objects.nonNull(updateHackathon.getStartDate())
+                            ? updateHackathon.getStartDate()
+                            : hackathon.getStartDate();
+
+        Date end = Objects.nonNull(updateHackathon.getEndDate())
+                          ? updateHackathon.getEndDate()
+                          : hackathon.getEndDate();
+
+        Date current = Objects.nonNull(updateHackathon.getCurrentDate())
+                              ? updateHackathon.getCurrentDate()
+                              : new Date();
+
+
+            if(current.compareTo(start)==1  && current.compareTo(end)==-1 ){  // between start ned
+                hackathon.setStatus("Closed");
+            }else if(current.compareTo(start)==0 || current.compareTo(end)==0){     // on start and end
+                hackathon.setStatus("Closed");
+            }else if(current.compareTo(start)==-1){                 // before start
+                hackathon.setStatus("Open");
+            }else if(current.compareTo(end)==1){                    // after end
+                hackathon.setStatus("Closed");
+            }
+
+
         hackathon.setStartDate(Objects.nonNull(updateHackathon.getStartDate())
                                       ? updateHackathon.getStartDate()
                                       : hackathon.getStartDate()
@@ -80,9 +108,6 @@ public class HackathonService {
                                     : hackathon.getEndDate()
                                 );
 
-        System.out.println(">>>>>>>>>>>>>>>>>>>");
-        System.out.println(updateHackathon.getToState());
-        System.err.println(hackathon.getStatus());
         hackathon.setStatus(Objects.nonNull(updateHackathon.getToState())
                                    ? updateHackathon.getToState()
                                    : hackathon.getStatus());
