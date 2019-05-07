@@ -33,8 +33,11 @@ public class OrganizationService {
         this.organizationMembershipService = organizationMembershipService;
     }
 
-    public List<Organization> findOrganizations() {
-        return organizationRepository.findAll();
+    public List<Organization> findOrganizations(final String name) {
+        if (Objects.nonNull(name))
+            return organizationRepository.findByNameContainingIgnoreCase(name);
+        else
+            return organizationRepository.findAll();
     }
 
     public Organization findOrganization(final Long id) {
@@ -55,7 +58,7 @@ public class OrganizationService {
     public List<User> findApprovedOrganizationMembers(final Long id) {
         Organization organization = findOrganization(id);
         List<OrganizationMembership> approvedOrganizationMemberShipList =
-                organizationMembershipService.findApprovedOrganizationMemberships(organization);
+                organizationMembershipService.findOrganizationMemberships(organization, "Approved");
         return Objects.nonNull(approvedOrganizationMemberShipList)
                 ? approvedOrganizationMemberShipList
                 .stream()
