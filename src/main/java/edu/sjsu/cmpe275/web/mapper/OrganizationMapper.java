@@ -43,7 +43,7 @@ public class OrganizationMapper {
                 .owner(mapOwnerResponse(organization.getOwner()))
                 .description(organization.getDescription())
                 .address(mapAddressResponse(organization.getAddress()))
-                .members(mapMembersResponse(organization))
+//                .members(mapMembersResponse(organization))
                 .build();
     }
 
@@ -76,18 +76,18 @@ public class OrganizationMapper {
                 .build();
     }
 
-    private List<AssociatedUserResponseDto> mapMembersResponse(final Organization organization) {
-        List<AssociatedUserResponseDto> members = Objects.nonNull(organization.getMembers())
-                ? organization.getMembers()
-                .stream()
-                .map(member -> AssociatedUserResponseDto.builder()
-                        .id(member.getId())
-                        .email(member.getEmail())
-                        .screenName(member.getScreenName())
-                        .build()
-                )
-                .collect(Collectors.toList()) : new ArrayList<>();
-        return members;
-    }
+//    private List<AssociatedUserResponseDto> mapMembersResponse(final Organization organization) {
+//        List<AssociatedUserResponseDto> members = Objects.nonNull(organization.getMembers())
+//                ? organization.getMembers()
+//                .stream()
+//                .map(member -> AssociatedUserResponseDto.builder()
+//                        .id(member.getId())
+//                        .email(member.getEmail())
+//                        .screenName(member.getScreenName())
+//                        .build()
+//                )
+//                .collect(Collectors.toList()) : new ArrayList<>();
+//        return members;
+//    }
 
 }

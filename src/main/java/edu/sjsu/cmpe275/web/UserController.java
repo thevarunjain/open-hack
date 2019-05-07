@@ -42,7 +42,7 @@ public class UserController {
 
     @PostMapping(value = "")
     @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDto createUser(
             @Valid @RequestBody CreateUserRequestDto toCreate,
             Errors validationErrors
