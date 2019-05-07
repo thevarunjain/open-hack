@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/hackathons")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TeamController {
     private final TeamService teamService;
     private final UserService userService;
