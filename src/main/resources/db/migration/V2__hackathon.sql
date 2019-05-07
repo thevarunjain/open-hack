@@ -7,6 +7,7 @@ CREATE TABLE hackathon (
   fee float NOT NULL,
   max_size int(11) NOT NULL,
   min_size int(11) NOT NULL,
+  owner_id int unsigned,
   status enum('Open', 'Closed', 'Finalized') DEFAULT 'Open',
   PRIMARY KEY (id),
   UNIQUE KEY (name)

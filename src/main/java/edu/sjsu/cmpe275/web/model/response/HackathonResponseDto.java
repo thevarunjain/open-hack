@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.sjsu.cmpe275.domain.entity.User;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+import java.sql.Date;
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -20,6 +23,9 @@ public class HackathonResponseDto {
 
     @JsonProperty("name")
     private String name;
+
+    @JsonProperty("owner")
+    private AssociatedUserResponseDto owner;
 
     @JsonProperty("description")
     private String description;
@@ -39,10 +45,19 @@ public class HackathonResponseDto {
     @JsonProperty("maxSize")
     private int maxSize;
 
-    @JsonProperty("judges")
-    private Set<User> judges;
+//    @JsonProperty("judges")
+//    private Set<User> judges;
+
+    @JsonProperty(value = "judges")
+//    @Singular
+    private Set<AssociatedUserResponseDto> judges;
+//    private Set<User> judges;
 
     @JsonProperty("status")
     private String status;
+
+    @JsonProperty("sponsors")
+    private List<AssociatedSponsorResponseDto> sponsors;
+
 
 }

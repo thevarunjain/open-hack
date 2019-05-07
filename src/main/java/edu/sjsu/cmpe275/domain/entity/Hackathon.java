@@ -53,6 +53,9 @@ public class Hackathon {
     @Column(name = "status", columnDefinition = "enum DEFAULT 'OPEN' ")
     private String status;
 
+    @OneToOne
+    @JoinColumn(name = "owner_id", nullable = false, updatable = false)
+    private User owner;
 
     @OneToMany(cascade=CascadeType.ALL)
     @JoinTable(name="hackathon_judge",
