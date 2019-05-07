@@ -9,5 +9,5 @@ public interface OrganizationMembershipRepository
         extends JpaRepository<OrganizationMembership, OrganizationMembership.OrganizationMembershipId> {
     List<OrganizationMembership> findByOrganizationIdAndStatus(Long id, String status);
 
-    List<OrganizationMembership> findByOrOrganizationId(Long id);
+    List<OrganizationMembership> findByOrganizationId(Long id);
 }
