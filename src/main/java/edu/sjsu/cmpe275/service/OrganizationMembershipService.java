@@ -51,6 +51,15 @@ public class OrganizationMembershipService {
             return organizationMembershipRepository.findByOrganizationId(organization.getId());
     }
 
+
+    public OrganizationMembership findOrganizationByMemberAndStatus(
+            final User user,
+            final String status
+    ) {
+        return organizationMembershipRepository.findByMemberIdAndStatus(user.getId(), status)
+                .orElse(null);
+    }
+
     @Transactional
     public OrganizationMembership createOrganizationMembership(final OrganizationMembership newOrganizationMembership) {
         return organizationMembershipRepository.save(newOrganizationMembership);

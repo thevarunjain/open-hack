@@ -33,16 +33,22 @@ public class OrganizationService {
         this.organizationMembershipService = organizationMembershipService;
     }
 
+    public Organization findOrganization(final Long id) {
+        return organizationRepository.findById(id)
+                .orElseThrow(() -> new OrganizationNotFoundException(id));
+    }
+
+
+    public Organization findOrganizationByOwner(final User user) {
+        return organizationRepository.findByOwnerId(user.getId())
+                .orElse(null);
+    }
+
     public List<Organization> findOrganizations(final String name) {
         if (Objects.nonNull(name))
             return organizationRepository.findByNameContainingIgnoreCase(name);
         else
             return organizationRepository.findAll();
-    }
-
-    public Organization findOrganization(final Long id) {
-        return organizationRepository.findById(id)
-                .orElseThrow(() -> new OrganizationNotFoundException(id));
     }
 
     @Transactional
