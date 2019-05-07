@@ -3,7 +3,6 @@ package edu.sjsu.cmpe275.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -31,6 +30,7 @@ public class Organization {
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "member", targetEntity = OrganizationMembership.class)
-    private List<User> members;
+    // TODO DO I keep it here OR should be handled by /orgs/{id}/members
+//    @OneToMany(mappedBy = "member", targetEntity = OrganizationMembership.class)
+//    private List<User> members;
 }
