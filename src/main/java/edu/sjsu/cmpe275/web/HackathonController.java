@@ -26,6 +26,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping(value = "/hackathons")
+@CrossOrigin(origins = "http://localhost:3000")
 public class HackathonController {
 
 
