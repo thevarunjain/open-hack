@@ -4,7 +4,6 @@ import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.Team;
 import edu.sjsu.cmpe275.domain.entity.TeamMembership;
 import edu.sjsu.cmpe275.domain.exception.TeamNotFoundException;
-import edu.sjsu.cmpe275.domain.repository.TeamMembershipRepository;
 import edu.sjsu.cmpe275.domain.repository.TeamRepository;
 import edu.sjsu.cmpe275.web.mapper.TeamMembershipMapper;
 import org.springframework.beans.factory.annotation.Autowired;

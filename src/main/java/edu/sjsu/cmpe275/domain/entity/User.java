@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 @Entity
 @AllArgsConstructor
@@ -54,6 +55,48 @@ public class User {
     @Column(name = "is_admin", columnDefinition = "bit", nullable = false)
     private boolean isAdmin;
 
+    public void update(final User fromRequest) {
+        if (Objects.nonNull(fromRequest.getFirstName())) {
+            this.setFirstName(fromRequest.getFirstName());
+        }
+        if (Objects.nonNull(fromRequest.getLastName())) {
+            this.setLastName(fromRequest.getLastName());
+        }
+        if (Objects.nonNull(fromRequest.getPortraitURL())) {
+            this.setPortraitURL(fromRequest.getPortraitURL());
+        }
+        if (Objects.nonNull(fromRequest.getBusinessTitle())) {
+            this.setBusinessTitle(fromRequest.getBusinessTitle());
+        }
+        if (Objects.nonNull(fromRequest.getAboutMe())) {
+            this.setAboutMe(fromRequest.getAboutMe());
+        }
+        if (Objects.nonNull(fromRequest.getAddress())) {
+            Address newAddress = Address.builder()
+                    .street(
+                            Objects.nonNull(fromRequest.getAddress().getStreet())
+                                    ? fromRequest.getAddress().getStreet()
+                                    : this.getAddress().getStreet()
+                    )
+                    .city(
+                            Objects.nonNull(fromRequest.getAddress().getCity())
+                                    ? fromRequest.getAddress().getCity()
+                                    : this.getAddress().getCity()
+                    )
+                    .state(
+                            Objects.nonNull(fromRequest.getAddress().getState())
+                                    ? fromRequest.getAddress().getState()
+                                    : this.getAddress().getState()
+                    )
+                    .zip(
+                            Objects.nonNull(fromRequest.getAddress().getZip())
+                                    ? fromRequest.getAddress().getZip()
+                                    : this.getAddress().getZip()
+                    )
+                    .build();
+            this.setAddress(newAddress);
+        }
+    }
 }
 
 

@@ -1,6 +1,6 @@
 package edu.sjsu.cmpe275.web;
 
-import edu.sjsu.cmpe275.domain.entity.*;
+import edu.sjsu.cmpe275.domain.entity.Team;
 import edu.sjsu.cmpe275.service.TeamMembershipService;
 import edu.sjsu.cmpe275.service.TeamService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -13,10 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.soap.SOAPBinding;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @RestController
 @RequestMapping("/hackathons")
