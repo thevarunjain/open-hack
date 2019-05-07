@@ -21,14 +21,15 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.validation.constraints.NotNull;
-import java.util.*;
 
 @RestController
 @RequestMapping(value = "/hackathons")
+@CrossOrigin(origins = "http://localhost:3000")
 public class HackathonController {
 
 
