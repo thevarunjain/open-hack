@@ -37,7 +37,6 @@ public class HackathonController {
     private HackathonService hackathonService;
     private HackathonSponsorService hackathonSponsorService;
     private UserService userService;
-    private OrganizationService organizationService;
     private HackathonSponsorMapper hackathonSponsorMapper;
 
     @Autowired
@@ -53,16 +52,15 @@ public class HackathonController {
         this.userService = userService;
         this.hackathonSponsorMapper = hackathonSponsorMapper;
         this.hackathonSponsorService = hackathonSponsorService;
-        this.organizationService = organizationService;
     }
 
 
     @GetMapping(value = "", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<HackathonResponseDto> getHackathons(){
+    public List<HackathonResponseDto> getHackathons(@RequestParam(required = false) String name){
 
-        List<Hackathon> allHackathons = hackathonService.findHackathons();
+        List<Hackathon> allHackathons = hackathonService.findHackathons(name);
 
         return hackathonMapper.map(allHackathons);
     }
@@ -70,7 +68,7 @@ public class HackathonController {
     @GetMapping(value = "/{id}", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public HackathonResponseDto getHackathonById(@PathVariable @NonNull Long id){
+    public HackathonResponseDto getHackathon(@PathVariable @NonNull Long id){
 
         Hackathon hackathon =  hackathonService.findHackathon(id);
 
@@ -89,24 +87,6 @@ public class HackathonController {
 
         }
         return hackathonMapper.map(hackathon, sponsorResponse);
-    }
-
-    @GetMapping(value = "/name/{name}", produces = "application/json")
-    @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
-    public List<Hackathon> getHackathonByName(@PathVariable @NonNull String name){
-
-        List<Hackathon> hackathon =  hackathonService.findHackathonByName(name);
-//        List<HackathonSponsor> allHackathonSponsor=  hackathonSponsorService.findHackathonSponsors(hackathon);
-
-//        for(HackathonSponsor hackathonSponsor : allHackathonSponsor){
-//
-//            hackathonSponsor.getOrganizationId().getName();
-//            hackathonSponsor.getDiscount();
-//
-//        }
-//        return hackathonMapper.map(hackathon);
-        return hackathon;
     }
 
 
