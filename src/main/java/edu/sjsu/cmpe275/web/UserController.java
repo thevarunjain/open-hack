@@ -1,7 +1,11 @@
 package edu.sjsu.cmpe275.web;
 
 
+import edu.sjsu.cmpe275.domain.entity.Organization;
+import edu.sjsu.cmpe275.domain.entity.OrganizationMembership;
 import edu.sjsu.cmpe275.domain.entity.User;
+import edu.sjsu.cmpe275.service.OrganizationMembershipService;
+import edu.sjsu.cmpe275.service.OrganizationService;
 import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.web.mapper.UserMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateUserRequestDto;
@@ -26,13 +30,21 @@ public class UserController {
 
     private final UserMapper userMapper;
 
+    private final OrganizationService organizationService;
+
+    private final OrganizationMembershipService organizationMembershipService;
+
     @Autowired
     public UserController(
             UserService userService,
-            UserMapper userMapper
+            UserMapper userMapper,
+            OrganizationService organizationService,
+            OrganizationMembershipService organizationMembershipService
     ) {
         this.userService = userService;
         this.userMapper = userMapper;
+        this.organizationService = organizationService;
+        this.organizationMembershipService = organizationMembershipService;
     }
 
     @GetMapping(value = "")
@@ -63,7 +75,19 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto getUser(@PathVariable @NotNull Long id) {
         User user  = userService.findUser(id);
-        return userMapper.map(user);
+        Organization ownerOf = organizationService.findOrganizationByOwner(user);
+        OrganizationMembership membership =
+                organizationMembershipService.findOrganizationByMemberAndStatus(
+                        user,
+                        "Approved"
+                );
+        Organization memberOf = Objects.nonNull(membership)
+                ? membership.getOrganization() : null;
+        return userMapper.map(
+                user,
+                ownerOf,
+                memberOf
+        );
     }
 
     @PutMapping(value = "/{id}")

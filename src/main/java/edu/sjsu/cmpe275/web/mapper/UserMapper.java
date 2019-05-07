@@ -1,18 +1,22 @@
 package edu.sjsu.cmpe275.web.mapper;
 
 import edu.sjsu.cmpe275.domain.entity.Address;
+import edu.sjsu.cmpe275.domain.entity.Organization;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.web.model.request.AddressRequestDto;
 import edu.sjsu.cmpe275.web.model.request.CreateUserRequestDto;
 import edu.sjsu.cmpe275.web.model.request.UpdateUserRequestDto;
 import edu.sjsu.cmpe275.web.model.response.AddressResponseDto;
+import edu.sjsu.cmpe275.web.model.response.AssociatedOrganizationResponseDto;
 import edu.sjsu.cmpe275.web.model.response.NameResponseDto;
 import edu.sjsu.cmpe275.web.model.response.UserResponseDto;
+import jdk.nashorn.internal.runtime.options.Option;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -78,8 +82,27 @@ public class UserMapper {
                 .screenName(user.getScreenName())
                 .portraitURL(user.getPortraitURL())
                 .businessTitle(user.getBusinessTitle())
-// TODO                .organization(mapOrganizationResponse(user.getOrganization()))
                 .aboutMe(user.getAboutMe())
+                .address(mapAddressResponse(user.getAddress()))
+                .isAdmin(user.isAdmin())
+                .build();
+    }
+
+    public UserResponseDto map(
+            final User user,
+            final Organization ownerOf,
+            final Organization memberOf
+    ) {
+        return UserResponseDto.builder()
+                .id(user.getId())
+                .name(mapNameResponse(user))
+                .email(user.getEmail())
+                .screenName(user.getScreenName())
+                .portraitURL(user.getPortraitURL())
+                .businessTitle(user.getBusinessTitle())
+                .aboutMe(user.getAboutMe())
+                .ownerOf(mapOrganizationResponse(ownerOf))
+                .memberOf(mapOrganizationResponse(memberOf))
                 .address(mapAddressResponse(user.getAddress()))
                 .isAdmin(user.isAdmin())
                 .build();
@@ -104,15 +127,15 @@ public class UserMapper {
                 .build();
     }
 
-//    private AssociatedOrganizationResponseDto mapOrganizationResponse(Organization organization) {
-//        if (Objects.isNull(organization)) {
-//            return AssociatedOrganizationResponseDto.builder().build();
-//        }
-//        return AssociatedOrganizationResponseDto.builder()
-//                .id(organization.getId())
-//                .name(organization.getName())
-//                .build();
-//    }
+    private AssociatedOrganizationResponseDto mapOrganizationResponse(final Organization organization) {
+        if (Objects.isNull(organization)) {
+            return null;
+        }
+        return AssociatedOrganizationResponseDto.builder()
+                .id(organization.getId())
+                .name(organization.getName())
+                .build();
+    }
 
     private AddressResponseDto mapAddressResponse(final Address address) {
         if (Objects.isNull(address)) {

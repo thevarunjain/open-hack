@@ -31,11 +31,14 @@ public class UserResponseDto {
     @JsonProperty("businessTitle")
     private String businessTitle;
 
-    @JsonProperty("organization")
-    private AssociatedOrganizationResponseDto organization;
-
     @JsonProperty("aboutMe")
     private String aboutMe;
+
+    @JsonProperty("ownerOf")
+    private AssociatedOrganizationResponseDto ownerOf;
+
+    @JsonProperty("memberOf")
+    private AssociatedOrganizationResponseDto memberOf;
 
     @JsonProperty(value = "address")
     private AddressResponseDto address;
