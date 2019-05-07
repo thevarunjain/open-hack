@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class UserService {
@@ -20,9 +21,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> findUsers() {
+    public List<User> findUsers(final String name) {
         // TODO Only return users with valid email address
-        return userRepository.findAll();
+        if (Objects.nonNull(name))
+            return userRepository.findByFirstNameContainingOrLastNameContainingAllIgnoreCase(name, name);
+        else
+            return userRepository.findAll();
     }
 
     public User findUser(final Long id) {

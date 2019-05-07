@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/users")
@@ -37,8 +38,8 @@ public class UserController {
     @GetMapping(value = "")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<UserResponseDto> getUsers() {
-        List<User> allUsers  = userService.findUsers();
+    public List<UserResponseDto> getUsers(@RequestParam(required = false) String name) {
+        List<User> allUsers = userService.findUsers(name);
         return userMapper.map(allUsers);
     }
 

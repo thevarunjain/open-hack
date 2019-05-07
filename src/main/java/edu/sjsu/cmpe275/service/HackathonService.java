@@ -39,17 +39,16 @@ public class HackathonService {
         this.hackathonSponsorService = hackathonSponsorService;
     }
 
-    public List<Hackathon> findHackathons(){
-        return hackathonRepository.findAll();
+    public List<Hackathon> findHackathons(final String name){
+        if (Objects.nonNull(name))
+            return hackathonRepository.findByNameContainingIgnoreCase(name);
+        else
+            return hackathonRepository.findAll();
     }
 
     public Hackathon findHackathon(final long id){
         return hackathonRepository.findById(id)
                 .orElseThrow(()-> new HackathonNotFoundException(id));
-    }
-
-    public List<Hackathon> findHackathonByName(final String name){
-        return hackathonRepository.findByName(name);
     }
 
     @Transactional
