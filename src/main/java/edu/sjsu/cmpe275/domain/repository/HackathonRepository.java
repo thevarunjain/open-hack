@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface HackathonRepository extends JpaRepository<Hackathon, Long> {
 
-    List<Hackathon> findByName (String name);
+    List<Hackathon> findByNameContainingIgnoreCase (String name);
 
 }

@@ -58,8 +58,8 @@ public class OrganizationController {
     @GetMapping(value = "")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<OrganizationResponseDto> getOrganizations() {
-        List<Organization> allOrganizations  = organizationService.findOrganizations();
+    public List<OrganizationResponseDto> getOrganizations(@RequestParam(required = false) String name) {
+        List<Organization> allOrganizations = organizationService.findOrganizations(name);
         return organizationMapper.map(allOrganizations);
     }
 
@@ -84,7 +84,7 @@ public class OrganizationController {
     @GetMapping(value = "/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public OrganizationResponseDto getUser(@PathVariable @NotNull Long id) {
+    public OrganizationResponseDto getOrganization(@PathVariable @NotNull Long id) {
         Organization organization  = organizationService.findOrganization(id);
         return organizationMapper.map(organization);
     }
@@ -109,11 +109,12 @@ public class OrganizationController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<OrganizationMembershipResponseDto> getOrganizationMemberships(
-            @PathVariable @NotNull Long id
+            @PathVariable @NotNull Long id,
+            @RequestParam(required = false) String status
     ) {
         Organization organization = organizationService.findOrganization(id);
         List<OrganizationMembership> organizationMembershipList =
-                organizationMembershipService.findOrganizationMemberships(organization);
+                organizationMembershipService.findOrganizationMemberships(organization, status);
         return organizationMembershipMapper.map(organizationMembershipList);
     }
 

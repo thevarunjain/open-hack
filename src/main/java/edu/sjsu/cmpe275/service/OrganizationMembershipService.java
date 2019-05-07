@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class OrganizationMembershipService {
@@ -36,20 +37,18 @@ public class OrganizationMembershipService {
                 .orElseThrow(() -> new OrganizationMembershipNotFoundException(toFind));
     }
 
-    public List<OrganizationMembership> findApprovedOrganizationMemberships(final Organization organization) {
-        // This is used to find all approved membership of given organization
-        List<OrganizationMembership> approvedMembershipList =
-                organizationMembershipRepository.findByOrganizationIdAndStatus(
-                        organization.getId(),
-                        "Approved"
-                );
-        return approvedMembershipList;
-    }
-
-    public List<OrganizationMembership> findOrganizationMemberships(final Organization organization) {
-        List<OrganizationMembership> membershipList =
-                organizationMembershipRepository.findByOrOrganizationId(organization.getId());
-        return membershipList;
+    public List<OrganizationMembership> findOrganizationMemberships(
+            final Organization organization,
+            final String status
+    ) {
+        // This is used to find membership of given organization based on status
+        if (Objects.nonNull(status))
+            return organizationMembershipRepository.findByOrganizationIdAndStatus(
+                    organization.getId(),
+                    status
+            );
+        else
+            return organizationMembershipRepository.findByOrganizationId(organization.getId());
     }
 
     @Transactional
