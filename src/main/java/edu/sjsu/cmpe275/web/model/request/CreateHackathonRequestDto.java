@@ -1,22 +1,13 @@
 package edu.sjsu.cmpe275.web.model.request;
 
-import edu.sjsu.cmpe275.domain.entity.Organization;
-import edu.sjsu.cmpe275.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.aspectj.weaver.ast.Or;
-import org.hibernate.validator.constraints.URL;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 

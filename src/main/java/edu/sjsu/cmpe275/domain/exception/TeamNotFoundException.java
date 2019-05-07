@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @ToString
 @Getter
-public class TeamNotFoundException extends RuntimeException{
+public class TeamNotFoundException extends RuntimeException {
     private final String ERROR_CODE = "TEAM_NOT_FOUND";
 
     private Long id;

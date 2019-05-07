@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 @Component
 public class HackathonService {

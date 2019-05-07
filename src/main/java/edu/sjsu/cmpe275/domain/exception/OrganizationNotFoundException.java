@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @ToString
 @Getter
-public class OrganizationNotFoundException extends RuntimeException{
+public class OrganizationNotFoundException extends RuntimeException {
     private final String ERROR_CODE = "ORGANIZATION_NOT_FOUND";
 
     private Long id;
