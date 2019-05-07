@@ -50,7 +50,7 @@ public class Hackathon {
     @Max(value = 11)
     private int maxSize;
 
-    @Column(name = "status", columnDefinition = "enum DEFAULT 'OPEN' ")
+    @Column(name = "status", columnDefinition = "enum")
     private String status;
 
     @OneToOne

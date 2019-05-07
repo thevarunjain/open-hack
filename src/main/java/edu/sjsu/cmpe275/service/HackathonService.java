@@ -69,7 +69,6 @@ public class HackathonService {
     public Hackathon updateHackathon(final Long id, @Valid UpdateHackathonRequestDto updateHackathon){
         Hackathon hackathon = findHackathon(id);
 //        Date todaysDate = new Date();
-//        Date
         hackathon.setStartDate(Objects.nonNull(updateHackathon.getStartDate())
                                       ? updateHackathon.getStartDate()
                                       : hackathon.getStartDate()
@@ -79,6 +78,13 @@ public class HackathonService {
                                     ? updateHackathon.getEndDate()
                                     : hackathon.getEndDate()
                                 );
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>");
+        System.out.println(updateHackathon.getToState());
+        System.err.println(hackathon.getStatus());
+        hackathon.setStatus(Objects.nonNull(updateHackathon.getToState())
+                                   ? updateHackathon.getToState()
+                                   : hackathon.getStatus());
 
         return hackathon;
     }

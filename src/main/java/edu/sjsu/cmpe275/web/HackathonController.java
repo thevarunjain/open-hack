@@ -147,6 +147,7 @@ public class HackathonController {
         if(validationErrors.hasErrors()){
             //TODO Validate the error
         }
+        System.out.println("................."+updateHackathon.getToState());
 
         Hackathon hackathon =  hackathonService.updateHackathon(id, updateHackathon);
 
