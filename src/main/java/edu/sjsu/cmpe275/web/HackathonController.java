@@ -12,6 +12,7 @@ import edu.sjsu.cmpe275.web.mapper.HackathonMapper;
 import edu.sjsu.cmpe275.web.mapper.HackathonSponsorMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
 import edu.sjsu.cmpe275.web.model.request.UpdateHackathonRequestDto;
+import edu.sjsu.cmpe275.web.model.response.AssociatedSponsorResponseDto;
 import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @RestController
@@ -67,17 +69,23 @@ public class HackathonController {
     public HackathonResponseDto getHackathonById(@PathVariable @NonNull Long id){
 
         Hackathon hackathon =  hackathonService.findHackathon(id);
+
         List<HackathonSponsor> allHackathonSponsor=  hackathonSponsorService.findHackathonSponsors(hackathon);
+
+        List<AssociatedSponsorResponseDto> sponsorResponse = new ArrayList<>();
 
         for(HackathonSponsor hackathonSponsor : allHackathonSponsor){
 
-                    hackathonSponsor.getOrganizationId().getName();
-                    hackathonSponsor.getDiscount();
+            sponsorResponse.add(
+                    hackathonSponsorMapper.map(
+                            hackathonSponsor.getId().getSponsorId(),
+                            hackathonSponsor.getOrganizationId().getName(),
+                            hackathonSponsor.getDiscount()
+                    ));
 
         }
-        return hackathonMapper.map(hackathon);
+        return hackathonMapper.map(hackathon, sponsorResponse);
     }
-
 
     @GetMapping(value = "/name/{name}", produces = "application/json")
     @ResponseBody
@@ -101,7 +109,9 @@ public class HackathonController {
     @PostMapping(value = "", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public HackathonResponseDto createHackathon(@Valid @RequestBody CreateHackathonRequestDto toCreateHackathon, Errors validationErrors){
+    public HackathonResponseDto createHackathon(@Valid @RequestBody CreateHackathonRequestDto toCreateHackathon,
+                                                Errors validationErrors,
+                                                @NotNull @RequestParam Long ownerId){
 
         if(validationErrors.hasErrors()){
             //TODO Validate the error
@@ -111,15 +121,19 @@ public class HackathonController {
         for(Long id : toCreateHackathon.getJudges()){
             judges.add(userService.findUser(id));
         }
+        User owner = userService.findUser(ownerId);
 
         Hackathon createdHackathon = hackathonService.createHackathon(
-                hackathonMapper.map(toCreateHackathon,judges),
+                hackathonMapper.map(toCreateHackathon,judges, owner),
                 toCreateHackathon.getSponsors(),
                 toCreateHackathon.getDiscount()
         );
 
         return hackathonMapper.map(createdHackathon);
     }
+
+
+
 
     @RequestMapping(value = "/{id}",
             produces = "application/json",
@@ -137,6 +151,7 @@ public class HackathonController {
 
         return hackathonMapper.map(hackathon);
     }
+
 }
 
 
