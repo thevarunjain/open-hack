@@ -8,17 +8,21 @@ import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.web.mapper.TeamMapper;
 import edu.sjsu.cmpe275.web.mapper.TeamMembershipMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateTeamRequestDto;
+import edu.sjsu.cmpe275.web.model.request.UpdateHackathonRequestDto;
+import edu.sjsu.cmpe275.web.model.request.UpdateTeamRequestDto;
 import edu.sjsu.cmpe275.web.model.response.AssociatedMemberResponseDto;
 import edu.sjsu.cmpe275.web.model.response.AssociatedSponsorResponseDto;
 import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import edu.sjsu.cmpe275.web.model.response.TeamResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,6 +119,23 @@ public class TeamController {
         );
 
         return teamMapper.map(createdTeam);
+    }
+
+    @RequestMapping(value = "/{hid}/teams/{tid}",
+            produces = "application/json",
+            method=RequestMethod.PATCH)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public TeamResponseDto updateHackathon(@Valid @RequestBody UpdateTeamRequestDto upadateTeam,
+                                                Errors validationErrors,
+                                                @NonNull @PathVariable Long hid,
+                                                @NonNull @PathVariable Long tid)  {
+
+        if(validationErrors.hasErrors()){
+            //TODO Validate the error
+        }
+        Team team =  teamService.updateTeam(hid, upadateTeam, tid);
+                 return teamMapper.map(team);
     }
 
 }

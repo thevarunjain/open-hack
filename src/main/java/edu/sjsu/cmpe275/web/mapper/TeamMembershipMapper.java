@@ -7,6 +7,8 @@ import edu.sjsu.cmpe275.web.model.response.AssociatedMemberResponseDto;
 import edu.sjsu.cmpe275.web.model.response.AssociatedSponsorResponseDto;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 public class TeamMembershipMapper {
 
@@ -37,9 +39,8 @@ public class TeamMembershipMapper {
                 .firstName(name)
                 .screenName(screenName)
                 .role(role)
-                .amount(amount)
-                .fee_paid(fee_paid)
-                .role(role)
+                .amount(Objects.nonNull(amount) ? amount : null)
+                .fee_paid(Objects.nonNull(fee_paid) ? fee_paid : null)
                 .build();
     }
 

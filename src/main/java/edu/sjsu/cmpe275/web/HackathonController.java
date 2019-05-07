@@ -127,7 +127,7 @@ public class HackathonController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public HackathonResponseDto updateHackathon(@Valid @RequestBody UpdateHackathonRequestDto updateHackathon,
-                                Errors validationErrors, @NonNull @PathVariable Long id) throws ParseException {
+                                Errors validationErrors, @NonNull @PathVariable Long id)  {
 
         if(validationErrors.hasErrors()){
             //TODO Validate the error

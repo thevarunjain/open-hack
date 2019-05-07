@@ -69,7 +69,7 @@ public class HackathonService {
     }
 
     @Transactional
-    public Hackathon updateHackathon(final Long id, @Valid UpdateHackathonRequestDto updateHackathon) throws ParseException {
+    public Hackathon updateHackathon(final Long id, @Valid UpdateHackathonRequestDto updateHackathon)  {
         Hackathon hackathon = findHackathon(id);
 
 

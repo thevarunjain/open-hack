@@ -6,11 +6,13 @@ import edu.sjsu.cmpe275.domain.entity.TeamMembership;
 import edu.sjsu.cmpe275.domain.exception.TeamNotFoundException;
 import edu.sjsu.cmpe275.domain.repository.TeamRepository;
 import edu.sjsu.cmpe275.web.mapper.TeamMembershipMapper;
+import edu.sjsu.cmpe275.web.model.request.UpdateTeamRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class TeamService {
@@ -79,5 +81,24 @@ public class TeamService {
         return createdTeam;
     }
 
+    @Transactional
+    public Team updateTeam(Long hid, UpdateTeamRequestDto upadateTeam, Long tid) {
 
+        Hackathon hackathon = hackathonService.findHackathon(hid);
+              List<Team> getTeams =findTeamForHackathon(hackathon, tid);
+                    Team team = getTeams.get(0);
+
+                    team.setGrades(Objects.nonNull(upadateTeam.getGrades())
+                                          ? upadateTeam.getGrades()
+                                          : team.getGrades() );
+
+                    team.setIsFinalized(Objects.nonNull(upadateTeam.getIsFinalized())
+                                               ? upadateTeam.getIsFinalized()
+                                               : team.getIsFinalized());
+
+                    team.setSubmissionURL(Objects.nonNull(upadateTeam.getSubmissionURL())
+                                                ? upadateTeam.getSubmissionURL()
+                                                : team.getSubmissionURL());
+            return team;
+    }
 }

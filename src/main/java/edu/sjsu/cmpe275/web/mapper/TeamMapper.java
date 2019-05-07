@@ -35,8 +35,12 @@ public class TeamMapper {
                 .isFinalized(team.getIsFinalized())
                 .owner(mapOwnerResponse(team.getOwner()))
                 .hackathon(mapHackathonResponse(team.getHackathon()))
-                .submissionURL(team.getSubmissionURL())
-                .grades(team.getGrades())
+                .submissionURL(Objects.nonNull(team.getSubmissionURL())
+                                      ? team.getSubmissionURL()
+                                      : null)
+                .grades(Objects.nonNull(team.getGrades())
+                               ? team.getGrades()
+                               : null)
                 .build();
     }
 
