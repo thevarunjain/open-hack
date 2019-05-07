@@ -1,9 +1,7 @@
 package edu.sjsu.cmpe275.web.mapper;
 
-import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.Team;
 import edu.sjsu.cmpe275.web.model.request.CreateTeamRequestDto;
-import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import edu.sjsu.cmpe275.web.model.response.TeamResponseDto;
 import org.springframework.stereotype.Component;
 

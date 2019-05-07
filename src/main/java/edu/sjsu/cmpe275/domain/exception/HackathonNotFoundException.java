@@ -1,6 +1,5 @@
 package edu.sjsu.cmpe275.domain.exception;
 
-import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import lombok.Getter;
 import lombok.ToString;
 
