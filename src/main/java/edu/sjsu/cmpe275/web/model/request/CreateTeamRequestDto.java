@@ -18,4 +18,8 @@ public class CreateTeamRequestDto {
     private String name;
     private List<Long> members;
     private List<String> roles;
+    private Boolean isFinalized;
+    private String submissionURL;
+    private Float grades;
+
 }

@@ -20,6 +20,8 @@ public class TeamService {
     private UserService userService;
     private HackathonService hackathonService;
     private TeamMembershipService teamMembershipService;
+    private HackathonSponsorService hackathonSponsorService;
+
 
     @Autowired
     public TeamService(
@@ -27,13 +29,32 @@ public class TeamService {
             final TeamMembershipMapper teamMembershipMapper,
             final UserService userService,
             final HackathonService hackathonService,
-            final TeamMembershipService teamMembershipService
+            final TeamMembershipService teamMembershipService,
+            final HackathonSponsorService hackathonSponsorService
     ) {
         this.teamRepository = teamRepository;
         this.teamMembershipMapper = teamMembershipMapper;
         this.teamMembershipService = teamMembershipService;
         this.userService = userService;
         this.hackathonService = hackathonService;
+        this.hackathonSponsorService = hackathonSponsorService;
+    }
+
+    public List<Team> findallTeamsForHackathon(final long id){
+
+            Hackathon hackathon = hackathonService.findHackathon(id);
+            List<Team> allTeams = teamRepository.findByHackathon(hackathon);
+
+            return allTeams;
+
+    }
+
+    public List<Team> findTeamForHackathon(Hackathon hid, Long tid) {
+            return teamRepository.findByHackathonAndId(hid, tid);
+    }
+
+    public List<Team> findTeams(){
+        return teamRepository.findAll();
     }
 
     public Team findTeam(final long id){
@@ -42,10 +63,8 @@ public class TeamService {
     }
 
     @Transactional
-    public Team createTeam(final Team team, final List<Long> members, final List<String> roles, final Long hackathonId){
+    public Team createTeam(final Team team, final List<Long> members, final List<String> roles){
 
-        Hackathon checkHackathonId = hackathonService.findHackathon(hackathonId);
-        team.setHackathon(checkHackathonId);
         Team createdTeam = teamRepository.save(team);
 
         for(int i=0;i<members.size();i++){
@@ -59,4 +78,6 @@ public class TeamService {
 
         return createdTeam;
     }
+
+
 }

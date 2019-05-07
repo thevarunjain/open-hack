@@ -3,6 +3,7 @@ package edu.sjsu.cmpe275.service;
 import edu.sjsu.cmpe275.domain.entity.Team;
 import edu.sjsu.cmpe275.domain.entity.TeamMembership;
 import edu.sjsu.cmpe275.domain.repository.TeamMembershipRepository;
+import edu.sjsu.cmpe275.web.model.response.AssociatedMemberResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +31,8 @@ public class TeamMembershipService {
     public void createMembers(TeamMembership teamMember){
         teamMembershipRepository.save(teamMember);
     }
+
+
 }
 
 
