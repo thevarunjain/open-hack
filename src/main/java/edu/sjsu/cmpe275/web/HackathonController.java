@@ -116,12 +116,11 @@ public class HackathonController {
             //TODO Validate the error
         }
 
+
         Hackathon hackathon =  hackathonService.updateHackathon(id, updateHackathon);
 
         return hackathonMapper.map(hackathon);
-
     }
-
 }
 
 

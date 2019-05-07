@@ -64,7 +64,8 @@ public class HackathonService {
     @Transactional
     public Hackathon updateHackathon(final Long id, @Valid UpdateHackathonRequestDto updateHackathon){
         Hackathon hackathon = findHackathon(id);
-
+//        Date todaysDate = new Date();
+//        Date 
         hackathon.setStartDate(Objects.nonNull(updateHackathon.getStartDate())
                                       ? updateHackathon.getStartDate()
                                       : hackathon.getStartDate()
