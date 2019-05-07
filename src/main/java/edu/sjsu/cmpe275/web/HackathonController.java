@@ -20,6 +20,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.sql.SQLOutput;
 import java.util.*;
 
 @RestController
@@ -101,7 +103,9 @@ public class HackathonController {
     @PostMapping(value = "", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public HackathonResponseDto createHackathon(@Valid @RequestBody CreateHackathonRequestDto toCreateHackathon, Errors validationErrors){
+    public HackathonResponseDto createHackathon(@Valid @RequestBody CreateHackathonRequestDto toCreateHackathon,
+                                                Errors validationErrors,
+                                                @NotNull @RequestParam Long ownerId){
 
         if(validationErrors.hasErrors()){
             //TODO Validate the error
@@ -111,15 +115,19 @@ public class HackathonController {
         for(Long id : toCreateHackathon.getJudges()){
             judges.add(userService.findUser(id));
         }
+        User owner = userService.findUser(ownerId);
 
         Hackathon createdHackathon = hackathonService.createHackathon(
-                hackathonMapper.map(toCreateHackathon,judges),
+                hackathonMapper.map(toCreateHackathon,judges, owner),
                 toCreateHackathon.getSponsors(),
                 toCreateHackathon.getDiscount()
         );
 
         return hackathonMapper.map(createdHackathon);
     }
+
+
+
 
     @RequestMapping(value = "/{id}",
             produces = "application/json",

@@ -1,20 +1,20 @@
 package edu.sjsu.cmpe275.web.mapper;
 
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
+import edu.sjsu.cmpe275.domain.entity.Organization;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
+import edu.sjsu.cmpe275.web.model.response.AssociatedUserResponseDto;
 import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class HackathonMapper {
 
-        public Hackathon map(CreateHackathonRequestDto toCreateHackathon, Set<User> judges){
+        public Hackathon map(CreateHackathonRequestDto toCreateHackathon, Set<User> judges,User owner){
             return Hackathon.builder()
                     .name(toCreateHackathon.getName())
                     .description(toCreateHackathon.getDescription())
@@ -27,6 +27,7 @@ public class HackathonMapper {
                     .status(Objects.nonNull(toCreateHackathon.getStatus())
                                    ? toCreateHackathon.getStatus()
                                    : "Open")
+                    .owner(owner)
                     .build();
         }
 
@@ -41,8 +42,9 @@ public class HackathonMapper {
                     .maxSize(hackathon.getMaxSize())
                     .minSize(hackathon.getMinSize())
                     .fee(hackathon.getFee())
-                    .judges(hackathon.getJudges())
+                    .judges(mapJudgeResponse(hackathon))
                     .status(hackathon.getStatus())
+                    .owner(mapOwnerResponse(hackathon.getOwner()))
                     .build();
         }
 
@@ -55,6 +57,32 @@ public class HackathonMapper {
                 }
             return hackathonResponseDtoList;
     }
+
+    private AssociatedUserResponseDto mapOwnerResponse(final User user) {
+        return AssociatedUserResponseDto.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .screenName(user.getScreenName())
+                .build();
+    }
+
+
+    private Set<AssociatedUserResponseDto> mapJudgeResponse (final Hackathon hackathon){
+        Set<AssociatedUserResponseDto> members = Objects.nonNull(hackathon.getJudges())
+                ? hackathon.getJudges()
+                .stream()
+                .map(judge -> AssociatedUserResponseDto.builder()
+                        .id(judge.getId())
+                        .email(judge.getEmail())
+                        .screenName(judge.getScreenName())
+                        .build()
+                )
+                .collect(Collectors.toSet())
+                : new HashSet<>();
+
+        return members;
+    }
+
 
 
 
