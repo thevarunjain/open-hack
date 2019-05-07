@@ -1,11 +1,13 @@
+server:
+  port: 8080
 spring:
   application:
     name: open-hack
 #  datasource:
 #    driverClassName: com.mysql.jdbc.Driver
-#    url: jdbc:mysql://HOSTNAME/DBNAME?serverTimezone=America/Los_Angeles
-#    username: USERNAME
-#    password: PASSWORD
+#    url: jdbc:mysql://mysql-rds.ccgxyrruqnma.us-east-1.rds.amazonaws.com/cmpe275?serverTimezone=America/Los_Angeles
+#    username: admin
+#    password: OpenHack#2019
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://mysql-rds.ccgxyrruqnma.us-east-1.rds.amazonaws.com/cmpe275?serverTimezone=America/Los_Angeles

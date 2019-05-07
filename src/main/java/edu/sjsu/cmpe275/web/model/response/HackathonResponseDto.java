@@ -42,7 +42,10 @@ public class HackathonResponseDto {
     @JsonProperty("maxSize")
     private int maxSize;
 
-    @JsonProperty("Judges")
+    @JsonProperty("judges")
     private Set<User> judges;
+
+    @JsonProperty("status")
+    private String status;
 
 }

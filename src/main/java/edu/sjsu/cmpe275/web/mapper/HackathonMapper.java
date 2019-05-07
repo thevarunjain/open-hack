@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Component
@@ -23,6 +24,9 @@ public class HackathonMapper {
                     .maxSize(toCreateHackathon.getMaxSize())
                     .minSize(toCreateHackathon.getMinSize())
                     .judges(judges)
+                    .status(Objects.nonNull(toCreateHackathon.getStatus())
+                                   ? toCreateHackathon.getStatus()
+                                   : "Open")
                     .build();
         }
 
@@ -38,6 +42,7 @@ public class HackathonMapper {
                     .minSize(hackathon.getMinSize())
                     .fee(hackathon.getFee())
                     .judges(hackathon.getJudges())
+                    .status(hackathon.getStatus())
                     .build();
         }
 
