@@ -36,4 +36,11 @@ public class UserService {
             user.setAdmin(true);
         return userRepository.save(user);
     }
+
+    @Transactional
+    public User updateUser(final Long id, final User fromRequest) {
+        User existingUser = findUser(id);
+        existingUser.update(fromRequest);
+        return existingUser;
+    }
 }
