@@ -8,15 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UpdateHackathonRequestDto {
+public class UpdateTeamRequestDto {
 
-    private java.util.Date startDate;
+    private Float grades;
 
-    private java.util.Date endDate;
+    private String submissionURL;
 
-    private java.util.Date currentDate;
-
-    private String toState;
+    private Boolean isFinalized;
 
 
 }

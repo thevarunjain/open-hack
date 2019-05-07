@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.URL;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @AllArgsConstructor
@@ -32,6 +35,10 @@ public class Team {
     @JoinColumn(name = "hackathon_id", nullable = false, updatable = false)
     private Hackathon hackathon;
 
-//    @OneToMany(mappedBy = "member", targetEntity = TeamMembership.class)
-//    private List<User> members;
+    @Column(name = "is_Finalized")
+    private Boolean isFinalized;
+
+    @OneToOne
+    @JoinColumn(name = "owner_id", nullable = false, updatable = false)
+    private User owner;
 }
