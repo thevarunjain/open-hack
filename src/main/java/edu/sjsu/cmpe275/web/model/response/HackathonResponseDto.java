@@ -57,5 +57,8 @@ public class HackathonResponseDto {
     @JsonProperty("status")
     private String status;
 
+    @JsonProperty("sponsors")
+    private List<AssociatedSponsorResponseDto> sponsors;
+
 
 }

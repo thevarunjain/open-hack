@@ -4,6 +4,7 @@ import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.Organization;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
+import edu.sjsu.cmpe275.web.model.response.AssociatedSponsorResponseDto;
 import edu.sjsu.cmpe275.web.model.response.AssociatedUserResponseDto;
 import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import org.springframework.stereotype.Component;
@@ -48,6 +49,8 @@ public class HackathonMapper {
                     .build();
         }
 
+
+
     public List<HackathonResponseDto> map(final List<Hackathon> hackathons){
             List<HackathonResponseDto> hackathonResponseDtoList = new ArrayList<>();
                 for(Hackathon hackathon : hackathons){
@@ -85,6 +88,22 @@ public class HackathonMapper {
 
 
 
+    public HackathonResponseDto map(Hackathon hackathon,  List<AssociatedSponsorResponseDto> sponsorResponse){
+        return HackathonResponseDto.builder()
+                .id(hackathon.getId())
+                .name(hackathon.getName())
+                .description(hackathon.getDescription())
+                .startDate(hackathon.getStartDate())
+                .endDate(hackathon.getEndDate())
+                .maxSize(hackathon.getMaxSize())
+                .minSize(hackathon.getMinSize())
+                .fee(hackathon.getFee())
+                .judges(mapJudgeResponse(hackathon))
+                .status(hackathon.getStatus())
+                .owner(mapOwnerResponse(hackathon.getOwner()))
+                .sponsors(sponsorResponse)
+                .build();
+    }
 
 }
 
