@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface OrganizationRepository extends JpaRepository<Organization, Long> {
     List<Organization> findByNameContainingIgnoreCase(String name);
 
-    Optional<Organization> findByOwnerId(Long owner_id);
+    Optional<List<Organization>> findByOwnerId(Long owner_id);
 }

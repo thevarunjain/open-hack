@@ -75,7 +75,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto getUser(@PathVariable @NotNull Long id) {
         User user  = userService.findUser(id);
-        Organization ownerOf = organizationService.findOrganizationByOwner(user);
+        List<Organization> ownerOf = organizationService.findOrganizationsByOwner(user);
         OrganizationMembership membership =
                 organizationMembershipService.findOrganizationByMemberAndStatus(
                         user,
