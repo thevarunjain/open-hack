@@ -19,6 +19,18 @@ spring:
     show-sql: true
   flyway:
     schemas: ["cmpe275"]
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: openhack27519@gmail.com
+    password: springcmpe275
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 app:
   jwtSecret: JWTSuperSecretKey
   jwtExpirationInMs: 604800000
+

@@ -44,23 +44,19 @@ public class UserController {
 
     private final OrganizationMembershipService organizationMembershipService;
 
-    private final EmailService emailService;
-
     @Autowired
     public UserController(
             UserService userService,
             UserMapper userMapper,
             MyHackathonsMapper myHackathonsMapper,
             OrganizationService organizationService,
-            OrganizationMembershipService organizationMembershipService,
-            EmailService emailService
+            OrganizationMembershipService organizationMembershipService
     ) {
         this.userService = userService;
         this.userMapper = userMapper;
         this.myHackathonsMapper = myHackathonsMapper;
         this.organizationService = organizationService;
         this.organizationMembershipService = organizationMembershipService;
-        this.emailService = emailService;
     }
 
     @GetMapping(value = "")
@@ -135,5 +131,4 @@ public class UserController {
         User updatedUser  = userService.updateUser(id, fromUpdate);
         return userMapper.map(updatedUser);
     }
-
 }
