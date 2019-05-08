@@ -2,6 +2,7 @@ package edu.sjsu.cmpe275.service;
 
 import edu.sjsu.cmpe275.domain.entity.Team;
 import edu.sjsu.cmpe275.domain.entity.TeamMembership;
+import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.domain.repository.TeamMembershipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,10 @@ public class TeamMembershipService {
     }
 
 
+    public TeamMembership findByMemberAndTeam(User user, Team team) {
+        return teamMembershipRepository.findByMemberIdAndTeamId(user, team)
+                .orElse(null);
+    }
 }
 
 

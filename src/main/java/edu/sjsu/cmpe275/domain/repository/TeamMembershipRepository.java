@@ -14,4 +14,6 @@ public interface TeamMembershipRepository
     List<TeamMembership> findByTeamId(Team id);
 
     Optional<List<TeamMembership>> findByMemberId(User id);
+
+    Optional<TeamMembership> findByMemberIdAndTeamId(User member_id, Team team_id);
 }

@@ -158,18 +158,23 @@ public class TeamController {
         return paymentMapper.map(amount, hackathon.getName());
     }
 
-//    @PostMapping(value = "/{hid}/teams/{tid}/payment")
-//    @ResponseBody
-//    @ResponseStatus(HttpStatus.OK)
-//    public SuccessResponseDto processPayment(
-//            @PathVariable @NotNull Long hid,
-//            @PathVariable @NotNull Long tid,
-//            @CurrentUser UserPrincipal currentUser
-//    ) {
-//        User user = userService.findUser(currentUser.getId());
-//        Team team = teamService.findTeam(tid);
-//
-//        return new SuccessResponseDto("Payment Processed");
-//    }
+    @PostMapping(value = "/{hid}/teams/{tid}/payment")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public SuccessResponseDto processPayment(
+            @PathVariable @NotNull Long hid,
+            @PathVariable @NotNull Long tid,
+            @RequestParam @NotNull Float amount,
+            @CurrentUser UserPrincipal currentUser
+    ) {
+        User user = userService.findUser(currentUser.getId());
+        Team team = teamService.findTeam(tid);
+        teamService.processPaymemtForMember(
+                user,
+                team,
+                amount
+        );
+        return new SuccessResponseDto("Payment Processed");
+    }
 
 }
