@@ -17,6 +17,7 @@ public class TeamMembershipMapper {
                 .teamId(team)
                 .memberId(members)
                 .role(role)
+                .fee_paid(false)
                 .build();
     }
 
