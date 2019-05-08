@@ -63,10 +63,12 @@ public class MyHackathonsMapper {
 
     public List<HackathonResponseDto> mapHackathonsResponse(final List<Hackathon> hackathons){
         List<HackathonResponseDto> hackathonResponseDtoList = new ArrayList<>();
-        for(Hackathon hackathon : hackathons){
-            hackathonResponseDtoList.add(
-                    map(hackathon)
-            );
+        if (Objects.nonNull(hackathons)) {
+            for(Hackathon hackathon : hackathons){
+                hackathonResponseDtoList.add(
+                        map(hackathon)
+                );
+            }
         }
         return hackathonResponseDtoList;
     }

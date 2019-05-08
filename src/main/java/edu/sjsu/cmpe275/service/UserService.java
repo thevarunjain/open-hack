@@ -116,7 +116,7 @@ public class UserService {
         // TODO Check what all hackathons that we need to send
         // TODO Improve Performance
         List<Hackathon> hackathonsByParticipant = new ArrayList<>();
-        List<TeamMembership> memberships = teamMembershipRepository.findByMemberId(user.getId())
+        List<TeamMembership> memberships = teamMembershipRepository.findByMemberId(user)
                 .orElse(new ArrayList<>());
         for (TeamMembership teamMembership: memberships) {
             Team team = teamRepository.findById(teamMembership.getTeamId().getId())
