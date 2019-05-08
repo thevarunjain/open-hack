@@ -95,14 +95,10 @@ public class HackathonController {
     @PostMapping(value = "", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public HackathonResponseDto createHackathon(@Valid @RequestBody CreateHackathonRequestDto toCreateHackathon,
-                                                Errors validationErrors,
-                                                @NotNull @RequestParam Long ownerId){
-
-        if(validationErrors.hasErrors()){
-            //TODO Validate the error
-        }
-
+    public HackathonResponseDto createHackathon(
+            @Valid @RequestBody CreateHackathonRequestDto toCreateHackathon,
+            @NotNull @RequestParam Long ownerId
+    ){
         Set<User> judges = new HashSet();
         for(Long id : toCreateHackathon.getJudges()){
             judges.add(userService.findUser(id));

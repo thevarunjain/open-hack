@@ -4,15 +4,19 @@ package edu.sjsu.cmpe275.web;
 import edu.sjsu.cmpe275.domain.entity.Organization;
 import edu.sjsu.cmpe275.domain.entity.OrganizationMembership;
 import edu.sjsu.cmpe275.domain.entity.User;
+import edu.sjsu.cmpe275.security.CurrentUser;
+import edu.sjsu.cmpe275.security.UserPrincipal;
 import edu.sjsu.cmpe275.service.OrganizationMembershipService;
 import edu.sjsu.cmpe275.service.OrganizationService;
 import edu.sjsu.cmpe275.service.UserService;
+import edu.sjsu.cmpe275.web.exception.ConstraintViolationException;
 import edu.sjsu.cmpe275.web.mapper.UserMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateUserRequestDto;
 import edu.sjsu.cmpe275.web.model.request.UpdateUserRequestDto;
 import edu.sjsu.cmpe275.web.model.response.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +54,11 @@ public class UserController {
     @GetMapping(value = "")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<UserResponseDto> getUsers(@RequestParam(required = false) String name) {
+    public List<UserResponseDto> getUsers(
+            @CurrentUser UserPrincipal currentUser,
+            @RequestParam(required = false) String name
+    ) {
+        System.out.println(currentUser.getUsername());
         List<User> allUsers = userService.findUsers(name);
         return userMapper.map(allUsers);
     }
@@ -59,14 +67,16 @@ public class UserController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDto createUser(
-            @Valid @RequestBody CreateUserRequestDto toCreate,
-            Errors validationErrors
+            @Valid @RequestBody CreateUserRequestDto toCreate
     ) {
         // TODO Custom error on validation failure
-        if (validationErrors.hasErrors()) {
-
+        if (userService.existByEmail(toCreate.getEmail())) {
+            throw new ConstraintViolationException("Email already taken", "email");
         }
-        User createdUser  = userService.createUser(userMapper.map(toCreate));
+        if (userService.existByScreenName(toCreate.getScreenName())) {
+            throw new ConstraintViolationException("Screen name already taken", "screenName");
+        }
+        User createdUser  = userService.createUser(userMapper.map(toCreate), toCreate.getPassword());
         return userMapper.map(createdUser);
     }
 

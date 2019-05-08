@@ -102,12 +102,8 @@ public class TeamController {
     public TeamResponseDto createTeam(
             @Valid @RequestBody CreateTeamRequestDto toCreateTeam,
             @PathVariable @NotNull Long id,
-            @NotNull @RequestParam Long ownerId,
-            Errors validationErrors
+            @NotNull @RequestParam Long ownerId
     ) {
-        // TODO Custom error on validation failure
-        if (validationErrors.hasErrors()) {
-        }
 
         User owner = userService.findUser(ownerId);
         Hackathon hackathon =  hackathonService.findHackathon(id);
@@ -126,14 +122,12 @@ public class TeamController {
             method=RequestMethod.PATCH)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public TeamResponseDto updateHackathon(@Valid @RequestBody UpdateTeamRequestDto upadateTeam,
-                                                Errors validationErrors,
-                                                @NonNull @PathVariable Long hid,
-                                                @NonNull @PathVariable Long tid)  {
+    public TeamResponseDto updateHackathon(
+            @Valid @RequestBody UpdateTeamRequestDto upadateTeam,
+            @NonNull @PathVariable Long hid,
+            @NonNull @PathVariable Long tid
+    ) {
 
-        if(validationErrors.hasErrors()){
-            //TODO Validate the error
-        }
         Team team =  teamService.updateTeam(hid, upadateTeam, tid);
                  return teamMapper.map(team);
     }

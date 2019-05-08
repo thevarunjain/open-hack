@@ -68,12 +68,8 @@ public class OrganizationController {
     @ResponseStatus(HttpStatus.CREATED)
     public OrganizationResponseDto createOrganization(
             @Valid @RequestBody CreateOrganizationRequestDto toCreate,
-            @NotNull @RequestParam Long ownerId, // TODO This should be from authentication token
-            Errors validationErrors
+            @NotNull @RequestParam Long ownerId // TODO This should be from authentication token
     ) {
-        // TODO Custom error on validation failure
-        if (validationErrors.hasErrors()) {
-        }
         Organization  createdOrganization = organizationService.createOrganization(
                 organizationMapper.map(toCreate),
                 ownerId
