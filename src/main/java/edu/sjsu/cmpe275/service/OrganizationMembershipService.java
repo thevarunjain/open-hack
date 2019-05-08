@@ -15,12 +15,18 @@ import java.util.Objects;
 @Component
 public class OrganizationMembershipService {
     private OrganizationMembershipRepository organizationMembershipRepository;
+//    private OrganizationService organizationService;
+    private EmailService emailService;
 
     @Autowired
     public OrganizationMembershipService(
-            final OrganizationMembershipRepository organizationMembershipRepository
+            final OrganizationMembershipRepository organizationMembershipRepository,
+//            final OrganizationService organizationService,
+            final EmailService emailService
     ) {
         this.organizationMembershipRepository = organizationMembershipRepository;
+//        this.organizationService = organizationService;
+        this.emailService = emailService;
     }
 
     public OrganizationMembership findOrganizationMembership(
@@ -61,7 +67,21 @@ public class OrganizationMembershipService {
     }
 
     @Transactional
-    public OrganizationMembership createOrganizationMembership(final OrganizationMembership newOrganizationMembership) {
+    public OrganizationMembership createOrganizationMembership(final OrganizationMembership newOrganizationMembership,
+                                                               final String emailOwner) {
+
+        String memberName = newOrganizationMembership.getMember().getFirstName() + " "+newOrganizationMembership.getMember().getLastName();
+        String subject = "Open Hackathon 2019 - Join Request by "+memberName;
+        String localServerUrl = "http://localhost:3000";
+        String hostedServerUrl = "" ;
+
+        String message = "Hello\n" +
+                "You have one new join request by "+memberName+" " +
+                "for you organization "+newOrganizationMembership.getOrganization().getName()+".\n" +
+                "Log in to your account to take the action "+ localServerUrl+"/login\n\n" +"" +
+                "Happy Hacking :)";
+
+        emailService.sendSimpleMessage(emailOwner, subject, message);
         return organizationMembershipRepository.save(newOrganizationMembership);
     }
 
