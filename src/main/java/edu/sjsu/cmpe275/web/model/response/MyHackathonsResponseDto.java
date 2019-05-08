@@ -21,6 +21,6 @@ public class MyHackathonsResponseDto {
     private List<HackathonResponseDto> judge;
 
     @JsonProperty("participant")
-    private List<HackathonResponseDto> participant;
+    private List<HackathonWithTeamResponseDto> participant;
 
 }

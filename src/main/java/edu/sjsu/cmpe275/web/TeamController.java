@@ -4,15 +4,20 @@ import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.Team;
 import edu.sjsu.cmpe275.domain.entity.TeamMembership;
 import edu.sjsu.cmpe275.domain.entity.User;
+import edu.sjsu.cmpe275.security.CurrentUser;
+import edu.sjsu.cmpe275.security.UserPrincipal;
 import edu.sjsu.cmpe275.service.HackathonService;
 import edu.sjsu.cmpe275.service.TeamMembershipService;
 import edu.sjsu.cmpe275.service.TeamService;
 import edu.sjsu.cmpe275.service.UserService;
+import edu.sjsu.cmpe275.web.mapper.PaymentMapper;
 import edu.sjsu.cmpe275.web.mapper.TeamMapper;
 import edu.sjsu.cmpe275.web.mapper.TeamMembershipMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateTeamRequestDto;
 import edu.sjsu.cmpe275.web.model.request.UpdateTeamRequestDto;
 import edu.sjsu.cmpe275.web.model.response.AssociatedMemberResponseDto;
+import edu.sjsu.cmpe275.web.model.response.PaymentResponseDto;
+import edu.sjsu.cmpe275.web.model.response.SuccessResponseDto;
 import edu.sjsu.cmpe275.web.model.response.TeamResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +39,7 @@ public class TeamController {
     private final TeamMapper teamMapper;
     private final TeamMembershipMapper teamMembershipMapper;
     private final HackathonService hackathonService;
+    private final PaymentMapper paymentMapper;
 
     @Autowired
     public TeamController(
@@ -42,7 +48,8 @@ public class TeamController {
             TeamMembershipService teamMembershipService,
             TeamMapper teamMapper,
             TeamMembershipMapper teamMembershipMapper,
-            HackathonService hackathonService
+            HackathonService hackathonService,
+            PaymentMapper paymentMapper
     ) {
         this.teamService = teamService;
         this.userService = userService;
@@ -50,6 +57,7 @@ public class TeamController {
         this.teamMapper = teamMapper;
         this.teamMembershipMapper = teamMembershipMapper;
         this.hackathonService = hackathonService;
+        this.paymentMapper = paymentMapper;
     }
 
     @GetMapping(value = "/{hid}/teams", produces = "application/json")
@@ -129,5 +137,38 @@ public class TeamController {
         Team team =  teamService.updateTeam(hid, upadateTeam, tid);
                  return teamMapper.map(team);
     }
+
+    @GetMapping(value = "/{hid}/teams/{tid}/payment")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public PaymentResponseDto getPayment(
+            @PathVariable @NotNull Long hid,
+            @PathVariable @NotNull Long tid,
+            @CurrentUser UserPrincipal currentUser
+    ) {
+        User user = userService.findUser(currentUser.getId());
+        Team team = teamService.findTeam(tid);
+        Hackathon hackathon = hackathonService.findHackathon(hid);
+        Float amount = teamService.getPaymentForMember(
+                user,
+                team,
+                hackathon
+        );
+        return paymentMapper.map(amount, hackathon.getName());
+    }
+
+//    @PostMapping(value = "/{hid}/teams/{tid}/payment")
+//    @ResponseBody
+//    @ResponseStatus(HttpStatus.OK)
+//    public SuccessResponseDto processPayment(
+//            @PathVariable @NotNull Long hid,
+//            @PathVariable @NotNull Long tid,
+//            @CurrentUser UserPrincipal currentUser
+//    ) {
+//        User user = userService.findUser(currentUser.getId());
+//        Team team = teamService.findTeam(tid);
+//
+//        return new SuccessResponseDto("Payment Processed");
+//    }
 
 }

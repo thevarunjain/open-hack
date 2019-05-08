@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.web;
 
+import edu.sjsu.cmpe275.domain.exception.TeamNotFoundException;
 import edu.sjsu.cmpe275.domain.exception.UserNotFoundException;
 import edu.sjsu.cmpe275.web.exception.ConstraintViolationException;
 import edu.sjsu.cmpe275.web.model.response.ErrorResponseDto;
@@ -28,6 +29,17 @@ public class BaseExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public ErrorResponseDto handleException(final UserNotFoundException e) {
+        return new ErrorResponseDto(
+                e.getERROR_CODE(),
+                e.getMessage(),
+                e.getId().toString()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorResponseDto handleException(final TeamNotFoundException e) {
         return new ErrorResponseDto(
                 e.getERROR_CODE(),
                 e.getMessage(),

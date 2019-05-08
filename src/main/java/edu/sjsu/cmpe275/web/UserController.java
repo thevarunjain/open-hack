@@ -1,10 +1,7 @@
 package edu.sjsu.cmpe275.web;
 
 
-import edu.sjsu.cmpe275.domain.entity.Hackathon;
-import edu.sjsu.cmpe275.domain.entity.Organization;
-import edu.sjsu.cmpe275.domain.entity.OrganizationMembership;
-import edu.sjsu.cmpe275.domain.entity.User;
+import edu.sjsu.cmpe275.domain.entity.*;
 import edu.sjsu.cmpe275.security.CurrentUser;
 import edu.sjsu.cmpe275.security.UserPrincipal;
 import edu.sjsu.cmpe275.service.OrganizationMembershipService;
@@ -25,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -106,7 +104,6 @@ public class UserController {
                 memberOf
         );
     }
-
     @GetMapping(value = "/{id}/hackathons")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
@@ -115,8 +112,8 @@ public class UserController {
         User user  = userService.findUser(id);
         List<Hackathon> owner = userService.findHackathonsByOwner(user);
         List<Hackathon> judge = userService.findHackathonsByJudge(user);
-        List<Hackathon> participant = userService.findHackathonsByParticipant(user);
-        return myHackathonsMapper.map(owner, judge, participant);
+        HashMap<Hackathon, Team> participantWithTeam = userService.findHackathonsByParticipant(user);
+        return myHackathonsMapper.map(owner, judge, participantWithTeam);
     }
 
     @PutMapping(value = "/{id}")

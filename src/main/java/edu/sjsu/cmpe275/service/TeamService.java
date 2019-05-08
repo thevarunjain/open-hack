@@ -1,8 +1,6 @@
 package edu.sjsu.cmpe275.service;
 
-import edu.sjsu.cmpe275.domain.entity.Hackathon;
-import edu.sjsu.cmpe275.domain.entity.Team;
-import edu.sjsu.cmpe275.domain.entity.TeamMembership;
+import edu.sjsu.cmpe275.domain.entity.*;
 import edu.sjsu.cmpe275.domain.exception.TeamNotFoundException;
 import edu.sjsu.cmpe275.domain.repository.TeamRepository;
 import edu.sjsu.cmpe275.web.mapper.TeamMembershipMapper;
@@ -23,6 +21,7 @@ public class TeamService {
     private HackathonService hackathonService;
     private TeamMembershipService teamMembershipService;
     private HackathonSponsorService hackathonSponsorService;
+    private OrganizationMembershipService organizationMembershipService;
 
 
     @Autowired
@@ -32,7 +31,8 @@ public class TeamService {
             final UserService userService,
             final HackathonService hackathonService,
             final TeamMembershipService teamMembershipService,
-            final HackathonSponsorService hackathonSponsorService
+            final HackathonSponsorService hackathonSponsorService,
+            final OrganizationMembershipService organizationMembershipService
     ) {
         this.teamRepository = teamRepository;
         this.teamMembershipMapper = teamMembershipMapper;
@@ -40,6 +40,7 @@ public class TeamService {
         this.userService = userService;
         this.hackathonService = hackathonService;
         this.hackathonSponsorService = hackathonSponsorService;
+        this.organizationMembershipService = organizationMembershipService;
     }
 
     public List<Team> findallTeamsForHackathon(final long id){
@@ -59,7 +60,7 @@ public class TeamService {
         return teamRepository.findAll();
     }
 
-    public Team findTeam(final long id){
+    public Team findTeam(final Long id){
         return teamRepository.findById(id)
                 .orElseThrow(()-> new TeamNotFoundException(id));
     }
@@ -100,5 +101,30 @@ public class TeamService {
                                                 ? upadateTeam.getSubmissionURL()
                                                 : team.getSubmissionURL());
             return team;
+    }
+
+    public Float getPaymentForMember(
+            final User user,
+            final Team team,
+            final Hackathon hackathon
+    ) {
+        OrganizationMembership membership =
+                organizationMembershipService.findOrganizationByMemberAndStatus(
+                        user,
+                        "Approved"
+                );
+        Organization memberOf = Objects.nonNull(membership)
+                ? membership.getOrganization() : null;
+        Float hackathonFee = hackathon.getFee();
+        if (Objects.nonNull(memberOf)) {
+            HackathonSponsor hackathonSponsor =  hackathonSponsorService.findHackathonSponsor(hackathon, memberOf);
+            Float discount = 0F;
+            if (Objects.nonNull(hackathonSponsor)) {
+                discount = hackathonSponsor.getDiscount() * hackathonFee;
+            }
+            return hackathonFee - discount;
+        } else {
+            return hackathonFee;
+        }
     }
 }
