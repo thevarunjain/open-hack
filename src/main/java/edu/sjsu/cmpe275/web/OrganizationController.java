@@ -93,9 +93,11 @@ public class OrganizationController {
     ) {
         Organization organization = organizationService.findOrganization(id);
         User member = userService.findUser(requesterId);
+
         OrganizationMembership createdOrganizationMembership  =
                 organizationMembershipService.createOrganizationMembership(
-                        organizationMembershipMapper.map(organization, member)
+                        organizationMembershipMapper.map(organization, member),
+                        organizationService.findOrganization(id).getOwner().getEmail()
                 );
         return organizationMembershipMapper.map(createdOrganizationMembership);
     }

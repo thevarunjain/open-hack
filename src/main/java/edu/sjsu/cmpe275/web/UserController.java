@@ -4,6 +4,7 @@ package edu.sjsu.cmpe275.web;
 import edu.sjsu.cmpe275.domain.entity.*;
 import edu.sjsu.cmpe275.security.CurrentUser;
 import edu.sjsu.cmpe275.security.UserPrincipal;
+import edu.sjsu.cmpe275.service.EmailService;
 import edu.sjsu.cmpe275.service.OrganizationMembershipService;
 import edu.sjsu.cmpe275.service.OrganizationService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -127,5 +128,4 @@ public class UserController {
         User updatedUser  = userService.updateUser(id, fromUpdate);
         return userMapper.map(updatedUser);
     }
-
 }

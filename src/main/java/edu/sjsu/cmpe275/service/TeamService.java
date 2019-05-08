@@ -1,6 +1,10 @@
 package edu.sjsu.cmpe275.service;
 
 import edu.sjsu.cmpe275.domain.entity.*;
+import edu.sjsu.cmpe275.domain.entity.Hackathon;
+import edu.sjsu.cmpe275.domain.entity.Team;
+import edu.sjsu.cmpe275.domain.entity.TeamMembership;
+import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.domain.exception.TeamNotFoundException;
 import edu.sjsu.cmpe275.domain.repository.TeamRepository;
 import edu.sjsu.cmpe275.web.mapper.TeamMembershipMapper;
@@ -9,20 +13,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Component
 public class TeamService {
 
-    private TeamRepository teamRepository;
-    private TeamMembershipMapper teamMembershipMapper;
-    private UserService userService;
-    private HackathonService hackathonService;
-    private TeamMembershipService teamMembershipService;
-    private HackathonSponsorService hackathonSponsorService;
-    private OrganizationMembershipService organizationMembershipService;
-
+    private final TeamRepository teamRepository;
+    private final TeamMembershipMapper teamMembershipMapper;
+    private final UserService userService;
+    private final HackathonService hackathonService;
+    private final TeamMembershipService teamMembershipService;
+    private final HackathonSponsorService hackathonSponsorService;
+    private final OrganizationMembershipService organizationMembershipService;
+    private final EmailService emailService;
 
     @Autowired
     public TeamService(
@@ -32,7 +38,8 @@ public class TeamService {
             final HackathonService hackathonService,
             final TeamMembershipService teamMembershipService,
             final HackathonSponsorService hackathonSponsorService,
-            final OrganizationMembershipService organizationMembershipService
+            final OrganizationMembershipService organizationMembershipService,
+            final EmailService emailService
     ) {
         this.teamRepository = teamRepository;
         this.teamMembershipMapper = teamMembershipMapper;
@@ -41,6 +48,7 @@ public class TeamService {
         this.hackathonService = hackathonService;
         this.hackathonSponsorService = hackathonSponsorService;
         this.organizationMembershipService = organizationMembershipService;
+        this.emailService = emailService;
     }
 
     public List<Team> findallTeamsForHackathon(final long id){
@@ -66,20 +74,64 @@ public class TeamService {
     }
 
     @Transactional
-    public Team createTeam(final Team team, final List<Long> members, final List<String> roles){
+    public Team createTeam(final Team team, List<Long> members, final List<String> roles, User owner){
 
         Team createdTeam = teamRepository.save(team);
 
+                members.add(owner.getId());
         for(int i=0;i<members.size();i++){
-            TeamMembership createMember = teamMembershipMapper.map(
-                    findTeam(createdTeam.getId()),
-                    userService.findUser(members.get(i)),
-                    roles.get(i));
+
+            TeamMembership createMember;
+
+            if(members.get(i)==owner.getId()){
+                createMember = teamMembershipMapper.map(
+                        findTeam(createdTeam.getId()),
+                        userService.findUser(members.get(i)),
+                        "Team Lead");
+            }else{
+                 createMember = teamMembershipMapper.map(
+                        findTeam(createdTeam.getId()),
+                        userService.findUser(members.get(i)),
+                        roles.get(i));
+            }
+
+            sendEmailToAllTeamMembers(createdTeam, members);
 
             teamMembershipService.createMembers(createMember);
+
+        }
+        return createdTeam;
+    }
+
+    private void sendEmailToAllTeamMembers(Team createdTeam, List<Long> members) {
+
+        String subject = "Open-Hack 2019 Invitation to Team - "+ createdTeam.getName();
+        Long hid = createdTeam.getHackathon().getId();
+        Long tid = createdTeam.getId();
+        String localServerUrl = "http://localhost:3000";
+        String hostedServerUrl = "" ;
+        String message = " Hi,\n" +
+                "Welcome to Open Hackathon 2019\n" +
+                "You are invited to join our hackathon team : "+ createdTeam.getName() + "\n" +
+                "Proceed to pay on "+localServerUrl+"/hackathons/"+hid+"/teams/"+tid+"/payments" +
+                "\n" +
+                "\n" +
+                "Thank You\n" +
+                createdTeam.getOwner().getFirstName() +" "+ createdTeam.getOwner().getLastName();
+
+        List<String> allEmails= new ArrayList<>();
+
+        for(Long mid : members){
+            String email = userService.findUser(mid).getEmail();
+                allEmails.add(email);
         }
 
-        return createdTeam;
+        for(String email : allEmails){
+            System.err.println("Sending mail to "+ email);
+            emailService.sendSimpleMessage(email,subject, message);
+        }
+
+
     }
 
     @Transactional

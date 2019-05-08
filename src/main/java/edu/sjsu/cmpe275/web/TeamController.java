@@ -112,12 +112,13 @@ public class TeamController {
     ) {
 
         User owner = userService.findUser(ownerId);
-        Hackathon hackathon =  hackathonService.findHackathon(id);
+        Hackathon hackathon = hackathonService.findHackathon(id);
 
         Team createdTeam = teamService.createTeam(
                 teamMapper.map(toCreateTeam,owner, hackathon),
                 toCreateTeam.getMembers(),
-                toCreateTeam.getRoles()
+                toCreateTeam.getRoles(),
+                owner
         );
 
         return teamMapper.map(createdTeam);
