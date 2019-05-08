@@ -1,6 +1,7 @@
 package edu.sjsu.cmpe275.web;
 
 
+import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.Organization;
 import edu.sjsu.cmpe275.domain.entity.OrganizationMembership;
 import edu.sjsu.cmpe275.domain.entity.User;
@@ -11,9 +12,13 @@ import edu.sjsu.cmpe275.service.OrganizationMembershipService;
 import edu.sjsu.cmpe275.service.OrganizationService;
 import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.web.exception.ConstraintViolationException;
+import edu.sjsu.cmpe275.web.mapper.HackathonMapper;
+import edu.sjsu.cmpe275.web.mapper.MyHackathonsMapper;
 import edu.sjsu.cmpe275.web.mapper.UserMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateUserRequestDto;
 import edu.sjsu.cmpe275.web.model.request.UpdateUserRequestDto;
+import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
+import edu.sjsu.cmpe275.web.model.response.MyHackathonsResponseDto;
 import edu.sjsu.cmpe275.web.model.response.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +38,8 @@ public class UserController {
 
     private final UserMapper userMapper;
 
+    private final MyHackathonsMapper myHackathonsMapper;
+
     private final OrganizationService organizationService;
 
     private final OrganizationMembershipService organizationMembershipService;
@@ -43,12 +50,14 @@ public class UserController {
     public UserController(
             UserService userService,
             UserMapper userMapper,
+            MyHackathonsMapper myHackathonsMapper,
             OrganizationService organizationService,
             OrganizationMembershipService organizationMembershipService,
             EmailService emailService
     ) {
         this.userService = userService;
         this.userMapper = userMapper;
+        this.myHackathonsMapper = myHackathonsMapper;
         this.organizationService = organizationService;
         this.organizationMembershipService = organizationMembershipService;
         this.emailService = emailService;
@@ -101,6 +110,18 @@ public class UserController {
                 ownerOf,
                 memberOf
         );
+    }
+
+    @GetMapping(value = "/{id}/hackathons")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public MyHackathonsResponseDto getUserHackathons(@PathVariable @NotNull Long id) {
+        // TODO should this be user from path or authenticated users
+        User user  = userService.findUser(id);
+        List<Hackathon> owner = userService.findHackathonsByOwner(user);
+        List<Hackathon> judge = userService.findHackathonsByJudge(user);
+        List<Hackathon> participant = userService.findHackathonsByParticipant(user);
+        return myHackathonsMapper.map(owner, judge, participant);
     }
 
     @PutMapping(value = "/{id}")
