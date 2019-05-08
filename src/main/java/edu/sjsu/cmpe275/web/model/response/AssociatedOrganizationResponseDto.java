@@ -17,4 +17,8 @@ public class AssociatedOrganizationResponseDto {
 
     @JsonProperty("name")
     private String name;
+
+    @JsonProperty("description")
+    private String description;
+
 }
