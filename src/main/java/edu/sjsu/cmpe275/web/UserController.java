@@ -6,6 +6,7 @@ import edu.sjsu.cmpe275.domain.entity.OrganizationMembership;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.security.CurrentUser;
 import edu.sjsu.cmpe275.security.UserPrincipal;
+import edu.sjsu.cmpe275.service.EmailService;
 import edu.sjsu.cmpe275.service.OrganizationMembershipService;
 import edu.sjsu.cmpe275.service.OrganizationService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -36,17 +37,21 @@ public class UserController {
 
     private final OrganizationMembershipService organizationMembershipService;
 
+    private final EmailService emailService;
+
     @Autowired
     public UserController(
             UserService userService,
             UserMapper userMapper,
             OrganizationService organizationService,
-            OrganizationMembershipService organizationMembershipService
+            OrganizationMembershipService organizationMembershipService,
+            EmailService emailService
     ) {
         this.userService = userService;
         this.userMapper = userMapper;
         this.organizationService = organizationService;
         this.organizationMembershipService = organizationMembershipService;
+        this.emailService = emailService;
     }
 
     @GetMapping(value = "")
