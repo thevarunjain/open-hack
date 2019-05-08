@@ -15,7 +15,6 @@ import edu.sjsu.cmpe275.web.model.response.OrganizationResponseDto;
 import edu.sjsu.cmpe275.web.model.response.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

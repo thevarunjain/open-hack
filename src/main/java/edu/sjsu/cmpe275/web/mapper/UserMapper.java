@@ -84,7 +84,7 @@ public class UserMapper {
 
     public UserResponseDto map(
             final User user,
-            final Organization ownerOf,
+            final List<Organization> ownerOf,
             final Organization memberOf
     ) {
         return UserResponseDto.builder()
@@ -95,7 +95,7 @@ public class UserMapper {
                 .portraitURL(user.getPortraitURL())
                 .businessTitle(user.getBusinessTitle())
                 .aboutMe(user.getAboutMe())
-                .ownerOf(mapOrganizationResponse(ownerOf))
+                .ownerOf(mapOrganizationsResponse(ownerOf))
                 .memberOf(mapOrganizationResponse(memberOf))
                 .address(mapAddressResponse(user.getAddress()))
                 .isAdmin(user.isAdmin())
@@ -128,7 +128,18 @@ public class UserMapper {
         return AssociatedOrganizationResponseDto.builder()
                 .id(organization.getId())
                 .name(organization.getName())
+                .description(organization.getDescription())
                 .build();
+    }
+
+
+    private List<AssociatedOrganizationResponseDto> mapOrganizationsResponse(List<Organization> organizations) {
+        List<AssociatedOrganizationResponseDto> organizationResponseDtoList = Objects.nonNull(organizations)
+                ? organizations
+                .stream()
+                .map(organization -> mapOrganizationResponse(organization))
+                .collect(Collectors.toList()) : new ArrayList<>();
+        return organizationResponseDtoList;
     }
 
     private AddressResponseDto mapAddressResponse(final Address address) {

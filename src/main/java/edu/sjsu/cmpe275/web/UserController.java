@@ -16,8 +16,6 @@ import edu.sjsu.cmpe275.web.model.request.UpdateUserRequestDto;
 import edu.sjsu.cmpe275.web.model.response.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -85,7 +83,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto getUser(@PathVariable @NotNull Long id) {
         User user  = userService.findUser(id);
-        Organization ownerOf = organizationService.findOrganizationByOwner(user);
+        List<Organization> ownerOf = organizationService.findOrganizationsByOwner(user);
         OrganizationMembership membership =
                 organizationMembershipService.findOrganizationByMemberAndStatus(
                         user,

@@ -1,7 +1,6 @@
 package edu.sjsu.cmpe275.web.mapper;
 
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
-import edu.sjsu.cmpe275.domain.entity.Organization;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
 import edu.sjsu.cmpe275.web.model.response.AssociatedSponsorResponseDto;

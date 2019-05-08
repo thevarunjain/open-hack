@@ -6,7 +6,6 @@ import edu.sjsu.cmpe275.domain.entity.HackathonSponsor;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.service.HackathonService;
 import edu.sjsu.cmpe275.service.HackathonSponsorService;
-import edu.sjsu.cmpe275.service.OrganizationService;
 import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.web.mapper.HackathonMapper;
 import edu.sjsu.cmpe275.web.mapper.HackathonSponsorMapper;
@@ -21,13 +20,11 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.validation.constraints.NotNull;
-import java.util.*;
 
 @RestController
 @RequestMapping(value = "/hackathons")

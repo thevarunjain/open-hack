@@ -4,7 +4,6 @@ import edu.sjsu.cmpe275.domain.entity.Team;
 import edu.sjsu.cmpe275.domain.entity.TeamMembership;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.web.model.response.AssociatedMemberResponseDto;
-import edu.sjsu.cmpe275.web.model.response.AssociatedSponsorResponseDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
