@@ -113,7 +113,7 @@ public class TeamService {
         String message = " Hi,\n" +
                 "Welcome to Open Hackathon 2019\n" +
                 "You are invited to join our hackathon team : "+ createdTeam.getName() + "\n" +
-                "Proceed to pay on "+localServerUrl+"/hackathons/"+hid+"/teams/"+tid+"/payments" +
+                "Proceed to pay on "+localServerUrl+"/payments/"+hid+"/"+tid +
                 "\n" +
                 "\n" +
                 "Thank You\n" +
@@ -177,6 +177,35 @@ public class TeamService {
             return hackathonFee - discount;
         } else {
             return hackathonFee;
+        }
+    }
+
+    @Transactional
+    public void processPaymemtForMember(
+            final User user,
+            final Team team,
+            final Float amount
+    ) {
+        TeamMembership teamMembership = teamMembershipService.findByMemberAndTeam(user, team);
+        teamMembership.setAmount(amount);
+        teamMembership.setFee_paid(true);
+        // Mark the team finalized if everyone paid fees
+        boolean isPaidByEveryone = true;
+        List<TeamMembership> teamMembershipList =
+                teamMembershipService.findTeamMembers(teamMembership.getTeamId());
+        for (TeamMembership membership: teamMembershipList) {
+            if (!membership.getFee_paid()) {
+                isPaidByEveryone = false;
+                break;
+            }
+        }
+        if (isPaidByEveryone) {
+            Team toUpdate = teamRepository.findById(teamMembership.getTeamId().getId())
+                    .orElse(null);
+            if (Objects.nonNull(toUpdate)) {
+                toUpdate.setIsFinalized(true);
+            }
+
         }
     }
 }
