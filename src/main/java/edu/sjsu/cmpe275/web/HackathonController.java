@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/hackathons")
@@ -96,18 +94,19 @@ public class HackathonController {
             @Valid @RequestBody CreateHackathonRequestDto toCreateHackathon,
             @NotNull @RequestParam Long ownerId
     ){
-        Set<User> judges = new HashSet();
+        List<User> judges = new ArrayList<>();
         for(Long id : toCreateHackathon.getJudges()){
             judges.add(userService.findUser(id));
         }
         User owner = userService.findUser(ownerId);
+        Hackathon hackathon =hackathonMapper.map(toCreateHackathon,judges, owner);
+
 
         Hackathon createdHackathon = hackathonService.createHackathon(
-                hackathonMapper.map(toCreateHackathon,judges, owner),
+                hackathon,
                 toCreateHackathon.getSponsors(),
                 toCreateHackathon.getDiscount()
         );
-
         return hackathonMapper.map(createdHackathon);
     }
 

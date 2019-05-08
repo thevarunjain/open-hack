@@ -9,7 +9,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +24,6 @@ public class CreateHackathonRequestDto {
 
     @NotNull(message = "End Date can not be null")
     @Temporal(TemporalType.DATE)
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private java.util.Date endDate;
 
     @NotNull(message = "Description can not be null")
@@ -42,7 +40,7 @@ public class CreateHackathonRequestDto {
     private int maxSize;
 
     @NotNull(message = "Atleast one judge is required")
-    private Set<Long> judges;
+    private List<Long> judges;
 
     private String status;
 
