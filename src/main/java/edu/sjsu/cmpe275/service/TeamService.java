@@ -170,11 +170,11 @@ public class TeamService {
         Float hackathonFee = hackathon.getFee();
         if (Objects.nonNull(memberOf)) {
             HackathonSponsor hackathonSponsor =  hackathonSponsorService.findHackathonSponsor(hackathon, memberOf);
-            Float discount = 0F;
+            Integer discount = 0;
             if (Objects.nonNull(hackathonSponsor)) {
-                discount = hackathonSponsor.getDiscount() * hackathonFee;
+                discount = hackathonSponsor.getDiscount();
             }
-            return hackathonFee - discount;
+            return hackathonFee - (hackathonFee * discount)/100;
         } else {
             return hackathonFee;
         }
