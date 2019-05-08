@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -56,14 +54,17 @@ public class HackathonService {
 
         Hackathon createdHackathon = hackathonRepository.save(hackathon);
 
-        for(int i=0;i<sponsors.size();i++){
-            HackathonSponsor createdSponsor = hackathonSponsorMapper.map(
-                    findHackathon(createdHackathon.getId()),
-                    organizationService.findOrganization(sponsors.get(i)),
-                    discount.get(i));
+        if(Objects.nonNull(sponsors) && Objects.nonNull(discount)){
+            for(int i=0;i<sponsors.size();i++){
+                HackathonSponsor createdSponsor = hackathonSponsorMapper.map(
+                        findHackathon(createdHackathon.getId()),
+                        organizationService.findOrganization(sponsors.get(i)),
+                        discount.get(i));
 
-           hackathonSponsorService.createSponsors(createdSponsor);
+                hackathonSponsorService.createSponsors(createdSponsor);
+            }
         }
+
 
         return createdHackathon;
     }

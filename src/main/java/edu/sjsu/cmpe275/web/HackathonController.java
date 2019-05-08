@@ -95,7 +95,7 @@ public class HackathonController {
     @PostMapping(value = "", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public HackathonResponseDto createHackathon(@Valid @RequestBody CreateHackathonRequestDto toCreateHackathon,
+    public HackathonResponseDto createHackathon( @RequestBody CreateHackathonRequestDto toCreateHackathon,
                                                 Errors validationErrors,
                                                 @NotNull @RequestParam Long ownerId){
 
@@ -103,18 +103,19 @@ public class HackathonController {
             //TODO Validate the error
         }
 
-        Set<User> judges = new HashSet();
+        List<User> judges = new ArrayList<>();
         for(Long id : toCreateHackathon.getJudges()){
             judges.add(userService.findUser(id));
         }
         User owner = userService.findUser(ownerId);
+        Hackathon hackathon =hackathonMapper.map(toCreateHackathon,judges, owner);
+
 
         Hackathon createdHackathon = hackathonService.createHackathon(
-                hackathonMapper.map(toCreateHackathon,judges, owner),
+                hackathon,
                 toCreateHackathon.getSponsors(),
                 toCreateHackathon.getDiscount()
         );
-
         return hackathonMapper.map(createdHackathon);
     }
 
