@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.service;
 
+import edu.sjsu.cmpe275.domain.entity.*;
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.Team;
 import edu.sjsu.cmpe275.domain.entity.TeamMembership;
@@ -20,12 +21,13 @@ import java.util.Set;
 @Component
 public class TeamService {
 
-    private TeamRepository teamRepository;
-    private TeamMembershipMapper teamMembershipMapper;
-    private UserService userService;
-    private HackathonService hackathonService;
-    private TeamMembershipService teamMembershipService;
-    private HackathonSponsorService hackathonSponsorService;
+    private final TeamRepository teamRepository;
+    private final TeamMembershipMapper teamMembershipMapper;
+    private final UserService userService;
+    private final HackathonService hackathonService;
+    private final TeamMembershipService teamMembershipService;
+    private final HackathonSponsorService hackathonSponsorService;
+    private final OrganizationMembershipService organizationMembershipService;
     private final EmailService emailService;
 
     @Autowired
@@ -36,6 +38,7 @@ public class TeamService {
             final HackathonService hackathonService,
             final TeamMembershipService teamMembershipService,
             final HackathonSponsorService hackathonSponsorService,
+            final OrganizationMembershipService organizationMembershipService,
             final EmailService emailService
     ) {
         this.teamRepository = teamRepository;
@@ -44,6 +47,7 @@ public class TeamService {
         this.userService = userService;
         this.hackathonService = hackathonService;
         this.hackathonSponsorService = hackathonSponsorService;
+        this.organizationMembershipService = organizationMembershipService;
         this.emailService = emailService;
     }
 
@@ -64,7 +68,7 @@ public class TeamService {
         return teamRepository.findAll();
     }
 
-    public Team findTeam(final long id){
+    public Team findTeam(final Long id){
         return teamRepository.findById(id)
                 .orElseThrow(()-> new TeamNotFoundException(id));
     }
@@ -149,5 +153,30 @@ public class TeamService {
                                                 ? upadateTeam.getSubmissionURL()
                                                 : team.getSubmissionURL());
             return team;
+    }
+
+    public Float getPaymentForMember(
+            final User user,
+            final Team team,
+            final Hackathon hackathon
+    ) {
+        OrganizationMembership membership =
+                organizationMembershipService.findOrganizationByMemberAndStatus(
+                        user,
+                        "Approved"
+                );
+        Organization memberOf = Objects.nonNull(membership)
+                ? membership.getOrganization() : null;
+        Float hackathonFee = hackathon.getFee();
+        if (Objects.nonNull(memberOf)) {
+            HackathonSponsor hackathonSponsor =  hackathonSponsorService.findHackathonSponsor(hackathon, memberOf);
+            Float discount = 0F;
+            if (Objects.nonNull(hackathonSponsor)) {
+                discount = hackathonSponsor.getDiscount() * hackathonFee;
+            }
+            return hackathonFee - discount;
+        } else {
+            return hackathonFee;
+        }
     }
 }

@@ -1,10 +1,9 @@
 package edu.sjsu.cmpe275.web.mapper;
 
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
+import edu.sjsu.cmpe275.domain.entity.Team;
 import edu.sjsu.cmpe275.domain.entity.User;
-import edu.sjsu.cmpe275.web.model.response.AssociatedUserResponseDto;
-import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
-import edu.sjsu.cmpe275.web.model.response.MyHackathonsResponseDto;
+import edu.sjsu.cmpe275.web.model.response.*;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -12,11 +11,50 @@ import java.util.stream.Collectors;
 
 @Component
 public class MyHackathonsMapper {
-    public MyHackathonsResponseDto map(List<Hackathon> owner, List<Hackathon> judge, List<Hackathon> participant) {
+    public MyHackathonsResponseDto map(
+            List<Hackathon> owner,
+            List<Hackathon> judge,
+            HashMap<Hackathon, Team> participantWithTeam
+    ) {
         return MyHackathonsResponseDto.builder()
                 .owner(mapHackathonsResponse(owner))
                 .judge(mapHackathonsResponse(judge))
-                .participant(mapHackathonsResponse(participant))
+                .participant(mapHackathonsWithTeamResponse(participantWithTeam))
+                .build();
+    }
+
+    private List<HackathonWithTeamResponseDto> mapHackathonsWithTeamResponse(
+            HashMap<Hackathon, Team> participantWithTeam
+    ) {
+        List<HackathonWithTeamResponseDto> hackathonWithTeamResponseDtoList =
+                new ArrayList<>();
+        if (Objects.nonNull(participantWithTeam)) {
+            Iterator<Map.Entry<Hackathon, Team>> itr = participantWithTeam.entrySet().iterator();
+            while (itr.hasNext()) {
+                Map.Entry<Hackathon, Team> entry = itr.next();
+                hackathonWithTeamResponseDtoList.add(
+                        HackathonWithTeamResponseDto.builder()
+                                .hackathon(map(entry.getKey()))
+                                .team(mapTeamResponse(entry.getValue()))
+                                .build()
+                );
+            }
+        }
+        return hackathonWithTeamResponseDtoList;
+    }
+
+    private TeamResponseDto mapTeamResponse(Team team){
+        return TeamResponseDto.builder()
+                .id(team.getId())
+                .name(team.getName())
+                .isFinalized(team.getIsFinalized())
+                .owner(mapOwnerResponse(team.getOwner()))
+                .submissionURL(Objects.nonNull(team.getSubmissionURL())
+                        ? team.getSubmissionURL()
+                        : null)
+                .grades(Objects.nonNull(team.getGrades())
+                        ? team.getGrades()
+                        : null)
                 .build();
     }
 

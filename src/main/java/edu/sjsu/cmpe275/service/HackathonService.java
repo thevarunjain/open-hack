@@ -44,7 +44,7 @@ public class HackathonService {
             return hackathonRepository.findAll();
     }
 
-    public Hackathon findHackathon(final long id){
+    public Hackathon findHackathon(final Long id){
         return hackathonRepository.findById(id)
                 .orElseThrow(()-> new HackathonNotFoundException(id));
     }

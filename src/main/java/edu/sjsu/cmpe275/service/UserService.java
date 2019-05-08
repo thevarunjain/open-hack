@@ -10,10 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 public class UserService {
@@ -112,17 +109,17 @@ public class UserService {
         return hackathonsByJudge;
     }
 
-    public List<Hackathon> findHackathonsByParticipant(final User user) {
+    public HashMap<Hackathon, Team> findHackathonsByParticipant(final User user) {
         // TODO Check what all hackathons that we need to send
         // TODO Improve Performance
-        List<Hackathon> hackathonsByParticipant = new ArrayList<>();
+        HashMap<Hackathon, Team> result = new HashMap<>();
         List<TeamMembership> memberships = teamMembershipRepository.findByMemberId(user)
                 .orElse(new ArrayList<>());
         for (TeamMembership teamMembership: memberships) {
             Team team = teamRepository.findById(teamMembership.getTeamId().getId())
                     .orElseThrow(() -> new TeamNotFoundException(teamMembership.getTeamId().getId()));
-            hackathonsByParticipant.add(team.getHackathon());
+            result.put(team.getHackathon(), team);
         }
-        return hackathonsByParticipant;
+        return result;
     }
 }
