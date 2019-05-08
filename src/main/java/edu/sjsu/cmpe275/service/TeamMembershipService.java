@@ -23,7 +23,6 @@ public class TeamMembershipService {
     }
 
     @Transactional
-
     public List<TeamMembership> findTeamMembers(final Team id){
         return teamMembershipRepository.findByTeamId(id);
     }
