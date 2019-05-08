@@ -2,11 +2,8 @@ package edu.sjsu.cmpe275.web.model.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.sjsu.cmpe275.domain.entity.User;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
-import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 

@@ -4,7 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -31,6 +33,10 @@ public class User {
     @Size(max = 255)
     private String email;
 
+    @Column(name = "password", nullable = false)
+    @Size(max = 255)
+    private String password;
+
     @Column(name = "screen_name", nullable = false, unique = true)
     @Size(max = 255)
     private String screenName;
@@ -54,6 +60,12 @@ public class User {
 
     @Column(name = "is_admin", columnDefinition = "bit", nullable = false)
     private boolean isAdmin;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public void update(final User fromRequest) {
         if (Objects.nonNull(fromRequest.getFirstName())) {

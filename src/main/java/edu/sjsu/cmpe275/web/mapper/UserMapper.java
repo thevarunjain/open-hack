@@ -10,13 +10,11 @@ import edu.sjsu.cmpe275.web.model.response.AddressResponseDto;
 import edu.sjsu.cmpe275.web.model.response.AssociatedOrganizationResponseDto;
 import edu.sjsu.cmpe275.web.model.response.NameResponseDto;
 import edu.sjsu.cmpe275.web.model.response.UserResponseDto;
-import jdk.nashorn.internal.runtime.options.Option;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,10 +33,6 @@ public class UserMapper {
                 )
                 .email(toCreate.getEmail())
                 .screenName(toCreate.getScreenName())
-                .portraitURL(toCreate.getPortraitURL())
-                .businessTitle(toCreate.getBusinessTitle())
-                .aboutMe(toCreate.getAboutMe())
-                .address(mapAddressRequest(toCreate.getAddress()))
                 .build();
     }
 
@@ -90,7 +84,7 @@ public class UserMapper {
 
     public UserResponseDto map(
             final User user,
-            final Organization ownerOf,
+            final List<Organization> ownerOf,
             final Organization memberOf
     ) {
         return UserResponseDto.builder()
@@ -101,7 +95,7 @@ public class UserMapper {
                 .portraitURL(user.getPortraitURL())
                 .businessTitle(user.getBusinessTitle())
                 .aboutMe(user.getAboutMe())
-                .ownerOf(mapOrganizationResponse(ownerOf))
+                .ownerOf(mapOrganizationsResponse(ownerOf))
                 .memberOf(mapOrganizationResponse(memberOf))
                 .address(mapAddressResponse(user.getAddress()))
                 .isAdmin(user.isAdmin())
@@ -129,12 +123,23 @@ public class UserMapper {
 
     private AssociatedOrganizationResponseDto mapOrganizationResponse(final Organization organization) {
         if (Objects.isNull(organization)) {
-            return null;
+            return AssociatedOrganizationResponseDto.builder().build();
         }
         return AssociatedOrganizationResponseDto.builder()
                 .id(organization.getId())
                 .name(organization.getName())
+                .description(organization.getDescription())
                 .build();
+    }
+
+
+    private List<AssociatedOrganizationResponseDto> mapOrganizationsResponse(List<Organization> organizations) {
+        List<AssociatedOrganizationResponseDto> organizationResponseDtoList = Objects.nonNull(organizations)
+                ? organizations
+                .stream()
+                .map(organization -> mapOrganizationResponse(organization))
+                .collect(Collectors.toList()) : new ArrayList<>();
+        return organizationResponseDtoList;
     }
 
     private AddressResponseDto mapAddressResponse(final Address address) {

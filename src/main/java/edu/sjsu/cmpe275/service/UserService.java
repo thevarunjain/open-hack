@@ -1,28 +1,19 @@
 package edu.sjsu.cmpe275.service;
 
-import edu.sjsu.cmpe275.domain.entity.Role;
-import edu.sjsu.cmpe275.domain.entity.RoleName;
-import edu.sjsu.cmpe275.domain.entity.User;
-import edu.sjsu.cmpe275.domain.exception.UserNotFoundException;
-import edu.sjsu.cmpe275.domain.repository.RoleRepository;
-import edu.sjsu.cmpe275.domain.entity.Hackathon;
-import edu.sjsu.cmpe275.domain.entity.Team;
-import edu.sjsu.cmpe275.domain.entity.TeamMembership;
-import edu.sjsu.cmpe275.domain.entity.User;
+import edu.sjsu.cmpe275.domain.entity.*;
+import edu.sjsu.cmpe275.domain.exception.RoleNotFoundException;
 import edu.sjsu.cmpe275.domain.exception.TeamNotFoundException;
 import edu.sjsu.cmpe275.domain.exception.UserNotFoundException;
-import edu.sjsu.cmpe275.domain.repository.HackathonRepository;
-import edu.sjsu.cmpe275.domain.repository.TeamMembershipRepository;
-import edu.sjsu.cmpe275.domain.repository.TeamRepository;
-import edu.sjsu.cmpe275.domain.repository.UserRepository;
+import edu.sjsu.cmpe275.domain.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.*;
 
 @Component
 public class UserService {
@@ -33,7 +24,7 @@ public class UserService {
 
     private final TeamMembershipRepository teamMembershipRepository;
 
-    private TeamRepository teamRepository;
+    private final TeamRepository teamRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -70,9 +61,19 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(final User user) {
-        if (user.getEmail().endsWith("sjsu.edu"))
+    public User createUser(final User user, final String password) {
+        Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                .orElseThrow(() -> new RoleNotFoundException(RoleName.ROLE_ADMIN.name()));
+        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new RoleNotFoundException(RoleName.ROLE_USER.name()));
+
+        if (user.getEmail().endsWith("sjsu.edu")) {
             user.setAdmin(true);
+            user.setRoles(Collections.singleton(adminRole));
+        } else {
+            user.setRoles(Collections.singleton(userRole));
+        }
+        user.setPassword(passwordEncoder.encode(password));
         return userRepository.save(user);
     }
 
@@ -101,7 +102,7 @@ public class UserService {
         List<Hackathon> hackathonsByJudge = new ArrayList<>();
         List<Hackathon> allHackathons = hackathonRepository.findAll();
         for (Hackathon hackathon: allHackathons) {
-            Set<User> judges = hackathon.getJudges();
+            List<User> judges = hackathon.getJudges();
             for (User judge: judges) {
                 if (Long.valueOf(judge.getId()).equals(user.getId())) {
                     hackathonsByJudge.add(hackathon);

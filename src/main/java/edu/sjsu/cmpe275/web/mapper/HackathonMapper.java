@@ -1,7 +1,6 @@
 package edu.sjsu.cmpe275.web.mapper;
 
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
-import edu.sjsu.cmpe275.domain.entity.Organization;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
 import edu.sjsu.cmpe275.web.model.response.AssociatedSponsorResponseDto;
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
 @Component
 public class HackathonMapper {
 
-        public Hackathon map(CreateHackathonRequestDto toCreateHackathon, Set<User> judges,User owner){
+        public Hackathon map(CreateHackathonRequestDto toCreateHackathon, List<User> judges,User owner){
             return Hackathon.builder()
                     .name(toCreateHackathon.getName())
                     .description(toCreateHackathon.getDescription())

@@ -6,7 +6,6 @@ import edu.sjsu.cmpe275.domain.entity.HackathonSponsor;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.service.HackathonService;
 import edu.sjsu.cmpe275.service.HackathonSponsorService;
-import edu.sjsu.cmpe275.service.OrganizationService;
 import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.web.mapper.HackathonMapper;
 import edu.sjsu.cmpe275.web.mapper.HackathonSponsorMapper;
@@ -21,11 +20,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 import javax.validation.constraints.NotNull;
@@ -34,6 +28,8 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/hackathons")
@@ -101,26 +97,23 @@ public class HackathonController {
     @PostMapping(value = "", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public HackathonResponseDto createHackathon(@Valid @RequestBody CreateHackathonRequestDto toCreateHackathon,
-                                                Errors validationErrors,
-                                                @NotNull @RequestParam Long ownerId){
-
-        if(validationErrors.hasErrors()){
-            //TODO Validate the error
-        }
-
-        Set<User> judges = new HashSet();
+    public HackathonResponseDto createHackathon(
+            @Valid @RequestBody CreateHackathonRequestDto toCreateHackathon,
+            @NotNull @RequestParam Long ownerId
+    ){
+        List<User> judges = new ArrayList<>();
         for(Long id : toCreateHackathon.getJudges()){
             judges.add(userService.findUser(id));
         }
         User owner = userService.findUser(ownerId);
+        Hackathon hackathon =hackathonMapper.map(toCreateHackathon,judges, owner);
+
 
         Hackathon createdHackathon = hackathonService.createHackathon(
-                hackathonMapper.map(toCreateHackathon,judges, owner),
+                hackathon,
                 toCreateHackathon.getSponsors(),
                 toCreateHackathon.getDiscount()
         );
-
         return hackathonMapper.map(createdHackathon);
     }
 
