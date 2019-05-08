@@ -104,10 +104,12 @@ public class TeamService {
         String subject = "Open-Hack 2019 Invitation to Team - "+ createdTeam.getName();
         Long hid = createdTeam.getHackathon().getId();
         Long tid = createdTeam.getId();
+        String localServerUrl = "http://localhost:3000";
+        String hostedServerUrl = "" ;
         String message = " Hi,\n" +
                 "Welcome to Open Hackathon 2019\n" +
                 "You are invited to join our hackathon team : "+ createdTeam.getName() + "\n" +
-                "Proceed to pay on http://localhost:8080/hackathons/"+hid+"/teams/"+tid+"/payments" +
+                "Proceed to pay on "+localServerUrl+"/hackathons/"+hid+"/teams/"+tid+"/payments" +
                 "\n" +
                 "\n" +
                 "Thank You\n" +
