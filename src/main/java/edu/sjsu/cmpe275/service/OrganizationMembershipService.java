@@ -15,17 +15,14 @@ import java.util.Objects;
 @Component
 public class OrganizationMembershipService {
     private OrganizationMembershipRepository organizationMembershipRepository;
-//    private OrganizationService organizationService;
     private EmailService emailService;
 
     @Autowired
     public OrganizationMembershipService(
             final OrganizationMembershipRepository organizationMembershipRepository,
-//            final OrganizationService organizationService,
             final EmailService emailService
     ) {
         this.organizationMembershipRepository = organizationMembershipRepository;
-//        this.organizationService = organizationService;
         this.emailService = emailService;
     }
 
