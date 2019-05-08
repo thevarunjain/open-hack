@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -61,6 +61,6 @@ public class Hackathon {
     @JoinTable(name="hackathon_judge",
                joinColumns={@JoinColumn(name="hackathon_id", referencedColumnName="id", table = "hackathon")}
                ,inverseJoinColumns={@JoinColumn(name="judge_id", referencedColumnName="id", table = "user")})
-    private Set<User> judges;
+    private List<User> judges;
 
 }

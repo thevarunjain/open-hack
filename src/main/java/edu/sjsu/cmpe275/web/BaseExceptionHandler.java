@@ -43,6 +43,9 @@ public class BaseExceptionHandler {
         if (e instanceof DataIntegrityViolationException
                 || e instanceof javax.validation.ConstraintViolationException
         ) {
+
+            System.err.println("Error");
+            System.err.println(e);
             return;
         }
         throw e;

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class HackathonMapper {
 
-        public Hackathon map(CreateHackathonRequestDto toCreateHackathon, Set<User> judges,User owner){
+        public Hackathon map(CreateHackathonRequestDto toCreateHackathon, List<User> judges,User owner){
             return Hackathon.builder()
                     .name(toCreateHackathon.getName())
                     .description(toCreateHackathon.getDescription())
