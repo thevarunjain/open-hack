@@ -51,6 +51,7 @@ public class OrganizationMembershipMapper {
         return AssociatedOrganizationResponseDto.builder()
                 .id(organization.getId())
                 .name(organization.getName())
+                .description(organization.getDescription())
                 .build();
     }
 

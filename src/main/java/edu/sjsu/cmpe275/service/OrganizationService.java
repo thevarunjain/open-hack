@@ -39,7 +39,7 @@ public class OrganizationService {
     }
 
 
-    public Organization findOrganizationByOwner(final User user) {
+    public List<Organization> findOrganizationsByOwner(final User user) {
         return organizationRepository.findByOwnerId(user.getId())
                 .orElse(null);
     }
