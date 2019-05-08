@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.validator.constraints.URL;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -25,17 +24,10 @@ public class CreateUserRequestDto {
     @Email
     private String email;
 
+    @NotNull(message = "Password can not be null")
+    private String password;
+
     @NotNull(message = "Screen name can not be null")
     @Pattern(regexp = "[a-zA-Z0-9]{3,}", message = "Screen name should be of minimum 3 alphanumeric characters")
     private String screenName;
-
-    @URL
-    private String portraitURL;
-
-    private String businessTitle;
-
-    private String aboutMe;
-
-    @Valid
-    private AddressRequestDto address;
 }

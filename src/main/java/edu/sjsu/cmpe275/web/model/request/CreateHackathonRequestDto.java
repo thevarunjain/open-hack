@@ -9,7 +9,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,7 +40,7 @@ public class CreateHackathonRequestDto {
     private int maxSize;
 
     @NotNull(message = "Atleast one judge is required")
-    private List<Long> judges;//
+    private List<Long> judges;
 
     private String status;
 
