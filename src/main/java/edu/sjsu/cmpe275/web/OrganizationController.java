@@ -24,7 +24,6 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/organizations")
-@CrossOrigin(origins = "http://localhost:3000")
 public class OrganizationController {
     private final OrganizationService organizationService;
 
