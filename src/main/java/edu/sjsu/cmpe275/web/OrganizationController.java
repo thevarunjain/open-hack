@@ -27,16 +27,12 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/organizations")
 public class OrganizationController {
+
     private final OrganizationService organizationService;
-
     private final UserService userService;
-
     private final OrganizationMembershipService organizationMembershipService;
-
     private final OrganizationMapper organizationMapper;
-
     private final OrganizationMembershipMapper organizationMembershipMapper;
-
     private final UserMapper userMapper;
 
     @Autowired
@@ -148,7 +144,9 @@ public class OrganizationController {
     @GetMapping(value = "/{id}/members")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<UserResponseDto> getApprovedOrganizationMembers(@PathVariable @NotNull Long id) {
+    public List<UserResponseDto> getApprovedOrganizationMembers(
+            @PathVariable @NotNull Long id
+    ) {
         // TODO changes in mapper so as to send AssociatedUserResponseDto
         List<User> orgMembers = organizationService.findApprovedOrganizationMembers(id);
         return userMapper.map(orgMembers);

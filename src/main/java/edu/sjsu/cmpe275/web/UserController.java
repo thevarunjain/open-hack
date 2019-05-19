@@ -1,6 +1,5 @@
 package edu.sjsu.cmpe275.web;
 
-
 import edu.sjsu.cmpe275.domain.entity.*;
 import edu.sjsu.cmpe275.security.CurrentUser;
 import edu.sjsu.cmpe275.security.UserPrincipal;
@@ -29,13 +28,9 @@ import java.util.Objects;
 public class UserController {
 
     private final UserService userService;
-
     private final UserMapper userMapper;
-
     private final MyHackathonsMapper myHackathonsMapper;
-
     private final OrganizationService organizationService;
-
     private final OrganizationMembershipService organizationMembershipService;
 
     @Autowired
@@ -85,7 +80,9 @@ public class UserController {
     @GetMapping(value = "/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public UserResponseDto getUser(@PathVariable @NotNull Long id) {
+    public UserResponseDto getUser(
+            @PathVariable @NotNull Long id
+    ) {
         User user = userService.findUser(id);
         List<Organization> ownerOf = organizationService.findOrganizationsByOwner(user);
         OrganizationMembership membership =
@@ -105,8 +102,9 @@ public class UserController {
     @GetMapping(value = "/{id}/hackathons")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public MyHackathonsResponseDto getUserHackathons(@PathVariable @NotNull Long id) {
-        // TODO should this be user from path or authenticated users
+    public MyHackathonsResponseDto getUserHackathons(
+            @PathVariable @NotNull Long id
+    ) {
         User user = userService.findUser(id);
         List<Hackathon> owner = userService.findHackathonsByOwner(user);
         List<Hackathon> judge = userService.findHackathonsByJudge(user);
@@ -121,7 +119,7 @@ public class UserController {
             @PathVariable @NotNull Long id,
             @Valid @RequestBody UpdateUserRequestDto fromRequest
     ) {
-        // TODO only current logged in user can update profile
+        // TODO only current logged in user can update his/her profile
         User fromUpdate = userMapper.map(fromRequest);
         User updatedUser = userService.updateUser(id, fromUpdate);
         return userMapper.map(updatedUser);

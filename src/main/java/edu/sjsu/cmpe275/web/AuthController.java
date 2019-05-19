@@ -18,7 +18,6 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-
     private final JwtTokenProvider tokenProvider;
 
     @Autowired
@@ -33,21 +32,20 @@ public class AuthController {
     @PostMapping(value = "/signin")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public JwtAuthenticationResponseDto authenticateUser(@Valid @RequestBody LoginRequestDto loginRequest) {
+    public JwtAuthenticationResponseDto authenticateUser(
+            @Valid @RequestBody LoginRequestDto loginRequest
+    ) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
                         loginRequest.getPassword()
                 )
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String jwt = tokenProvider.generateToken(authentication);
         return JwtAuthenticationResponseDto.builder()
                 .accessToken(jwt)
                 .tokenType("Bearer")
                 .build();
     }
-
 }

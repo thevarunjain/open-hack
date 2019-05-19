@@ -1,6 +1,5 @@
 package edu.sjsu.cmpe275.web;
 
-
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.HackathonSponsor;
 import edu.sjsu.cmpe275.domain.entity.User;
@@ -28,11 +27,11 @@ import java.util.List;
 @RequestMapping(value = "/hackathons")
 public class HackathonController {
 
-    private HackathonMapper hackathonMapper;
-    private HackathonService hackathonService;
-    private HackathonSponsorService hackathonSponsorService;
-    private UserService userService;
-    private HackathonSponsorMapper hackathonSponsorMapper;
+    private final HackathonMapper hackathonMapper;
+    private final HackathonService hackathonService;
+    private final HackathonSponsorService hackathonSponsorService;
+    private final UserService userService;
+    private final HackathonSponsorMapper hackathonSponsorMapper;
 
     @Autowired
     public HackathonController(
@@ -49,7 +48,7 @@ public class HackathonController {
         this.hackathonSponsorService = hackathonSponsorService;
     }
 
-    @GetMapping(value = "", produces = "application/json")
+    @GetMapping(value = "")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<HackathonResponseDto> getHackathons(
@@ -61,7 +60,7 @@ public class HackathonController {
         return hackathonMapper.map(allHackathons);
     }
 
-    @GetMapping(value = "/{id}", produces = "application/json")
+    @GetMapping(value = "/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public HackathonResponseDto getHackathon(
@@ -81,7 +80,7 @@ public class HackathonController {
         return hackathonMapper.map(hackathon, sponsorResponse);
     }
 
-    @PostMapping(value = "", produces = "application/json")
+    @PostMapping(value = "")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public HackathonResponseDto createHackathon(
@@ -95,7 +94,6 @@ public class HackathonController {
         }
         User owner = userService.findUser(user.getId());
         Hackathon hackathon = hackathonMapper.map(toCreateHackathon, judges, owner);
-
         Hackathon createdHackathon = hackathonService.createHackathon(
                 hackathon,
                 toCreateHackathon.getSponsors(),
@@ -104,7 +102,7 @@ public class HackathonController {
         return hackathonMapper.map(createdHackathon);
     }
 
-    @PatchMapping(value = "/{id}", produces = "application/json")
+    @PatchMapping(value = "/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public HackathonResponseDto updateHackathon(
