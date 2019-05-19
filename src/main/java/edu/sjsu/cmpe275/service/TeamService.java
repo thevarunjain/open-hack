@@ -1,10 +1,6 @@
 package edu.sjsu.cmpe275.service;
 
 import edu.sjsu.cmpe275.domain.entity.*;
-import edu.sjsu.cmpe275.domain.entity.Hackathon;
-import edu.sjsu.cmpe275.domain.entity.Team;
-import edu.sjsu.cmpe275.domain.entity.TeamMembership;
-import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.domain.exception.TeamNotFoundException;
 import edu.sjsu.cmpe275.domain.repository.TeamRepository;
 import edu.sjsu.cmpe275.web.mapper.TeamMembershipMapper;
@@ -16,7 +12,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Component
 public class TeamService {

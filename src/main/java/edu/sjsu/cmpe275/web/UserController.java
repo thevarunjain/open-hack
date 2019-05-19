@@ -4,17 +4,14 @@ package edu.sjsu.cmpe275.web;
 import edu.sjsu.cmpe275.domain.entity.*;
 import edu.sjsu.cmpe275.security.CurrentUser;
 import edu.sjsu.cmpe275.security.UserPrincipal;
-import edu.sjsu.cmpe275.service.EmailService;
 import edu.sjsu.cmpe275.service.OrganizationMembershipService;
 import edu.sjsu.cmpe275.service.OrganizationService;
 import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.web.exception.ConstraintViolationException;
-import edu.sjsu.cmpe275.web.mapper.HackathonMapper;
 import edu.sjsu.cmpe275.web.mapper.MyHackathonsMapper;
 import edu.sjsu.cmpe275.web.mapper.UserMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateUserRequestDto;
 import edu.sjsu.cmpe275.web.model.request.UpdateUserRequestDto;
-import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import edu.sjsu.cmpe275.web.model.response.MyHackathonsResponseDto;
 import edu.sjsu.cmpe275.web.model.response.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,6 +120,7 @@ public class UserController {
             @PathVariable @NotNull Long id,
             @Valid @RequestBody UpdateUserRequestDto fromRequest
     ) {
+        // TODO only current logged in user can update profile
         User fromUpdate = userMapper.map(fromRequest);
         User updatedUser  = userService.updateUser(id, fromUpdate);
         return userMapper.map(updatedUser);
