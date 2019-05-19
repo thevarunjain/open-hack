@@ -46,45 +46,45 @@ public class TeamService {
         this.emailService = emailService;
     }
 
-    public List<Team> findallTeamsForHackathon(final long id){
+    public List<Team> findallTeamsForHackathon(final long id) {
 
-            Hackathon hackathon = hackathonService.findHackathon(id);
-            List<Team> allTeams = teamRepository.findByHackathon(hackathon);
+        Hackathon hackathon = hackathonService.findHackathon(id);
+        List<Team> allTeams = teamRepository.findByHackathon(hackathon);
 
-            return allTeams;
+        return allTeams;
 
     }
 
     public List<Team> findTeamForHackathon(Hackathon hid, Long tid) {
-            return teamRepository.findByHackathonAndId(hid, tid);
+        return teamRepository.findByHackathonAndId(hid, tid);
     }
 
-    public List<Team> findTeams(){
+    public List<Team> findTeams() {
         return teamRepository.findAll();
     }
 
-    public Team findTeam(final Long id){
+    public Team findTeam(final Long id) {
         return teamRepository.findById(id)
-                .orElseThrow(()-> new TeamNotFoundException(id));
+                .orElseThrow(() -> new TeamNotFoundException(id));
     }
 
     @Transactional
-    public Team createTeam(final Team team, List<Long> members, final List<String> roles, User owner){
+    public Team createTeam(final Team team, List<Long> members, final List<String> roles, User owner) {
 
         Team createdTeam = teamRepository.save(team);
 
-                members.add(owner.getId());
-        for(int i=0;i<members.size();i++){
+        members.add(owner.getId());
+        for (int i = 0; i < members.size(); i++) {
 
             TeamMembership createMember;
 
-            if(members.get(i)==owner.getId()){
+            if (members.get(i) == owner.getId()) {
                 createMember = teamMembershipMapper.map(
                         findTeam(createdTeam.getId()),
                         userService.findUser(members.get(i)),
                         "Team Lead");
-            }else{
-                 createMember = teamMembershipMapper.map(
+            } else {
+                createMember = teamMembershipMapper.map(
                         findTeam(createdTeam.getId()),
                         userService.findUser(members.get(i)),
                         roles.get(i));
@@ -100,30 +100,30 @@ public class TeamService {
 
     private void sendEmailToAllTeamMembers(Team createdTeam, List<Long> members) {
 
-        String subject = "Open-Hack 2019 Invitation to Team - "+ createdTeam.getName();
+        String subject = "Open-Hack 2019 Invitation to Team - " + createdTeam.getName();
         Long hid = createdTeam.getHackathon().getId();
         Long tid = createdTeam.getId();
         String localServerUrl = "http://localhost:3000";
-        String hostedServerUrl = "" ;
+        String hostedServerUrl = "";
         String message = " Hi,\n" +
                 "Welcome to Open Hackathon 2019\n" +
-                "You are invited to join our hackathon team : "+ createdTeam.getName() + "\n" +
-                "Proceed to pay on "+localServerUrl+"/payments/"+hid+"/"+tid +
+                "You are invited to join our hackathon team : " + createdTeam.getName() + "\n" +
+                "Proceed to pay on " + localServerUrl + "/payments/" + hid + "/" + tid +
                 "\n" +
                 "\n" +
                 "Thank You\n" +
-                createdTeam.getOwner().getFirstName() +" "+ createdTeam.getOwner().getLastName();
+                createdTeam.getOwner().getFirstName() + " " + createdTeam.getOwner().getLastName();
 
-        List<String> allEmails= new ArrayList<>();
+        List<String> allEmails = new ArrayList<>();
 
-        for(Long mid : members){
+        for (Long mid : members) {
             String email = userService.findUser(mid).getEmail();
-                allEmails.add(email);
+            allEmails.add(email);
         }
 
-        for(String email : allEmails){
-            System.err.println("Sending mail to "+ email);
-            emailService.sendSimpleMessage(email,subject, message);
+        for (String email : allEmails) {
+            System.err.println("Sending mail to " + email);
+            emailService.sendSimpleMessage(email, subject, message);
         }
 
 
@@ -133,21 +133,21 @@ public class TeamService {
     public Team updateTeam(Long hid, UpdateTeamRequestDto upadateTeam, Long tid) {
 
         Hackathon hackathon = hackathonService.findHackathon(hid);
-              List<Team> getTeams =findTeamForHackathon(hackathon, tid);
-                    Team team = getTeams.get(0);
+        List<Team> getTeams = findTeamForHackathon(hackathon, tid);
+        Team team = getTeams.get(0);
 
-                    team.setGrades(Objects.nonNull(upadateTeam.getGrades())
-                                          ? upadateTeam.getGrades()
-                                          : team.getGrades() );
+        team.setGrades(Objects.nonNull(upadateTeam.getGrades())
+                ? upadateTeam.getGrades()
+                : team.getGrades());
 
-                    team.setIsFinalized(Objects.nonNull(upadateTeam.getIsFinalized())
-                                               ? upadateTeam.getIsFinalized()
-                                               : team.getIsFinalized());
+        team.setIsFinalized(Objects.nonNull(upadateTeam.getIsFinalized())
+                ? upadateTeam.getIsFinalized()
+                : team.getIsFinalized());
 
-                    team.setSubmissionURL(Objects.nonNull(upadateTeam.getSubmissionURL())
-                                                ? upadateTeam.getSubmissionURL()
-                                                : team.getSubmissionURL());
-            return team;
+        team.setSubmissionURL(Objects.nonNull(upadateTeam.getSubmissionURL())
+                ? upadateTeam.getSubmissionURL()
+                : team.getSubmissionURL());
+        return team;
     }
 
     public Float getPaymentForMember(
@@ -164,12 +164,12 @@ public class TeamService {
                 ? membership.getOrganization() : null;
         Float hackathonFee = hackathon.getFee();
         if (Objects.nonNull(memberOf)) {
-            HackathonSponsor hackathonSponsor =  hackathonSponsorService.findHackathonSponsor(hackathon, memberOf);
+            HackathonSponsor hackathonSponsor = hackathonSponsorService.findHackathonSponsor(hackathon, memberOf);
             Integer discount = 0;
             if (Objects.nonNull(hackathonSponsor)) {
                 discount = hackathonSponsor.getDiscount();
             }
-            return hackathonFee - (hackathonFee * discount)/100;
+            return hackathonFee - (hackathonFee * discount) / 100;
         } else {
             return hackathonFee;
         }
@@ -188,7 +188,7 @@ public class TeamService {
         boolean isPaidByEveryone = true;
         List<TeamMembership> teamMembershipList =
                 teamMembershipService.findTeamMembers(teamMembership.getTeamId());
-        for (TeamMembership membership: teamMembershipList) {
+        for (TeamMembership membership : teamMembershipList) {
             if (!membership.getFee_paid()) {
                 isPaidByEveryone = false;
                 break;

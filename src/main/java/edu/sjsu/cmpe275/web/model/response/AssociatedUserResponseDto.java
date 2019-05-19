@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_EMPTY  )
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class AssociatedUserResponseDto {
     @JsonProperty("id")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)

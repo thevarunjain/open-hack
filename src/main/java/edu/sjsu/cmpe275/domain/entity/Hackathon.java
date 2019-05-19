@@ -20,7 +20,7 @@ public class Hackathon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id",columnDefinition = "int unsigned")
+    @Column(name = "id", columnDefinition = "int unsigned")
     private long id;
 
     @Column(name = "name", nullable = false, unique = true)
@@ -36,7 +36,7 @@ public class Hackathon {
     private java.util.Date endDate;
 
     @Column(name = "description", nullable = false)
-    @Size(min = 10,max = 255)
+    @Size(min = 10, max = 255)
     private String description;
 
     @Column(name = "fee", nullable = false)
@@ -57,10 +57,10 @@ public class Hackathon {
     @JoinColumn(name = "owner_id", nullable = false, updatable = false)
     private User owner;
 
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinTable(name="hackathon_judge",
-               joinColumns={@JoinColumn(name="hackathon_id", referencedColumnName="id", table = "hackathon")}
-               ,inverseJoinColumns={@JoinColumn(name="judge_id", referencedColumnName="id", table = "user")})
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "hackathon_judge",
+            joinColumns = {@JoinColumn(name = "hackathon_id", referencedColumnName = "id", table = "hackathon")}
+            , inverseJoinColumns = {@JoinColumn(name = "judge_id", referencedColumnName = "id", table = "user")})
     private List<User> judges;
 
 }

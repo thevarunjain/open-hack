@@ -11,7 +11,7 @@ import java.util.Objects;
 @Component
 public class TeamMembershipMapper {
 
-    public TeamMembership map(final Team team, final User members, final String role){
+    public TeamMembership map(final Team team, final User members, final String role) {
         return TeamMembership.builder()
                 .id(mapMemberId(team, members))
                 .teamId(team)
@@ -32,8 +32,8 @@ public class TeamMembershipMapper {
     }
 
     public AssociatedMemberResponseDto map(final Long memberId, final String name,
-                                           final String screenName,final String role,
-                                           final Float amount, final Boolean fee_paid){
+                                           final String screenName, final String role,
+                                           final Float amount, final Boolean fee_paid) {
         return AssociatedMemberResponseDto.builder()
                 .memberId(memberId)
                 .firstName(name)
@@ -43,7 +43,6 @@ public class TeamMembershipMapper {
                 .fee_paid(Objects.nonNull(fee_paid) ? fee_paid : null)
                 .build();
     }
-
 
 
 }

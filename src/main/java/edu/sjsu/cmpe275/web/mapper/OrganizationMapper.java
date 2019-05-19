@@ -24,6 +24,7 @@ public class OrganizationMapper {
                 .address(mapAddressRequest(toCreate.getAddress()))
                 .build();
     }
+
     private Address mapAddressRequest(final AddressRequestDto address) {
         if (Objects.isNull(address)) {
             return Address.builder().build();

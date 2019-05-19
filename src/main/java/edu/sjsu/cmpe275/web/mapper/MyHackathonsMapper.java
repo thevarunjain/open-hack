@@ -43,7 +43,7 @@ public class MyHackathonsMapper {
         return hackathonWithTeamResponseDtoList;
     }
 
-    private TeamResponseDto mapTeamResponse(Team team){
+    private TeamResponseDto mapTeamResponse(Team team) {
         return TeamResponseDto.builder()
                 .id(team.getId())
                 .name(team.getName())
@@ -58,7 +58,7 @@ public class MyHackathonsMapper {
                 .build();
     }
 
-    public HackathonResponseDto map(Hackathon hackathon){
+    public HackathonResponseDto map(Hackathon hackathon) {
         return HackathonResponseDto.builder()
                 .id(hackathon.getId())
                 .name(hackathon.getName())
@@ -83,7 +83,7 @@ public class MyHackathonsMapper {
     }
 
 
-    private Set<AssociatedUserResponseDto> mapJudgeResponse (final Hackathon hackathon){
+    private Set<AssociatedUserResponseDto> mapJudgeResponse(final Hackathon hackathon) {
         Set<AssociatedUserResponseDto> members = Objects.nonNull(hackathon.getJudges())
                 ? hackathon.getJudges()
                 .stream()
@@ -99,10 +99,10 @@ public class MyHackathonsMapper {
         return members;
     }
 
-    public List<HackathonResponseDto> mapHackathonsResponse(final List<Hackathon> hackathons){
+    public List<HackathonResponseDto> mapHackathonsResponse(final List<Hackathon> hackathons) {
         List<HackathonResponseDto> hackathonResponseDtoList = new ArrayList<>();
         if (Objects.nonNull(hackathons)) {
-            for(Hackathon hackathon : hackathons){
+            for (Hackathon hackathon : hackathons) {
                 hackathonResponseDtoList.add(
                         map(hackathon)
                 );

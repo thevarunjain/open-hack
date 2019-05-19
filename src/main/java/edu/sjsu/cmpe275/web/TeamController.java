@@ -63,29 +63,29 @@ public class TeamController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<TeamResponseDto> getallTeamsForHackathon(@RequestParam(required = false) String name,
-                                                    @PathVariable @NotNull Long hid){
+                                                         @PathVariable @NotNull Long hid) {
 
         List<Team> allTeams = teamService.findallTeamsForHackathon(hid);
-            return teamMapper.map(allTeams);
+        return teamMapper.map(allTeams);
     }
 
     @GetMapping(value = "/{hid}/teams/{tid}", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public TeamResponseDto getTeams(@RequestParam(required = false) String name,
-                                          @PathVariable @NotNull Long hid,
-                                          @PathVariable @NotNull Long tid){
+                                    @PathVariable @NotNull Long hid,
+                                    @PathVariable @NotNull Long tid) {
 
         Hackathon hackathon = hackathonService.findHackathon(hid);
-            List<Team> getTeam = teamService.findTeamForHackathon(hackathon, tid);
-                    Team team = getTeam.get(0);
+        List<Team> getTeam = teamService.findTeamForHackathon(hackathon, tid);
+        Team team = getTeam.get(0);
 
-        List<TeamMembership> allMembers  =teamMembershipService.findTeamMembers(team);
+        List<TeamMembership> allMembers = teamMembershipService.findTeamMembers(team);
 
         List<AssociatedMemberResponseDto> memberResponse = new ArrayList<>();
 
 
-        for(TeamMembership teamMembership : allMembers){
+        for (TeamMembership teamMembership : allMembers) {
             memberResponse.add(
                     teamMembershipMapper.map(
                             teamMembership.getId().getMemberId(),
@@ -101,7 +101,7 @@ public class TeamController {
     }
 
 
-    @PostMapping(value = "/{id}/teams", produces = "application/json" )
+    @PostMapping(value = "/{id}/teams", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public TeamResponseDto createTeam(
@@ -114,7 +114,7 @@ public class TeamController {
         Hackathon hackathon = hackathonService.findHackathon(id);
 
         Team createdTeam = teamService.createTeam(
-                teamMapper.map(toCreateTeam,owner, hackathon),
+                teamMapper.map(toCreateTeam, owner, hackathon),
                 toCreateTeam.getMembers(),
                 toCreateTeam.getRoles(),
                 owner
@@ -125,7 +125,7 @@ public class TeamController {
 
     @RequestMapping(value = "/{hid}/teams/{tid}",
             produces = "application/json",
-            method=RequestMethod.PATCH)
+            method = RequestMethod.PATCH)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public TeamResponseDto updateHackathon(
@@ -134,8 +134,8 @@ public class TeamController {
             @NonNull @PathVariable Long tid
     ) {
 
-        Team team =  teamService.updateTeam(hid, upadateTeam, tid);
-                 return teamMapper.map(team);
+        Team team = teamService.updateTeam(hid, upadateTeam, tid);
+        return teamMapper.map(team);
     }
 
     @GetMapping(value = "/{hid}/teams/{tid}/payment")

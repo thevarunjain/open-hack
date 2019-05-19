@@ -38,6 +38,7 @@ public class OrganizationController {
     private final OrganizationMembershipMapper organizationMembershipMapper;
 
     private final UserMapper userMapper;
+
     @Autowired
     public OrganizationController(
             OrganizationService organizationService,
@@ -73,7 +74,7 @@ public class OrganizationController {
             @CurrentUser UserPrincipal currentUser
     ) {
         User user = userService.findUser(currentUser.getId());
-        Organization  createdOrganization = organizationService.createOrganization(
+        Organization createdOrganization = organizationService.createOrganization(
                 organizationMapper.map(toCreate),
                 user.getId()
         );
@@ -86,7 +87,7 @@ public class OrganizationController {
     public OrganizationResponseDto getOrganization(
             @PathVariable @NotNull Long id
     ) {
-        Organization organization  = organizationService.findOrganization(id);
+        Organization organization = organizationService.findOrganization(id);
         return organizationMapper.map(organization);
     }
 
@@ -101,7 +102,7 @@ public class OrganizationController {
         Organization organization = organizationService.findOrganization(id);
         User member = userService.findUser(user.getId());
 
-        OrganizationMembership createdOrganizationMembership  =
+        OrganizationMembership createdOrganizationMembership =
                 organizationMembershipService.createOrganizationMembership(
                         organizationMembershipMapper.map(organization, member),
                         organizationService.findOrganization(id).getOwner().getEmail()
@@ -127,14 +128,15 @@ public class OrganizationController {
     @ResponseStatus(HttpStatus.OK)
     public OrganizationMembershipResponseDto updateOrganizationMembership(
             @PathVariable @NotNull Long id,
-            @NotNull @RequestParam Long requesterId, // TODO This should be from authentication token
             @RequestParam Long memberId,
-            @NotNull @RequestParam String toState
+            @NotNull @RequestParam String toState,
+            @CurrentUser UserPrincipal currentUser
     ) {
+        User user = userService.findUser(currentUser.getId());
         Organization organization = organizationService.findOrganization(id);
-        User requester = userService.findUser(requesterId);
-        User member = Objects.nonNull(memberId) ? userService.findUser(memberId): null;
-        OrganizationMembership updatedOrganizationMembership  =
+        User requester = userService.findUser(user.getId());
+        User member = Objects.nonNull(memberId) ? userService.findUser(memberId) : null;
+        OrganizationMembership updatedOrganizationMembership =
                 organizationMembershipService.updateOrganizationMembership(
                         organization,
                         Objects.nonNull(member) ? member : requester,
@@ -148,7 +150,7 @@ public class OrganizationController {
     @ResponseStatus(HttpStatus.OK)
     public List<UserResponseDto> getApprovedOrganizationMembers(@PathVariable @NotNull Long id) {
         // TODO changes in mapper so as to send AssociatedUserResponseDto
-        List<User> orgMembers  = organizationService.findApprovedOrganizationMembers(id);
+        List<User> orgMembers = organizationService.findApprovedOrganizationMembers(id);
         return userMapper.map(orgMembers);
     }
 }

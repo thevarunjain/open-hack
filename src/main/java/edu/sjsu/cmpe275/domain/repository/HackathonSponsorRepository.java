@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface HackathonSponsorRepository
         extends JpaRepository<HackathonSponsor, HackathonSponsor.HackathonSponsorId> {
 
-    List<HackathonSponsor> findByHackathonId (Hackathon id);
+    List<HackathonSponsor> findByHackathonId(Hackathon id);
 
     Optional<HackathonSponsor> findByHackathonIdAndOrganizationId(
             Hackathon hackathon_id, Organization sponsor_id

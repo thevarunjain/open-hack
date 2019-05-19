@@ -78,7 +78,7 @@ public class UserController {
         if (userService.existByScreenName(toCreate.getScreenName())) {
             throw new ConstraintViolationException("Screen name already taken", "screenName");
         }
-        User createdUser  = userService.createUser(userMapper.map(toCreate), toCreate.getPassword());
+        User createdUser = userService.createUser(userMapper.map(toCreate), toCreate.getPassword());
         return userMapper.map(createdUser);
     }
 
@@ -86,7 +86,7 @@ public class UserController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto getUser(@PathVariable @NotNull Long id) {
-        User user  = userService.findUser(id);
+        User user = userService.findUser(id);
         List<Organization> ownerOf = organizationService.findOrganizationsByOwner(user);
         OrganizationMembership membership =
                 organizationMembershipService.findOrganizationByMemberAndStatus(
@@ -101,12 +101,13 @@ public class UserController {
                 memberOf
         );
     }
+
     @GetMapping(value = "/{id}/hackathons")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public MyHackathonsResponseDto getUserHackathons(@PathVariable @NotNull Long id) {
         // TODO should this be user from path or authenticated users
-        User user  = userService.findUser(id);
+        User user = userService.findUser(id);
         List<Hackathon> owner = userService.findHackathonsByOwner(user);
         List<Hackathon> judge = userService.findHackathonsByJudge(user);
         HashMap<Hackathon, Team> participantWithTeam = userService.findHackathonsByParticipant(user);
@@ -122,7 +123,7 @@ public class UserController {
     ) {
         // TODO only current logged in user can update profile
         User fromUpdate = userMapper.map(fromRequest);
-        User updatedUser  = userService.updateUser(id, fromUpdate);
+        User updatedUser = userService.updateUser(id, fromUpdate);
         return userMapper.map(updatedUser);
     }
 }

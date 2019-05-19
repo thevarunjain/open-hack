@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface HackathonRepository extends JpaRepository<Hackathon, Long> {
 
-    List<Hackathon> findByNameContainingIgnoreCase (String name);
+    List<Hackathon> findByNameContainingIgnoreCase(String name);
 
     Optional<List<Hackathon>> findByOwnerId(Long id);
 }

@@ -13,22 +13,22 @@ import java.util.stream.Collectors;
 @Component
 public class TeamMapper {
 
-    public Team map(CreateTeamRequestDto toCreateTeam, User owner, Hackathon hackathon){
+    public Team map(CreateTeamRequestDto toCreateTeam, User owner, Hackathon hackathon) {
         return Team.builder()
                 .name(toCreateTeam.getName())
                 .isFinalized(false)
                 .owner(owner)
                 .hackathon(hackathon)
                 .submissionURL(Objects.nonNull(toCreateTeam.getSubmissionURL())
-                                      ? toCreateTeam.getSubmissionURL()
-                                      : null)
+                        ? toCreateTeam.getSubmissionURL()
+                        : null)
                 .grades(Objects.nonNull(toCreateTeam.getGrades())
-                               ? toCreateTeam.getGrades()
-                               : null )
+                        ? toCreateTeam.getGrades()
+                        : null)
                 .build();
     }
 
-    public TeamResponseDto map(Team team){
+    public TeamResponseDto map(Team team) {
         return TeamResponseDto.builder()
                 .id(team.getId())
                 .name(team.getName())
@@ -36,17 +36,17 @@ public class TeamMapper {
                 .owner(mapOwnerResponse(team.getOwner()))
                 .hackathon(mapHackathonResponse(team.getHackathon()))
                 .submissionURL(Objects.nonNull(team.getSubmissionURL())
-                                      ? team.getSubmissionURL()
-                                      : null)
+                        ? team.getSubmissionURL()
+                        : null)
                 .grades(Objects.nonNull(team.getGrades())
-                               ? team.getGrades()
-                               : null)
+                        ? team.getGrades()
+                        : null)
                 .build();
     }
 
-    public List<TeamResponseDto> map(final List<Team> teams){
+    public List<TeamResponseDto> map(final List<Team> teams) {
         List<TeamResponseDto> teamResponseDtoList = new ArrayList<>();
-        for(Team team : teams){
+        for (Team team : teams) {
             teamResponseDtoList.add(
                     map(team)
             );
@@ -64,7 +64,7 @@ public class TeamMapper {
     }
 
 
-    public HackathonResponseDto mapHackathonResponse(Hackathon hackathon){
+    public HackathonResponseDto mapHackathonResponse(Hackathon hackathon) {
         return HackathonResponseDto.builder()
                 .id(hackathon.getId())
                 .name(hackathon.getName())
@@ -79,7 +79,8 @@ public class TeamMapper {
 //                .owner(mapOwnerResponse(hackathon.getOwner()))
                 .build();
     }
-    private Set<AssociatedUserResponseDto> mapJudgeResponse (final Hackathon hackathon){
+
+    private Set<AssociatedUserResponseDto> mapJudgeResponse(final Hackathon hackathon) {
         Set<AssociatedUserResponseDto> members = Objects.nonNull(hackathon.getJudges())
                 ? hackathon.getJudges()
                 .stream()
@@ -108,7 +109,7 @@ public class TeamMapper {
     }
 
 
-    public HackathonResponseDto map(Hackathon hackathon,  List<AssociatedSponsorResponseDto> sponsorResponse){
+    public HackathonResponseDto map(Hackathon hackathon, List<AssociatedSponsorResponseDto> sponsorResponse) {
         return HackathonResponseDto.builder()
                 .id(hackathon.getId())
                 .name(hackathon.getName())

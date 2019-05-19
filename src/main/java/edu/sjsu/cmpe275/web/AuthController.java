@@ -23,9 +23,9 @@ public class AuthController {
 
     @Autowired
     public AuthController(
-        AuthenticationManager authenticationManager,
-        JwtTokenProvider tokenProvider
-    ){
+            AuthenticationManager authenticationManager,
+            JwtTokenProvider tokenProvider
+    ) {
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
     }
