@@ -97,7 +97,7 @@ public class TeamController {
         return teamMapper.map(team, memberResponse);
     }
 
-    @PostMapping(value = "/{id}/teams", produces = "application/json")
+    @PostMapping(value = "/{id}/teams")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public TeamResponseDto createTeam(
