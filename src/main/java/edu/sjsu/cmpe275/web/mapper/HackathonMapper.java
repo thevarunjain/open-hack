@@ -14,50 +14,49 @@ import java.util.stream.Collectors;
 @Component
 public class HackathonMapper {
 
-        public Hackathon map(CreateHackathonRequestDto toCreateHackathon, List<User> judges,User owner){
-            return Hackathon.builder()
-                    .name(toCreateHackathon.getName())
-                    .description(toCreateHackathon.getDescription())
-                    .startDate(toCreateHackathon.getStartDate())
-                    .endDate(toCreateHackathon.getEndDate())
-                    .fee(toCreateHackathon.getFee())
-                    .maxSize(toCreateHackathon.getMaxSize())
-                    .minSize(toCreateHackathon.getMinSize())
-                    .judges(judges)
-                    .status(Objects.nonNull(toCreateHackathon.getStatus())
-                                   ? toCreateHackathon.getStatus()
-                                   : "Open")
-                    .owner(owner)
-                    .build();
+    public Hackathon map(CreateHackathonRequestDto toCreateHackathon, List<User> judges, User owner) {
+        return Hackathon.builder()
+                .name(toCreateHackathon.getName())
+                .description(toCreateHackathon.getDescription())
+                .startDate(toCreateHackathon.getStartDate())
+                .endDate(toCreateHackathon.getEndDate())
+                .fee(toCreateHackathon.getFee())
+                .maxSize(toCreateHackathon.getMaxSize())
+                .minSize(toCreateHackathon.getMinSize())
+                .judges(judges)
+                .status(Objects.nonNull(toCreateHackathon.getStatus())
+                        ? toCreateHackathon.getStatus()
+                        : "Open")
+                .owner(owner)
+                .build();
+    }
+
+
+    public HackathonResponseDto map(Hackathon hackathon) {
+        return HackathonResponseDto.builder()
+                .id(hackathon.getId())
+                .name(hackathon.getName())
+                .description(hackathon.getDescription())
+                .startDate(hackathon.getStartDate())
+                .endDate(hackathon.getEndDate())
+                .maxSize(hackathon.getMaxSize())
+                .minSize(hackathon.getMinSize())
+                .fee(hackathon.getFee())
+                .judges(mapJudgeResponse(hackathon))
+                .status(hackathon.getStatus())
+                .owner(mapOwnerResponse(hackathon.getOwner()))
+                .build();
+    }
+
+
+    public List<HackathonResponseDto> map(final List<Hackathon> hackathons) {
+        List<HackathonResponseDto> hackathonResponseDtoList = new ArrayList<>();
+        for (Hackathon hackathon : hackathons) {
+            hackathonResponseDtoList.add(
+                    map(hackathon)
+            );
         }
-
-
-    public HackathonResponseDto map(Hackathon hackathon){
-            return HackathonResponseDto.builder()
-                    .id(hackathon.getId())
-                    .name(hackathon.getName())
-                    .description(hackathon.getDescription())
-                    .startDate(hackathon.getStartDate())
-                    .endDate(hackathon.getEndDate())
-                    .maxSize(hackathon.getMaxSize())
-                    .minSize(hackathon.getMinSize())
-                    .fee(hackathon.getFee())
-                    .judges(mapJudgeResponse(hackathon))
-                    .status(hackathon.getStatus())
-                    .owner(mapOwnerResponse(hackathon.getOwner()))
-                    .build();
-        }
-
-
-
-    public List<HackathonResponseDto> map(final List<Hackathon> hackathons){
-            List<HackathonResponseDto> hackathonResponseDtoList = new ArrayList<>();
-                for(Hackathon hackathon : hackathons){
-                    hackathonResponseDtoList.add(
-                            map(hackathon)
-                    );
-                }
-            return hackathonResponseDtoList;
+        return hackathonResponseDtoList;
     }
 
     private AssociatedUserResponseDto mapOwnerResponse(final User user) {
@@ -69,7 +68,7 @@ public class HackathonMapper {
     }
 
 
-    private Set<AssociatedUserResponseDto> mapJudgeResponse (final Hackathon hackathon){
+    private Set<AssociatedUserResponseDto> mapJudgeResponse(final Hackathon hackathon) {
         Set<AssociatedUserResponseDto> members = Objects.nonNull(hackathon.getJudges())
                 ? hackathon.getJudges()
                 .stream()
@@ -86,8 +85,7 @@ public class HackathonMapper {
     }
 
 
-
-    public HackathonResponseDto map(Hackathon hackathon,  List<AssociatedSponsorResponseDto> sponsorResponse){
+    public HackathonResponseDto map(Hackathon hackathon, List<AssociatedSponsorResponseDto> sponsorResponse) {
         return HackathonResponseDto.builder()
                 .id(hackathon.getId())
                 .name(hackathon.getName())

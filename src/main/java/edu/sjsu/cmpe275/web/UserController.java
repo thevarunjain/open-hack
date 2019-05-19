@@ -1,20 +1,16 @@
 package edu.sjsu.cmpe275.web;
 
-
 import edu.sjsu.cmpe275.domain.entity.*;
 import edu.sjsu.cmpe275.security.CurrentUser;
 import edu.sjsu.cmpe275.security.UserPrincipal;
-import edu.sjsu.cmpe275.service.EmailService;
 import edu.sjsu.cmpe275.service.OrganizationMembershipService;
 import edu.sjsu.cmpe275.service.OrganizationService;
 import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.web.exception.ConstraintViolationException;
-import edu.sjsu.cmpe275.web.mapper.HackathonMapper;
 import edu.sjsu.cmpe275.web.mapper.MyHackathonsMapper;
 import edu.sjsu.cmpe275.web.mapper.UserMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateUserRequestDto;
 import edu.sjsu.cmpe275.web.model.request.UpdateUserRequestDto;
-import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import edu.sjsu.cmpe275.web.model.response.MyHackathonsResponseDto;
 import edu.sjsu.cmpe275.web.model.response.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +28,9 @@ import java.util.Objects;
 public class UserController {
 
     private final UserService userService;
-
     private final UserMapper userMapper;
-
     private final MyHackathonsMapper myHackathonsMapper;
-
     private final OrganizationService organizationService;
-
     private final OrganizationMembershipService organizationMembershipService;
 
     @Autowired
@@ -81,15 +73,17 @@ public class UserController {
         if (userService.existByScreenName(toCreate.getScreenName())) {
             throw new ConstraintViolationException("Screen name already taken", "screenName");
         }
-        User createdUser  = userService.createUser(userMapper.map(toCreate), toCreate.getPassword());
+        User createdUser = userService.createUser(userMapper.map(toCreate), toCreate.getPassword());
         return userMapper.map(createdUser);
     }
 
     @GetMapping(value = "/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public UserResponseDto getUser(@PathVariable @NotNull Long id) {
-        User user  = userService.findUser(id);
+    public UserResponseDto getUser(
+            @PathVariable @NotNull Long id
+    ) {
+        User user = userService.findUser(id);
         List<Organization> ownerOf = organizationService.findOrganizationsByOwner(user);
         OrganizationMembership membership =
                 organizationMembershipService.findOrganizationByMemberAndStatus(
@@ -104,12 +98,14 @@ public class UserController {
                 memberOf
         );
     }
+
     @GetMapping(value = "/{id}/hackathons")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public MyHackathonsResponseDto getUserHackathons(@PathVariable @NotNull Long id) {
-        // TODO should this be user from path or authenticated users
-        User user  = userService.findUser(id);
+    public MyHackathonsResponseDto getUserHackathons(
+            @PathVariable @NotNull Long id
+    ) {
+        User user = userService.findUser(id);
         List<Hackathon> owner = userService.findHackathonsByOwner(user);
         List<Hackathon> judge = userService.findHackathonsByJudge(user);
         HashMap<Hackathon, Team> participantWithTeam = userService.findHackathonsByParticipant(user);
@@ -123,8 +119,9 @@ public class UserController {
             @PathVariable @NotNull Long id,
             @Valid @RequestBody UpdateUserRequestDto fromRequest
     ) {
+        // TODO only current logged in user can update his/her profile
         User fromUpdate = userMapper.map(fromRequest);
-        User updatedUser  = userService.updateUser(id, fromUpdate);
+        User updatedUser = userService.updateUser(id, fromUpdate);
         return userMapper.map(updatedUser);
     }
 }

@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class HackathonSponsorMapper {
 
-        public HackathonSponsor map(final Hackathon hackathon, final Organization sponsors, final int discount){
-            return HackathonSponsor.builder()
-                    .id(mapSponsorId(hackathon, sponsors))
-                    .hackathonId(hackathon)
-                    .organizationId(sponsors)
-                    .discount(discount)
-                    .build();
-        }
+    public HackathonSponsor map(final Hackathon hackathon, final Organization sponsors, final int discount) {
+        return HackathonSponsor.builder()
+                .id(mapSponsorId(hackathon, sponsors))
+                .hackathonId(hackathon)
+                .organizationId(sponsors)
+                .discount(discount)
+                .build();
+    }
 
 
     private HackathonSponsor.HackathonSponsorId mapSponsorId(
@@ -29,12 +29,12 @@ public class HackathonSponsorMapper {
                 .build();
     }
 
-    public AssociatedSponsorResponseDto map(final Long sponsorId,final String name, final int discount){
-            return AssociatedSponsorResponseDto.builder()
-                    .sponsorId(sponsorId)
-                    .sponsorName(name)
-                    .discount(discount)
-                    .build();
+    public AssociatedSponsorResponseDto map(final Long sponsorId, final String name, final int discount) {
+        return AssociatedSponsorResponseDto.builder()
+                .sponsorId(sponsorId)
+                .sponsorName(name)
+                .discount(discount)
+                .build();
     }
 
 }

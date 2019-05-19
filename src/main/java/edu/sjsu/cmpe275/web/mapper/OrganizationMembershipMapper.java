@@ -68,10 +68,10 @@ public class OrganizationMembershipMapper {
     public List<OrganizationMembershipResponseDto> map(List<OrganizationMembership> organizationMembershipList) {
         List<OrganizationMembershipResponseDto> organizationMembershipResponseDtoList =
                 Objects.nonNull(organizationMembershipList)
-                ? organizationMembershipList
-                .stream()
-                .map(organizationMembership -> map(organizationMembership))
-                .collect(Collectors.toList()) : new ArrayList<>();
+                        ? organizationMembershipList
+                        .stream()
+                        .map(organizationMembership -> map(organizationMembership))
+                        .collect(Collectors.toList()) : new ArrayList<>();
         return organizationMembershipResponseDtoList;
     }
 }

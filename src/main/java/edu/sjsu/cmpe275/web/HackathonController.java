@@ -1,9 +1,10 @@
 package edu.sjsu.cmpe275.web;
 
-
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.HackathonSponsor;
 import edu.sjsu.cmpe275.domain.entity.User;
+import edu.sjsu.cmpe275.security.CurrentUser;
+import edu.sjsu.cmpe275.security.UserPrincipal;
 import edu.sjsu.cmpe275.service.HackathonService;
 import edu.sjsu.cmpe275.service.HackathonSponsorService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -16,18 +17,9 @@ import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.*;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +27,11 @@ import java.util.List;
 @RequestMapping(value = "/hackathons")
 public class HackathonController {
 
-
-    private HackathonMapper hackathonMapper;
-    private HackathonService hackathonService;
-    private HackathonSponsorService hackathonSponsorService;
-    private UserService userService;
-    private HackathonSponsorMapper hackathonSponsorMapper;
+    private final HackathonMapper hackathonMapper;
+    private final HackathonService hackathonService;
+    private final HackathonSponsorService hackathonSponsorService;
+    private final UserService userService;
+    private final HackathonSponsorMapper hackathonSponsorMapper;
 
     @Autowired
     public HackathonController(
@@ -49,7 +40,7 @@ public class HackathonController {
             UserService userService,
             HackathonSponsorMapper hackathonSponsorMapper,
             HackathonSponsorService hackathonSponsorService
-    ){
+    ) {
         this.hackathonMapper = hackathonMapper;
         this.hackathonService = hackathonService;
         this.userService = userService;
@@ -57,57 +48,52 @@ public class HackathonController {
         this.hackathonSponsorService = hackathonSponsorService;
     }
 
-
-    @GetMapping(value = "", produces = "application/json")
+    @GetMapping(value = "")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<HackathonResponseDto> getHackathons(@RequestParam(required = false) String name){
+    public List<HackathonResponseDto> getHackathons(
+            @RequestParam(required = false) String name
+    ) {
 
         List<Hackathon> allHackathons = hackathonService.findHackathons(name);
 
         return hackathonMapper.map(allHackathons);
     }
 
-    @GetMapping(value = "/{id}", produces = "application/json")
+    @GetMapping(value = "/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public HackathonResponseDto getHackathon(@PathVariable @NonNull Long id){
-
-        Hackathon hackathon =  hackathonService.findHackathon(id);
-
-        List<HackathonSponsor> allHackathonSponsor=  hackathonSponsorService.findHackathonSponsors(hackathon);
-
+    public HackathonResponseDto getHackathon(
+            @PathVariable @NonNull Long id
+    ) {
+        Hackathon hackathon = hackathonService.findHackathon(id);
+        List<HackathonSponsor> allHackathonSponsor = hackathonSponsorService.findHackathonSponsors(hackathon);
         List<AssociatedSponsorResponseDto> sponsorResponse = new ArrayList<>();
-
-        for(HackathonSponsor hackathonSponsor : allHackathonSponsor){
-
+        for (HackathonSponsor hackathonSponsor : allHackathonSponsor) {
             sponsorResponse.add(
                     hackathonSponsorMapper.map(
                             hackathonSponsor.getId().getSponsorId(),
                             hackathonSponsor.getOrganizationId().getName(),
                             hackathonSponsor.getDiscount()
                     ));
-
         }
         return hackathonMapper.map(hackathon, sponsorResponse);
     }
 
-
-    @PostMapping(value = "", produces = "application/json")
+    @PostMapping(value = "")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public HackathonResponseDto createHackathon(
             @Valid @RequestBody CreateHackathonRequestDto toCreateHackathon,
-            @NotNull @RequestParam Long ownerId
-    ){
+            @CurrentUser UserPrincipal currentUser
+    ) {
+        User user = userService.findUser(currentUser.getId());
         List<User> judges = new ArrayList<>();
-        for(Long id : toCreateHackathon.getJudges()){
+        for (Long id : toCreateHackathon.getJudges()) {
             judges.add(userService.findUser(id));
         }
-        User owner = userService.findUser(ownerId);
-        Hackathon hackathon =hackathonMapper.map(toCreateHackathon,judges, owner);
-
-
+        User owner = userService.findUser(user.getId());
+        Hackathon hackathon = hackathonMapper.map(toCreateHackathon, judges, owner);
         Hackathon createdHackathon = hackathonService.createHackathon(
                 hackathon,
                 toCreateHackathon.getSponsors(),
@@ -116,26 +102,15 @@ public class HackathonController {
         return hackathonMapper.map(createdHackathon);
     }
 
-
-
-
-    @RequestMapping(value = "/{id}",
-            produces = "application/json",
-            method=RequestMethod.PATCH)
+    @PatchMapping(value = "/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public HackathonResponseDto updateHackathon(@Valid @RequestBody UpdateHackathonRequestDto updateHackathon,
-                                Errors validationErrors, @NonNull @PathVariable Long id)  {
-
-        if(validationErrors.hasErrors()){
-            //TODO Validate the error
-        }
-        Hackathon hackathon =  hackathonService.updateHackathon(id, updateHackathon);
-
+    public HackathonResponseDto updateHackathon(
+            @Valid @RequestBody UpdateHackathonRequestDto updateHackathon,
+            @NonNull @PathVariable Long id
+    ) {
+        // TODO Only admin should be able to update hackathon
+        Hackathon hackathon = hackathonService.updateHackathon(id, updateHackathon);
         return hackathonMapper.map(hackathon);
     }
-
 }
-
-
-

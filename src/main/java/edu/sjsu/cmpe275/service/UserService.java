@@ -98,9 +98,9 @@ public class UserService {
         // TODO Improve Performance
         List<Hackathon> hackathonsByJudge = new ArrayList<>();
         List<Hackathon> allHackathons = hackathonRepository.findAll();
-        for (Hackathon hackathon: allHackathons) {
+        for (Hackathon hackathon : allHackathons) {
             List<User> judges = hackathon.getJudges();
-            for (User judge: judges) {
+            for (User judge : judges) {
                 if (Long.valueOf(judge.getId()).equals(user.getId())) {
                     hackathonsByJudge.add(hackathon);
                 }
@@ -115,7 +115,7 @@ public class UserService {
         HashMap<Hackathon, Team> result = new HashMap<>();
         List<TeamMembership> memberships = teamMembershipRepository.findByMemberId(user)
                 .orElse(new ArrayList<>());
-        for (TeamMembership teamMembership: memberships) {
+        for (TeamMembership teamMembership : memberships) {
             Team team = teamRepository.findById(teamMembership.getTeamId().getId())
                     .orElseThrow(() -> new TeamNotFoundException(teamMembership.getTeamId().getId()));
             result.put(team.getHackathon(), team);

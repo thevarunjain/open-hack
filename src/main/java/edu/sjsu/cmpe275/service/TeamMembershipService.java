@@ -23,11 +23,11 @@ public class TeamMembershipService {
     }
 
     @Transactional
-    public List<TeamMembership> findTeamMembers(final Team id){
+    public List<TeamMembership> findTeamMembers(final Team id) {
         return teamMembershipRepository.findByTeamId(id);
     }
 
-    public void createMembers(TeamMembership teamMember){
+    public void createMembers(TeamMembership teamMember) {
         teamMembershipRepository.save(teamMember);
     }
 

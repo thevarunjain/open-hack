@@ -17,16 +17,16 @@ public class HackathonSponsorService {
 
     public HackathonSponsorService(
             HackathonSponsorRepository hackathonSponsorRepository
-    ){
+    ) {
         this.hackathonSponsorRepository = hackathonSponsorRepository;
     }
 
 
-    public List<HackathonSponsor> findHackathonSponsors(final Hackathon id){
+    public List<HackathonSponsor> findHackathonSponsors(final Hackathon id) {
         return hackathonSponsorRepository.findByHackathonId(id);
     }
 
-    public void createSponsors(HackathonSponsor hackathonSponsor){
+    public void createSponsors(HackathonSponsor hackathonSponsor) {
         hackathonSponsorRepository.save(hackathonSponsor);
     }
 

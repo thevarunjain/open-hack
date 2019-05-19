@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Builder
 @Data
 @Table(name = "hackathon_sponsor")
-public class HackathonSponsor{
+public class HackathonSponsor {
 
     @EmbeddedId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class HackathonSponsor{
     @JoinColumn(name = "sponsor_id", insertable = false, updatable = false)
     private Organization organizationId;
 
-    @Column(name = "discount",nullable = false)
+    @Column(name = "discount", nullable = false)
     private int discount;
 
     @Embeddable

@@ -10,7 +10,7 @@ public class HackathonNotFoundException extends RuntimeException {
 
     private Long id;
 
-    public HackathonNotFoundException(final Long id){
+    public HackathonNotFoundException(final Long id) {
         super("Hackathon not found");
         this.id = id;
     }

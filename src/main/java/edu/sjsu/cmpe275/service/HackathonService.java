@@ -30,32 +30,32 @@ public class HackathonService {
             OrganizationService organizationService,
             HackathonSponsorService hackathonSponsorService
 
-    ){
+    ) {
         this.hackathonRepository = hackathonRepository;
         this.hackathonSponsorMapper = hackathonSponsorMapper;
         this.organizationService = organizationService;
         this.hackathonSponsorService = hackathonSponsorService;
     }
 
-    public List<Hackathon> findHackathons(final String name){
+    public List<Hackathon> findHackathons(final String name) {
         if (Objects.nonNull(name))
             return hackathonRepository.findByNameContainingIgnoreCase(name);
         else
             return hackathonRepository.findAll();
     }
 
-    public Hackathon findHackathon(final Long id){
+    public Hackathon findHackathon(final Long id) {
         return hackathonRepository.findById(id)
-                .orElseThrow(()-> new HackathonNotFoundException(id));
+                .orElseThrow(() -> new HackathonNotFoundException(id));
     }
 
     @Transactional
-    public Hackathon createHackathon(final Hackathon hackathon, final List<Long> sponsors, final List<Integer> discount){
+    public Hackathon createHackathon(final Hackathon hackathon, final List<Long> sponsors, final List<Integer> discount) {
 
         Hackathon createdHackathon = hackathonRepository.save(hackathon);
 
-        if(Objects.nonNull(sponsors) && Objects.nonNull(discount)){
-            for(int i=0;i<sponsors.size();i++){
+        if (Objects.nonNull(sponsors) && Objects.nonNull(discount)) {
+            for (int i = 0; i < sponsors.size(); i++) {
                 HackathonSponsor createdSponsor = hackathonSponsorMapper.map(
                         findHackathon(createdHackathon.getId()),
                         organizationService.findOrganization(sponsors.get(i)),
@@ -70,47 +70,47 @@ public class HackathonService {
     }
 
     @Transactional
-    public Hackathon updateHackathon(final Long id, @Valid UpdateHackathonRequestDto updateHackathon)  {
+    public Hackathon updateHackathon(final Long id, @Valid UpdateHackathonRequestDto updateHackathon) {
         Hackathon hackathon = findHackathon(id);
 
 
         Date start = Objects.nonNull(updateHackathon.getStartDate())
-                            ? updateHackathon.getStartDate()
-                            : hackathon.getStartDate();
+                ? updateHackathon.getStartDate()
+                : hackathon.getStartDate();
 
         Date end = Objects.nonNull(updateHackathon.getEndDate())
-                          ? updateHackathon.getEndDate()
-                          : hackathon.getEndDate();
+                ? updateHackathon.getEndDate()
+                : hackathon.getEndDate();
 
         Date current = Objects.nonNull(updateHackathon.getCurrentDate())
-                              ? updateHackathon.getCurrentDate()
-                              : new Date();
+                ? updateHackathon.getCurrentDate()
+                : new Date();
 
 
-            if(current.compareTo(start)==1  && current.compareTo(end)==-1 ){  // between start ned
-                hackathon.setStatus("Closed");
-            }else if(current.compareTo(start)==0 || current.compareTo(end)==0){     // on start and end
-                hackathon.setStatus("Closed");
-            }else if(current.compareTo(start)==-1){                 // before start
-                hackathon.setStatus("Open");
-            }else if(current.compareTo(end)==1){                    // after end
-                hackathon.setStatus("Closed");
-            }
+        if (current.compareTo(start) == 1 && current.compareTo(end) == -1) {  // between start ned
+            hackathon.setStatus("Closed");
+        } else if (current.compareTo(start) == 0 || current.compareTo(end) == 0) {     // on start and end
+            hackathon.setStatus("Closed");
+        } else if (current.compareTo(start) == -1) {                 // before start
+            hackathon.setStatus("Open");
+        } else if (current.compareTo(end) == 1) {                    // after end
+            hackathon.setStatus("Closed");
+        }
 
 
         hackathon.setStartDate(Objects.nonNull(updateHackathon.getStartDate())
-                                      ? updateHackathon.getStartDate()
-                                      : hackathon.getStartDate()
-                                );
+                ? updateHackathon.getStartDate()
+                : hackathon.getStartDate()
+        );
 
         hackathon.setEndDate(Objects.nonNull(updateHackathon.getEndDate())
-                                    ? updateHackathon.getEndDate()
-                                    : hackathon.getEndDate()
-                                );
+                ? updateHackathon.getEndDate()
+                : hackathon.getEndDate()
+        );
 
         hackathon.setStatus(Objects.nonNull(updateHackathon.getToState())
-                                   ? updateHackathon.getToState()
-                                   : hackathon.getStatus());
+                ? updateHackathon.getToState()
+                : hackathon.getStatus());
 
         return hackathon;
     }
