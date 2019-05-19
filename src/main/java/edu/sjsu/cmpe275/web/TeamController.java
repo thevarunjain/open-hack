@@ -31,7 +31,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/hackathons")
-@CrossOrigin(origins = "http://localhost:3000")
 public class TeamController {
     private final TeamService teamService;
     private final UserService userService;
