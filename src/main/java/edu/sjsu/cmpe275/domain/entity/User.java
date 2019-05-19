@@ -88,22 +88,22 @@ public class User {
                     .street(
                             Objects.nonNull(fromRequest.getAddress().getStreet())
                                     ? fromRequest.getAddress().getStreet()
-                                    : this.getAddress().getStreet()
+                                    : Objects.nonNull(this.getAddress()) ? this.getAddress().getStreet() : null
                     )
                     .city(
                             Objects.nonNull(fromRequest.getAddress().getCity())
                                     ? fromRequest.getAddress().getCity()
-                                    : this.getAddress().getCity()
+                                    : Objects.nonNull(this.getAddress()) ? this.getAddress().getCity() : null
                     )
                     .state(
                             Objects.nonNull(fromRequest.getAddress().getState())
                                     ? fromRequest.getAddress().getState()
-                                    : this.getAddress().getState()
+                                    : Objects.nonNull(this.getAddress()) ? this.getAddress().getState() : null
                     )
                     .zip(
                             Objects.nonNull(fromRequest.getAddress().getZip())
                                     ? fromRequest.getAddress().getZip()
-                                    : this.getAddress().getZip()
+                                    : Objects.nonNull(this.getAddress()) ? this.getAddress().getZip() : null
                     )
                     .build();
             this.setAddress(newAddress);
