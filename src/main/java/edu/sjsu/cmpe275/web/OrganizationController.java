@@ -3,6 +3,8 @@ package edu.sjsu.cmpe275.web;
 import edu.sjsu.cmpe275.domain.entity.Organization;
 import edu.sjsu.cmpe275.domain.entity.OrganizationMembership;
 import edu.sjsu.cmpe275.domain.entity.User;
+import edu.sjsu.cmpe275.security.CurrentUser;
+import edu.sjsu.cmpe275.security.UserPrincipal;
 import edu.sjsu.cmpe275.service.OrganizationMembershipService;
 import edu.sjsu.cmpe275.service.OrganizationService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -56,7 +58,9 @@ public class OrganizationController {
     @GetMapping(value = "")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<OrganizationResponseDto> getOrganizations(@RequestParam(required = false) String name) {
+    public List<OrganizationResponseDto> getOrganizations(
+            @RequestParam(required = false) String name
+    ) {
         List<Organization> allOrganizations = organizationService.findOrganizations(name);
         return organizationMapper.map(allOrganizations);
     }
@@ -66,11 +70,12 @@ public class OrganizationController {
     @ResponseStatus(HttpStatus.CREATED)
     public OrganizationResponseDto createOrganization(
             @Valid @RequestBody CreateOrganizationRequestDto toCreate,
-            @NotNull @RequestParam Long ownerId // TODO This should be from authentication token
+            @CurrentUser UserPrincipal currentUser
     ) {
+        User user = userService.findUser(currentUser.getId());
         Organization  createdOrganization = organizationService.createOrganization(
                 organizationMapper.map(toCreate),
-                ownerId
+                user.getId()
         );
         return organizationMapper.map(createdOrganization);
     }
@@ -78,7 +83,9 @@ public class OrganizationController {
     @GetMapping(value = "/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public OrganizationResponseDto getOrganization(@PathVariable @NotNull Long id) {
+    public OrganizationResponseDto getOrganization(
+            @PathVariable @NotNull Long id
+    ) {
         Organization organization  = organizationService.findOrganization(id);
         return organizationMapper.map(organization);
     }
@@ -88,10 +95,11 @@ public class OrganizationController {
     @ResponseStatus(HttpStatus.CREATED)
     public OrganizationMembershipResponseDto createOrganizationMembership(
             @PathVariable @NotNull Long id,
-            @NotNull @RequestParam Long requesterId // TODO This should be from authentication token
+            @CurrentUser UserPrincipal currentUser
     ) {
+        User user = userService.findUser(currentUser.getId());
         Organization organization = organizationService.findOrganization(id);
-        User member = userService.findUser(requesterId);
+        User member = userService.findUser(user.getId());
 
         OrganizationMembership createdOrganizationMembership  =
                 organizationMembershipService.createOrganizationMembership(
