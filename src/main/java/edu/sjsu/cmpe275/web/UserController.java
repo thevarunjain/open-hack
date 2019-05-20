@@ -55,9 +55,30 @@ public class UserController {
             @CurrentUser UserPrincipal currentUser,
             @RequestParam(required = false) String name
     ) {
-        System.out.println(currentUser.getUsername());
         List<User> allUsers = userService.findUsers(name);
         return userMapper.map(allUsers);
+    }
+
+    @GetMapping(value = "/checkEmail")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public void checkEmail(
+            @RequestParam String email
+    ) {
+        if (userService.existByEmail(email)) {
+            throw new ConstraintViolationException("Email already taken", "email");
+        }
+    }
+
+    @GetMapping(value = "/checkScreenName")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public void checkScreenName(
+            @RequestParam String screenName
+    ) {
+        if (userService.existByScreenName(screenName)) {
+            throw new ConstraintViolationException("Screen name already taken", "screenName");
+        }
     }
 
     @PostMapping(value = "")
