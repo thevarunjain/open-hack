@@ -5,6 +5,7 @@ import edu.sjsu.cmpe275.domain.entity.HackathonSponsor;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.security.CurrentUser;
 import edu.sjsu.cmpe275.security.UserPrincipal;
+import edu.sjsu.cmpe275.service.HackathonEarningReport;
 import edu.sjsu.cmpe275.service.HackathonService;
 import edu.sjsu.cmpe275.service.HackathonSponsorService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -67,6 +68,7 @@ public class HackathonController {
             @PathVariable @NonNull Long id
     ) {
         Hackathon hackathon = hackathonService.findHackathon(id);
+        HackathonEarningReport hackathonEarningReport = hackathonService.getEarningReport(id);
         List<HackathonSponsor> allHackathonSponsor = hackathonSponsorService.findHackathonSponsors(hackathon);
         List<AssociatedSponsorResponseDto> sponsorResponse = new ArrayList<>();
         for (HackathonSponsor hackathonSponsor : allHackathonSponsor) {
@@ -77,7 +79,7 @@ public class HackathonController {
                             hackathonSponsor.getDiscount()
                     ));
         }
-        return hackathonMapper.map(hackathon, sponsorResponse);
+        return hackathonMapper.map(hackathon, sponsorResponse, hackathonEarningReport);
     }
 
     @PostMapping(value = "")
