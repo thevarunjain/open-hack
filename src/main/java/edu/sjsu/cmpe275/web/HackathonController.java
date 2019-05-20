@@ -87,6 +87,7 @@ public class HackathonController {
             @Valid @RequestBody CreateHackathonRequestDto toCreateHackathon,
             @CurrentUser UserPrincipal currentUser
     ) {
+        // TODO only admin can create hackathon
         User user = userService.findUser(currentUser.getId());
         List<User> judges = new ArrayList<>();
         for (Long id : toCreateHackathon.getJudges()) {

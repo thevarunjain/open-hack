@@ -183,13 +183,13 @@ public class TeamService {
     ) {
         TeamMembership teamMembership = teamMembershipService.findByMemberAndTeam(user, team);
         teamMembership.setAmount(amount);
-        teamMembership.setFee_paid(true);
+        teamMembership.setFeePaid(true);
         // Mark the team finalized if everyone paid fees
         boolean isPaidByEveryone = true;
         List<TeamMembership> teamMembershipList =
                 teamMembershipService.findTeamMembers(teamMembership.getTeamId());
         for (TeamMembership membership : teamMembershipList) {
-            if (!membership.getFee_paid()) {
+            if (!membership.getFeePaid()) {
                 isPaidByEveryone = false;
                 break;
             }

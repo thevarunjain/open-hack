@@ -63,7 +63,7 @@ public class TeamController {
     @GetMapping(value = "/{hid}/teams")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<TeamResponseDto> getallTeamsForHackathon(
+    public List<TeamResponseDto> getTeamsForHackathon(
             @PathVariable @NotNull Long hid
     ) {
         List<Team> allTeams = teamService.findallTeamsForHackathon(hid);
@@ -73,7 +73,7 @@ public class TeamController {
     @GetMapping(value = "/{hid}/teams/{tid}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public TeamResponseDto getTeams(
+    public TeamResponseDto getTeam(
             @PathVariable @NotNull Long hid,
             @PathVariable @NotNull Long tid
     ) {
@@ -90,7 +90,7 @@ public class TeamController {
                             teamMembership.getMemberId().getScreenName(),
                             teamMembership.getRole(),
                             teamMembership.getAmount(),
-                            teamMembership.getFee_paid()
+                            teamMembership.getFeePaid()
                     )
             );
         }
