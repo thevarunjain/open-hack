@@ -2,9 +2,11 @@ package edu.sjsu.cmpe275.web.mapper;
 
 import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.User;
+import edu.sjsu.cmpe275.service.HackathonEarningReport;
 import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
 import edu.sjsu.cmpe275.web.model.response.AssociatedSponsorResponseDto;
 import edu.sjsu.cmpe275.web.model.response.AssociatedUserResponseDto;
+import edu.sjsu.cmpe275.web.model.response.HackathonEarningReportResponseDto;
 import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import org.springframework.stereotype.Component;
 
@@ -85,7 +87,11 @@ public class HackathonMapper {
     }
 
 
-    public HackathonResponseDto map(Hackathon hackathon, List<AssociatedSponsorResponseDto> sponsorResponse) {
+    public HackathonResponseDto map(
+            Hackathon hackathon,
+            List<AssociatedSponsorResponseDto> sponsorResponse,
+            HackathonEarningReport earningReport
+    ) {
         return HackathonResponseDto.builder()
                 .id(hackathon.getId())
                 .name(hackathon.getName())
@@ -99,6 +105,17 @@ public class HackathonMapper {
                 .status(hackathon.getStatus())
                 .owner(mapOwnerResponse(hackathon.getOwner()))
                 .sponsors(sponsorResponse)
+                .earningReport(mapEarningReportResponseDto(earningReport))
+                .build();
+    }
+
+    private HackathonEarningReportResponseDto mapEarningReportResponseDto(HackathonEarningReport earningReport) {
+        return HackathonEarningReportResponseDto.builder()
+                .paidRegistrationFee(earningReport.getPaidRegistrationFee())
+                .unpaidRegistrationFee(earningReport.getUnpaidRegistrationFee())
+                .sponsorRevenue(earningReport.getSponsorRevenue())
+                .expense(earningReport.getExpense())
+                .profit(earningReport.getProfit())
                 .build();
     }
 

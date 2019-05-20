@@ -42,13 +42,8 @@ public class HackathonResponseDto {
     @JsonProperty("maxSize")
     private int maxSize;
 
-//    @JsonProperty("judges")
-//    private Set<User> judges;
-
     @JsonProperty(value = "judges")
-//    @Singular
     private Set<AssociatedUserResponseDto> judges;
-//    private Set<User> judges;
 
     @JsonProperty("status")
     private String status;
@@ -56,5 +51,7 @@ public class HackathonResponseDto {
     @JsonProperty("sponsors")
     private List<AssociatedSponsorResponseDto> sponsors;
 
+    @JsonProperty("earningReport")
+    private HackathonEarningReportResponseDto earningReport;
 
 }
