@@ -17,7 +17,7 @@ public class TeamMembershipMapper {
                 .teamId(team)
                 .memberId(members)
                 .role(role)
-                .fee_paid(false)
+                .feePaid(false)
                 .build();
     }
 
@@ -33,14 +33,14 @@ public class TeamMembershipMapper {
 
     public AssociatedMemberResponseDto map(final Long memberId, final String name,
                                            final String screenName, final String role,
-                                           final Float amount, final Boolean fee_paid) {
+                                           final Float amount, final Boolean feePaid) {
         return AssociatedMemberResponseDto.builder()
                 .memberId(memberId)
                 .firstName(name)
                 .screenName(screenName)
                 .role(role)
                 .amount(Objects.nonNull(amount) ? amount : null)
-                .fee_paid(Objects.nonNull(fee_paid) ? fee_paid : null)
+                .feePaid(Objects.nonNull(feePaid) ? feePaid : null)
                 .build();
     }
 

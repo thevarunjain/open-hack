@@ -16,10 +16,10 @@ public class AssociatedMemberResponseDto {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private long memberId;
 
-    @JsonProperty("first_name")
+    @JsonProperty("firstName")
     private String firstName;
 
-    @JsonProperty("screen_name")
+    @JsonProperty("screenName")
     private String screenName;
 
     @JsonProperty("role")
@@ -28,7 +28,7 @@ public class AssociatedMemberResponseDto {
     @JsonProperty("amount")
     private Float amount;
 
-    @JsonProperty("fee_paid")
-    private Boolean fee_paid;
+    @JsonProperty("feePaid")
+    private Boolean feePaid;
 
 }

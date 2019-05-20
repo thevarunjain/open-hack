@@ -29,8 +29,8 @@ public class TeamMembership {
     @Column(name = "role")
     private String role;
 
-    @Column(name = "fee_paid")
-    private Boolean fee_paid;
+    @Column(name = "feePaid")
+    private Boolean feePaid;
 
     @Column(name = "amount")
     private Float amount;
