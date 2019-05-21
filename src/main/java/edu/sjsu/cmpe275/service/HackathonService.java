@@ -11,10 +11,8 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import javax.validation.constraints.Email;
+import java.util.*;
 
 @Component
 public class HackathonService {
@@ -26,6 +24,7 @@ public class HackathonService {
     private final TeamRepository teamRepository;
     private final TeamMembershipService teamMembershipService;
     private final HackathonExpenseService hackathonExpenseService;
+    private final EmailService emailService;
 
     @Autowired
     public HackathonService(
@@ -35,7 +34,8 @@ public class HackathonService {
             HackathonSponsorService hackathonSponsorService,
             TeamRepository teamRepository,
             TeamMembershipService teamMembershipService,
-            HackathonExpenseService hackathonExpenseService
+            HackathonExpenseService hackathonExpenseService,
+            EmailService emailService
     ) {
         this.hackathonRepository = hackathonRepository;
         this.hackathonSponsorMapper = hackathonSponsorMapper;
@@ -44,6 +44,7 @@ public class HackathonService {
         this.teamRepository = teamRepository;
         this.teamMembershipService = teamMembershipService;
         this.hackathonExpenseService = hackathonExpenseService;
+        this.emailService = emailService;
     }
 
     public List<Hackathon> findHackathons(final String name) {
@@ -96,12 +97,12 @@ public class HackathonService {
                 : new Date();
 
 
-        if (current.compareTo(start) == 1 && current.compareTo(end) == -1) {  // between start ned
+        if (current.compareTo(start) == 1 && current.compareTo(end) == -1) {  // between start end
             hackathon.setStatus("Closed");
         } else if (current.compareTo(start) == 0 || current.compareTo(end) == 0) {     // on start and end
             hackathon.setStatus("Closed");
         } else if (current.compareTo(start) == -1) {                 // before start
-            hackathon.setStatus("Open");
+            hackathon.setStatus("Created");
         } else if (current.compareTo(end) == 1) {                    // after end
             hackathon.setStatus("Closed");
         }
@@ -120,8 +121,72 @@ public class HackathonService {
         hackathon.setStatus(Objects.nonNull(updateHackathon.getToState())
                 ? updateHackathon.getToState()
                 : hackathon.getStatus());
+        if (updateHackathon.getToState().equals("Finalized")) {
+            List<Team> teams = teamRepository.findByHackathon(hackathon);
+            teams.sort(Comparator.comparing(Team::getGrades).reversed());
+            List<Team> winningTeams;
+            List<Team> participatingTeams;
+            if (teams.size() <= 3) {
+                winningTeams = teams;
+                participatingTeams = new ArrayList<>();
+            } else {
+                winningTeams = teams.subList(0, 3);
+                participatingTeams = teams.subList(3, teams.size());
+            }
+            List<User> winningTeamMembers = findMembership(winningTeams);
+            List<User> participatingTeamMembers = findMembership(participatingTeams);
 
+            sendEmailToJudgesAndParticipants(hackathon.getJudges(), participatingTeamMembers, hackathon);
+            sendEmailToWinners(winningTeamMembers, hackathon);
+        }
         return hackathon;
+    }
+
+    private List<User> findMembership(List<Team> teams) {
+        List<User> users = new ArrayList<>();
+        for (Team team : teams) {
+            List<TeamMembership> membershipList = teamMembershipService.findTeamMembers(team);
+            for (TeamMembership membership : membershipList) {
+                users.add(membership.getMemberId());
+            }
+        }
+        return users;
+    }
+
+    private void sendEmailToJudgesAndParticipants(List<User> judges, List<User> members, Hackathon hackathon) {
+        String subject = "Open-Hack 2019 Results available - " + hackathon.getName();
+        String hostedServerUrl = "https://openhacks.herokuapp.com";
+
+        for (User user : judges) {
+            String message = " Hi,\n" +
+                    "Welcome to Open Hackathon 2019\n" +
+                    "Results for the Hackathon " + hackathon.getName() + "are now available at\n" +
+                    "Log in to your account to take the action " + hostedServerUrl + "/login\n\n";
+            emailService.sendSimpleMessage(user.getEmail(), subject, message);
+        }
+
+        for (User user : members) {
+            String message = " Hi,\n" +
+                    "Welcome to Open Hackathon 2019\n" +
+                    "Results for the Hackathon " + hackathon.getName() + "are now available at\n" +
+                    "Log in to your account to take the action " + hostedServerUrl + "/login\n\n";
+            emailService.sendSimpleMessage(user.getEmail(), subject, message);
+        }
+
+    }
+
+    private void sendEmailToWinners(List<User> winners, Hackathon hackathon) {
+        String subject = "Open-Hack 2019 : Congratulations on winning " + hackathon.getName();
+        String hostedServerUrl = "https://openhacks.herokuapp.com";
+
+        for (User user : winners) {
+            String message = " Hi,\n" +
+                    "Welcome to Open Hackathon 2019\n" +
+                    "You're one of the winning team! Congratulations!!" +
+                    "Results for the Hackathon " + hackathon.getName() + "are now available at\n" +
+                    "Log in to your account to take the action " + hostedServerUrl + "/login\n\n";
+            emailService.sendSimpleMessage(user.getEmail(), subject, message);
+        }
     }
 
     public HackathonEarningReport getEarningReport(final Long id) {
@@ -181,14 +246,7 @@ public class HackathonService {
     public List<User> findHackathonParticipants(final Long id) {
         Hackathon hackathon = findHackathon(id);
         List<Team> teams = teamRepository.findByHackathon(hackathon);
-        List<User> participants = new ArrayList<>();
-        for (Team team: teams) {
-            List<TeamMembership> teamMembershipList = teamMembershipService.findTeamMembers(team);
-            for (TeamMembership teamMembership: teamMembershipList) {
-                participants.add(teamMembership.getMemberId());
-            }
-        }
-        return participants;
+        return findMembership(teams);
     }
 }
 
