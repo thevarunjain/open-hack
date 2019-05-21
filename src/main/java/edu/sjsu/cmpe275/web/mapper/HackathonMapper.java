@@ -4,10 +4,7 @@ import edu.sjsu.cmpe275.domain.entity.Hackathon;
 import edu.sjsu.cmpe275.domain.entity.User;
 import edu.sjsu.cmpe275.service.HackathonEarningReport;
 import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
-import edu.sjsu.cmpe275.web.model.response.AssociatedSponsorResponseDto;
-import edu.sjsu.cmpe275.web.model.response.AssociatedUserResponseDto;
-import edu.sjsu.cmpe275.web.model.response.HackathonEarningReportResponseDto;
-import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
+import edu.sjsu.cmpe275.web.model.response.*;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -119,5 +116,34 @@ public class HackathonMapper {
                 .build();
     }
 
+    public HackathonMemberResponseDto map(
+            final List<User> judges,
+            final List<User> participants
+    ) {
+        return HackathonMemberResponseDto.builder()
+                .judges(mapMemberResponse(judges))
+                .participants(mapMemberResponse(participants))
+                .build();
+    }
+
+    private List<MemberResponseDto> mapMemberResponse(final List<User> users) {
+        List<MemberResponseDto> userList = Objects.nonNull(users)
+                ? users
+                .stream()
+                .map(user -> MemberResponseDto.builder()
+                        .memberId(user.getId())
+                        .name(
+                                NameResponseDto.builder()
+                                        .first(user.getFirstName())
+                                        .last(user.getLastName())
+                                        .build()
+                        )
+                        .build()
+                )
+                .collect(Collectors.toList())
+                : new ArrayList<>();
+
+        return userList;
+    }
 }
 
