@@ -1,9 +1,6 @@
 package edu.sjsu.cmpe275.service;
 
-import edu.sjsu.cmpe275.domain.entity.Hackathon;
-import edu.sjsu.cmpe275.domain.entity.HackathonSponsor;
-import edu.sjsu.cmpe275.domain.entity.Team;
-import edu.sjsu.cmpe275.domain.entity.TeamMembership;
+import edu.sjsu.cmpe275.domain.entity.*;
 import edu.sjsu.cmpe275.domain.exception.HackathonNotFoundException;
 import edu.sjsu.cmpe275.domain.repository.HackathonRepository;
 import edu.sjsu.cmpe275.domain.repository.TeamRepository;
@@ -172,6 +169,19 @@ public class HackathonService {
     private Float getExpense(final Long id) {
         // TODO Implement after bonus feature implemented
         return 0.0F;
+    }
+
+    public List<User> findHackathonParticipants(final Long id) {
+        Hackathon hackathon = findHackathon(id);
+        List<Team> teams = teamRepository.findByHackathon(hackathon);
+        List<User> participants = new ArrayList<>();
+        for (Team team: teams) {
+            List<TeamMembership> teamMembershipList = teamMembershipService.findTeamMembers(team);
+            for (TeamMembership teamMembership: teamMembershipList) {
+                participants.add(teamMembership.getMemberId());
+            }
+        }
+        return participants;
     }
 }
 

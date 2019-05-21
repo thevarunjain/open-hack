@@ -14,6 +14,7 @@ import edu.sjsu.cmpe275.web.mapper.HackathonSponsorMapper;
 import edu.sjsu.cmpe275.web.model.request.CreateHackathonRequestDto;
 import edu.sjsu.cmpe275.web.model.request.UpdateHackathonRequestDto;
 import edu.sjsu.cmpe275.web.model.response.AssociatedSponsorResponseDto;
+import edu.sjsu.cmpe275.web.model.response.HackathonMemberResponseDto;
 import edu.sjsu.cmpe275.web.model.response.HackathonResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -80,6 +81,20 @@ public class HackathonController {
                     ));
         }
         return hackathonMapper.map(hackathon, sponsorResponse, hackathonEarningReport);
+    }
+
+    @GetMapping(value = "/{id}/members")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public HackathonMemberResponseDto getHackathonMembers(
+            @PathVariable @NonNull Long id
+    ) {
+
+        List<User> participants = hackathonService.findHackathonParticipants(id);
+        return hackathonMapper.map(
+                hackathonService.findHackathon(id).getJudges(),
+                participants
+        );
     }
 
     @PostMapping(value = "")
