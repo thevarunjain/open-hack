@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 public class TeamService {
@@ -104,29 +102,20 @@ public class TeamService {
         Long hid = createdTeam.getHackathon().getId();
         Long tid = createdTeam.getId();
         String localServerUrl = "http://localhost:3000";
-        String hostedServerUrl = "";
-        String message = " Hi,\n" +
-                "Welcome to Open Hackathon 2019\n" +
-                "You are invited to join our hackathon team : " + createdTeam.getName() + "\n" +
-                "Proceed to pay on " + localServerUrl + "/payments/" + hid + "/" + tid +
-                "\n" +
-                "\n" +
-                "Thank You\n" +
-                createdTeam.getOwner().getFirstName() + " " + createdTeam.getOwner().getLastName();
-
-        List<String> allEmails = new ArrayList<>();
+        String hostedServerUrl = "https://openhacks.herokuapp.com";
 
         for (Long mid : members) {
+            String message = " Hi,\n" +
+                    "Welcome to Open Hackathon 2019\n" +
+                    "You are invited to join our hackathon team : " + createdTeam.getName() + "\n" +
+                    "Proceed to pay on " + hostedServerUrl + "/payments/" + hid + "/" + tid + "/" + mid +
+                    "\n" +
+                    "\n" +
+                    "Thank You\n" +
+                    createdTeam.getOwner().getFirstName() + " " + createdTeam.getOwner().getLastName();
             String email = userService.findUser(mid).getEmail();
-            allEmails.add(email);
-        }
-
-        for (String email : allEmails) {
-            System.err.println("Sending mail to " + email);
             emailService.sendSimpleMessage(email, subject, message);
         }
-
-
     }
 
     @Transactional

@@ -70,12 +70,12 @@ public class OrganizationMembershipService {
         String memberName = newOrganizationMembership.getMember().getFirstName() + " " + newOrganizationMembership.getMember().getLastName();
         String subject = "Open Hackathon 2019 - Join Request by " + memberName;
         String localServerUrl = "http://localhost:3000";
-        String hostedServerUrl = "";
+        String hostedServerUrl = "https://openhacks.herokuapp.com";
 
         String message = "Hello\n" +
                 "You have one new join request by " + memberName + " " +
                 "for you organization " + newOrganizationMembership.getOrganization().getName() + ".\n" +
-                "Log in to your account to take the action " + localServerUrl + "/login\n\n" + "" +
+                "Log in to your account to take the action " + hostedServerUrl + "/login\n\n" + "" +
                 "Happy Hacking :)";
 
         emailService.sendSimpleMessage(emailOwner, subject, message);
