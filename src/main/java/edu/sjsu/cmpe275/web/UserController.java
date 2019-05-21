@@ -3,6 +3,7 @@ package edu.sjsu.cmpe275.web;
 import edu.sjsu.cmpe275.domain.entity.*;
 import edu.sjsu.cmpe275.security.CurrentUser;
 import edu.sjsu.cmpe275.security.UserPrincipal;
+import edu.sjsu.cmpe275.service.AmazonService;
 import edu.sjsu.cmpe275.service.OrganizationMembershipService;
 import edu.sjsu.cmpe275.service.OrganizationService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -16,6 +17,7 @@ import edu.sjsu.cmpe275.web.model.response.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -32,6 +34,7 @@ public class UserController {
     private final MyHackathonsMapper myHackathonsMapper;
     private final OrganizationService organizationService;
     private final OrganizationMembershipService organizationMembershipService;
+    private final AmazonService amazonService;
 
     @Autowired
     public UserController(
@@ -39,13 +42,15 @@ public class UserController {
             UserMapper userMapper,
             MyHackathonsMapper myHackathonsMapper,
             OrganizationService organizationService,
-            OrganizationMembershipService organizationMembershipService
+            OrganizationMembershipService organizationMembershipService,
+            AmazonService amazonService
     ) {
         this.userService = userService;
         this.userMapper = userMapper;
         this.myHackathonsMapper = myHackathonsMapper;
         this.organizationService = organizationService;
         this.organizationMembershipService = organizationMembershipService;
+        this.amazonService = amazonService;
     }
 
     @GetMapping(value = "")
@@ -144,5 +149,13 @@ public class UserController {
         User fromUpdate = userMapper.map(fromRequest);
         User updatedUser = userService.updateUser(id, fromUpdate);
         return userMapper.map(updatedUser);
+    }
+
+    @PostMapping("/{id}/upload")
+    public String uploadFile(
+            @PathVariable @NotNull Long id,
+            @RequestPart(value = "file") MultipartFile file
+    ) {
+        return amazonService.uploadFile(file);
     }
 }
