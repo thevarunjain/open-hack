@@ -25,6 +25,7 @@ public class HackathonService {
     private final HackathonSponsorService hackathonSponsorService;
     private final TeamRepository teamRepository;
     private final TeamMembershipService teamMembershipService;
+    private final HackathonExpenseService hackathonExpenseService;
 
     @Autowired
     public HackathonService(
@@ -33,7 +34,8 @@ public class HackathonService {
             OrganizationService organizationService,
             HackathonSponsorService hackathonSponsorService,
             TeamRepository teamRepository,
-            TeamMembershipService teamMembershipService
+            TeamMembershipService teamMembershipService,
+            HackathonExpenseService hackathonExpenseService
     ) {
         this.hackathonRepository = hackathonRepository;
         this.hackathonSponsorMapper = hackathonSponsorMapper;
@@ -41,6 +43,7 @@ public class HackathonService {
         this.hackathonSponsorService = hackathonSponsorService;
         this.teamRepository = teamRepository;
         this.teamMembershipService = teamMembershipService;
+        this.hackathonExpenseService = hackathonExpenseService;
     }
 
     public List<Hackathon> findHackathons(final String name) {
@@ -167,8 +170,12 @@ public class HackathonService {
     }
 
     private Float getExpense(final Long id) {
-        // TODO Implement after bonus feature implemented
-        return 0.0F;
+        List<HackathonExpense> expenses = hackathonExpenseService.findHackthonExpenses(findHackathon(id));
+        Float totalExpense = 0.0F;
+        for (HackathonExpense expense: expenses) {
+            totalExpense += expense.getAmount();
+        }
+        return totalExpense;
     }
 
     public List<User> findHackathonParticipants(final Long id) {
