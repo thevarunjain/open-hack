@@ -134,9 +134,9 @@ public class TeamController {
     public PaymentResponseDto getPayment(
             @PathVariable @NotNull Long hid,
             @PathVariable @NotNull Long tid,
-            @CurrentUser UserPrincipal currentUser
+            @RequestParam @NotNull Long participantId
     ) {
-        User user = userService.findUser(currentUser.getId());
+        User user = userService.findUser(participantId);
         Team team = teamService.findTeam(tid);
         Hackathon hackathon = hackathonService.findHackathon(hid);
         Float amount = teamService.getPaymentForMember(
@@ -154,9 +154,9 @@ public class TeamController {
             @PathVariable @NotNull Long hid,
             @PathVariable @NotNull Long tid,
             @RequestParam @NotNull Float amount,
-            @CurrentUser UserPrincipal currentUser
+            @RequestParam @NotNull Long participantId
     ) {
-        User user = userService.findUser(currentUser.getId());
+        User user = userService.findUser(participantId);
         Team team = teamService.findTeam(tid);
         teamService.processPaymemtForMember(
                 user,
