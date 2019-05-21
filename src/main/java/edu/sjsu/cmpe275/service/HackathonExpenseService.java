@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -24,7 +25,7 @@ public class HackathonExpenseService {
             final Hackathon hackathon
     ) {
         return hackathonExpenseRepository.findByHackathon(hackathon)
-                .orElse(null);
+                .orElse(new ArrayList<>());
     }
 
     @Transactional
