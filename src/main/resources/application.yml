@@ -33,4 +33,9 @@ spring:
 app:
   jwtSecret: JWTSuperSecretKey
   jwtExpirationInMs: 604800000
+amazonProperties:
+  endpointUrl: https://s3.us-east-1.amazonaws.com
+  accessKey: AKIASYTHK37C77L3D6TG
+  secretKey: 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
+  bucketName: open-hack
 
