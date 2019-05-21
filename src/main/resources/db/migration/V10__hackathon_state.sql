@@ -1,0 +1,1 @@
+ALTER TABLE hackathon MODIFY status enum('Created','Open', 'Closed', 'Finalized') DEFAULT 'Created';
