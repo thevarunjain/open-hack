@@ -25,7 +25,7 @@ public class HackathonMapper {
                 .judges(judges)
                 .status(Objects.nonNull(toCreateHackathon.getStatus())
                         ? toCreateHackathon.getStatus()
-                        : "Open")
+                        : "Created")
                 .owner(owner)
                 .build();
     }
