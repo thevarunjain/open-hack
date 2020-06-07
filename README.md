@@ -1,7 +1,6 @@
-# open-hack
-Spring Boot system for hackathon modularized application 
+# Hackathon application 
 
-Refer to [Project Report](https://github.com/thevarunjain/open-hack/blob/master/Project%20Report.pdf) 
+Refer to [Project Report](https://github.com/thevarunjain/open-hack/blob/master/Project%20Report.pdf) for the following details
 - System Design
 - Deployment
 - Database Schema
